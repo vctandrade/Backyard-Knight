@@ -5,10 +5,12 @@ import data
 
 pygame.init()
 
+data.loadConfig()
 data.loadResources()
-data.loadConfig("config.ini")
 
-pygame.display.set_caption("Game")
+data.loadLanguage(data.config.LANG)
+
+pygame.display.set_caption(data.translate("caption"))
 resolution = data.config.WIDTH, data.config.HEIGHT
 display = pygame.display.set_mode(resolution)
 
