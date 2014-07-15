@@ -5,7 +5,7 @@ import graphics
 class Main(object):
     
     def __init__(self):
-        graphics.userInterface.cursor.setNone()
+        graphics.userInterface.cursor.setDefault()
         self.dustSpawner = graphics.spawner.Dust()
         
         pass

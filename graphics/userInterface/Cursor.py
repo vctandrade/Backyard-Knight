@@ -1,22 +1,11 @@
 import graphics
 import pygame
 
-class Cursor(object):
+class Cursor:
     
     sprite = None
     info = graphics.AnimationInfo()
     
-    def setNone(self):
-        pygame.mouse.set_visible(True)
-        Cursor.sprite = None
-       
-    def setFairy(self):
-        pygame.mouse.set_visible(False)
-        Cursor.sprite = graphics.Sprite(3, "sprite.png", pygame.mouse.get_pos())
-        Cursor.sprite.xScale, Cursor.sprite.yScale = 2, 2
-        
-        Cursor.info.clear()
-        Cursor.info.set(index = lambda: 3 + (Cursor.info.timer % 6) / 3)
     
     def draw(self, display):
         if Cursor.sprite == None: return
@@ -28,5 +17,18 @@ class Cursor(object):
         Cursor.info.timer += 1
         Cursor.info.animate(Cursor.sprite)
         Cursor.sprite.x, Cursor.sprite.y = pygame.mouse.get_pos()
+    
+    
+    def setDefault(self):
+        pygame.mouse.set_visible(True)
+        Cursor.sprite = None
+       
+    def setFairy(self):
+        pygame.mouse.set_visible(False)
+        Cursor.sprite = graphics.Sprite(3, "sprite.png", pygame.mouse.get_pos())
+        Cursor.sprite.xScale, Cursor.sprite.yScale = 2, 2
+        
+        Cursor.info.clear()
+        Cursor.info.set(index = lambda: 3 + (Cursor.info.timer % 6) / 3)
 
 cursor = Cursor()
