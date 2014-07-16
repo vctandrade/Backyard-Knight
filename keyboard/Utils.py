@@ -1,5 +1,2 @@
 
-UPDATE = 33
-
-class Event:
-    type = UPDATE
+PRESSED = 33

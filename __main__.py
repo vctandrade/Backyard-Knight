@@ -16,7 +16,7 @@ display = pygame.display.set_mode(resolution)
 
 clock = pygame.time.Clock()
 
-screen = screen.Main()
+screen = screen.TextFieldTest()
 
 def repaint():
     display.fill(0x000000)
@@ -26,7 +26,9 @@ def repaint():
 def handleInput():
     global screen
     
-    screen.respondToUserInput(keyboard.Event)
+    keyboard.tick()
+    pressedKeys = keyboard.getPressed()
+    screen.respondToUserInput(pressedKeys)
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

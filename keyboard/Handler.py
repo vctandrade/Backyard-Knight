@@ -1,23 +1,31 @@
 import pygame
+import keyboard
 
-class KeyHandler(object):
+delay = 20
+period = 4
+
+ticks = 0
+lastUni = None
     
-    def __init__(self):
-        self.keyState = dict()
+def handle(event):
+    global lastUni, ticks
+             
+    if event.type == pygame.KEYDOWN:
+        lastUni = event
+        ticks = 0
+        
+    if event.type == pygame.KEYUP:
+        lastUni = None
+        ticks = 0
+
+def tick():
+    global ticks
+    if lastUni: ticks += 1
+
+def getPressed():
+    eventList = list()
     
-    def listenTo(self, *key):
-        self.keyState.clear()
-        for k in key:
-            self.keyState[k] = False
+    if (lastUni == None or ticks > 1) and (ticks < delay or ticks % period > 0): pass
+    else: eventList.append(lastUni)
     
-    def handle(self, event):            
-        if event.type == pygame.KEYDOWN:
-            if event.key in self.keyState:
-                self.keyState[event.key] = True
-            
-        if event.type == pygame.KEYUP:
-            if event.key in self.keyState:
-                self.keyState[event.key] = False
-    
-    def __getitem__(self, i):
-        return self.keyState[i]
+    return pygame.event.Event(keyboard.PRESSED, keys=eventList)
