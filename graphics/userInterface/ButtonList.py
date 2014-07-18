@@ -10,8 +10,11 @@ class ButtonList(object):
         return self.buttons[i]
 
     def add(self, index, iconPath, x, y, active=True, visible=True, mask=None):
-        self.buttons.append(Button(index, iconPath, x, y, active, visible, mask))
-        self.buttons[-1].updateHover(pygame.mouse.get_pos())
+        newButton = Button(index, iconPath, x, y, active, visible, mask)
+        newButton.updateHover(pygame.mouse.get_pos())
+
+        self.buttons.append(newButton)
+
 
     def handle(self, event):
         clicked = None

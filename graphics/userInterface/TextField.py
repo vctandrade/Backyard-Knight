@@ -20,19 +20,11 @@ class TextField(object):
 
         self.active = active
         self.visible = visible
+
         self.hovered = False
         self.clicked = False
+
         self.focused = focused
-
-    def toggleActive(self):
-        if self.active == True:
-            self.active = False
-        else: self.active = True
-
-    def toggleVisible(self):
-        if self.visible == True:
-            self.visible = False
-        else: self.visible = True
 
     def getIcon(self):
         if not self.visible: return graphics.blankImage
@@ -62,11 +54,10 @@ class TextField(object):
         if self.clicked and self.hovered and self.active:
             self.clicked = False
             self.focused = True
-            return
 
-        self.focused = False
-        self.clicked = False
-        return
+        else:
+            self.focused = False
+            self.clicked = False
 
     def inputText(self, event):
         if event.type != pygame.KEYDOWN or not self.focused or not self.active:

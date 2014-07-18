@@ -15,7 +15,7 @@ resolution = data.config.WIDTH, data.config.HEIGHT
 display = pygame.display.set_mode(resolution)
 
 clock = pygame.time.Clock()
-keyboard.setMultiKeys(pygame.K_a)
+
 screen = screen.TextFieldTest()
 
 def repaint():

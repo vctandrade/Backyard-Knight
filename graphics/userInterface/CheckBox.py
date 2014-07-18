@@ -2,11 +2,9 @@ import graphics
 import pygame
 import data
 
-class Button(object):
+class CheckBox(object):
 
-    def __init__(self, index, icon, x, y, active=True, visible=True, mask=None):
-
-        self.index = index
+    def __init__(self, icon, x, y, checked=False, active=True, visible=True, mask=None):
 
         self.icon = icon
         self.mask = mask
@@ -20,14 +18,17 @@ class Button(object):
         self.active = active
         self.visible = visible
 
+        self.checked = checked
+
         self.hovered = False
         self.clicked = False
 
     def getIcon(self):
         if not self.visible: return graphics.blankImage
 
-        index = 3 if not self.active else 2 if self.clicked \
-            else 1 if self.hovered else 0
+        index = 0 if not self.checked else 1
+        index += 0 if self.active else 2
+
         return data.getResource(self.icon)[index]
 
     def getDrawPos(self):
@@ -53,10 +54,9 @@ class Button(object):
     def clickUp(self):
         if self.clicked and self.hovered and self.active:
             self.clicked = False
-            return True
+            self.checked = not self.checked
 
-        self.clicked = False
-        return False
+        else: self.clicked = False
 
     def __setattr__(self, name, value):
         self.__dict__[name] = value
