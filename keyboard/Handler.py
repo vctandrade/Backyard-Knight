@@ -1,22 +1,31 @@
 import pygame
-import keyboard
 
 delay = 20
 period = 4
 
 ticks = 0
 lastUni = None
-    
+
+multiKeys = dict()
+
+def setMultiKeys(*keys):
+    multiKeys.clear()
+    for i in keys: multiKeys[i] = None
+
 def handle(event):
     global lastUni, ticks
-             
+
     if event.type == pygame.KEYDOWN:
-        lastUni = event
-        ticks = 0
-        
+        if event.key in multiKeys:
+            multiKeys[event.key] = event
+
+        else: lastUni = event; ticks = 0
+
     if event.type == pygame.KEYUP:
-        lastUni = None
-        ticks = 0
+        if event.key in multiKeys:
+            multiKeys[event.key] = None
+
+        else: lastUni = None; ticks = 0
 
 def tick():
     global ticks
@@ -24,8 +33,12 @@ def tick():
 
 def getPressed():
     eventList = list()
-    
-    if (lastUni == None or ticks > 1) and (ticks < delay or ticks % period > 0): pass
+
+    for i in multiKeys.values():
+        if i: eventList.append(i)
+
+    if (lastUni == None or ticks != 0) \
+        and (ticks < delay or ticks % period > 0): pass
     else: eventList.append(lastUni)
-    
-    return pygame.event.Event(keyboard.PRESSED, keys=eventList)
+
+    return eventList

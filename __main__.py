@@ -15,7 +15,7 @@ resolution = data.config.WIDTH, data.config.HEIGHT
 display = pygame.display.set_mode(resolution)
 
 clock = pygame.time.Clock()
-
+keyboard.setMultiKeys(pygame.K_a)
 screen = screen.TextFieldTest()
 
 def repaint():
@@ -25,21 +25,22 @@ def repaint():
 
 def handleInput():
     global screen
-    
-    keyboard.tick()
-    pressedKeys = keyboard.getPressed()
-    screen.respondToUserInput(pressedKeys)
-    
+
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            screen = None
+        if hasattr(event, "key"): keyboard.handle(event)
+        elif event.type == pygame.QUIT: screen = None
         else: screen = screen.respondToUserInput(event)
 
+    for event in keyboard.getPressed():
+        screen = screen.respondToUserInput(event)
+
+    keyboard.tick()
+
 while screen is not None:
-    screen.update()
     repaint()
+    screen.update()
     handleInput()
-    
+
     clock.tick(60)
-        
+
 pygame.quit()

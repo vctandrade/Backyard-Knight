@@ -5,7 +5,7 @@ class Configuration:
     WIDTH = 1024
     HEIGHT = 768
     LANG = "en_us"
-        
+
     def __getitem__(self, key): return Configuration.__dict__[key]
     def __setitem__(self, key, value): Configuration.__dict__[key] = value
     def __contains__(self, key): return key in Configuration.__dict__
@@ -14,7 +14,7 @@ class Configuration:
 
 config = Configuration()
 
-def loadConfig():    
+def loadConfig():
     if os.path.isfile("config.ini"):
         with open("config.ini", 'r') as f:
             for line in f:
