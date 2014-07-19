@@ -3,3 +3,6 @@
 /Cursor.pyc
 /__init__.pyc
 /TextField.pyc
+/CheckBox.pyc
+/CheckBoxList.pyc
+/Interface.pyc

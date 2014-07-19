@@ -47,6 +47,8 @@ class Button(object):
             self.hovered = False
             self.clicked = False
 
+        return self.hovered if self.active else False
+
     def clickDown(self):
         if self.hovered: self.clicked = True
 

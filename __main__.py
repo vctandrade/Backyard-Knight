@@ -1,6 +1,7 @@
 import pygame
 import screen
 import keyboard
+import graphics
 import data
 
 pygame.init()
@@ -35,6 +36,7 @@ def handleInput():
         screen = screen.respondToUserInput(event)
 
     keyboard.tick()
+    graphics.userInterface.cursor.update()
 
 while screen is not None:
     repaint()

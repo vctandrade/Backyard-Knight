@@ -1,7 +1,7 @@
 import cursor
 
 from Button import *
-from ButtonList import *
 from CheckBox import *
-from CheckBoxList import *
+from Events import *
+from Interface import *
 from TextField import *
