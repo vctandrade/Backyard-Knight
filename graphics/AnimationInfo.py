@@ -1,5 +1,5 @@
 
-class AnimationInfo(object):
+class AnimationInfo():
     def __init__(self):
         self.timer = 0
         self.deathTime = -1
@@ -7,14 +7,6 @@ class AnimationInfo(object):
     def set(self, **value):
         for key in value:
             self.__dict__[key] = value[key]
-
-    def clear(self):
-        for key in self.__dict__:
-            if '__' in key: break
-            if key == "timer": break
-            if key == "deathTime": break
-
-            __dict__.remove(key)
 
     def animate(self, target):
         for attr in self.__dict__:

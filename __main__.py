@@ -8,8 +8,9 @@ pygame.init()
 
 data.loadConfig()
 data.loadResources()
+data.loadLanguage()
 
-data.loadLanguage(data.config.LANG)
+graphics.userInterface.cursor.init()
 
 pygame.display.set_caption(data.translate("caption"))
 resolution = data.config.WIDTH, data.config.HEIGHT
@@ -22,6 +23,7 @@ screen = screen.TextFieldTest()
 def repaint():
     display.fill(0x000000)
     screen.displayOutput(display)
+    graphics.userInterface.cursor.draw(display)
     pygame.display.flip()
 
 def handleInput():

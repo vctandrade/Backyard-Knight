@@ -1,8 +1,9 @@
 import json
+import data
 
-def loadLanguage(lang):
+def loadLanguage():
     global langPack
-    with open("../../lang/" + lang) as f:
+    with open("../../lang/" + data.config.LANG) as f:
         langPack = json.load(f)
 
 def translate(key):

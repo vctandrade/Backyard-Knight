@@ -13,7 +13,6 @@ class TextFieldTest(object):
 
     def displayOutput(self, display):
         self.interface.draw(display)
-        graphics.userInterface.cursor.draw(display)
         display.blit(self.tf.getIcon(), self.tf.getDrawPos())
 
         pass
@@ -31,8 +30,7 @@ class TextFieldTest(object):
             if e.type == graphics.userInterface.BUTTONCLICKED:
                 if e.button == 0: self.interface.checkBoxes["fu"].active = not self.interface.checkBoxes["fu"].active
 
-        if event.type == pygame.MOUSEMOTION:
-            self.tf.updateHover(event.pos)
+        self.tf.updateHover()
         if event.type == pygame.MOUSEBUTTONDOWN:
             self.tf.clickDown()
         if event.type == pygame.MOUSEBUTTONUP:

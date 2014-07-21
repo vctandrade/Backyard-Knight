@@ -12,13 +12,13 @@ class Interface(object):
 
     def addButton(self, index, iconPath, x, y, active=True, visible=True, mask=None):
         newButton = Button(index, iconPath, x, y, active, visible, mask)
-        newButton.updateHover(pygame.mouse.get_pos())
+        newButton.updateHover()
 
         self.buttons.append(newButton)
 
     def addCheckBox(self, tag, iconPath, x, y, checked=False, active=True, visible=True, mask=None):
         newCheckBox = CheckBox(iconPath, x, y, checked, active, visible, mask)
-        newCheckBox.updateHover(pygame.mouse.get_pos())
+        newCheckBox.updateHover()
 
         self.checkBoxes[tag] = newCheckBox
 
@@ -30,9 +30,8 @@ class Interface(object):
 
         hoverMode = Events.NOHOVER
 
-        if hasattr(event, "pos"):
-            for i in self.buttons + self.checkBoxes.values():
-                if i.updateHover(event.pos): hoverMode = Events.CLICKHOVER
+        for i in self.buttons + self.checkBoxes.values():
+            if i.updateHover(): hoverMode = Events.CLICKHOVER
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             for i in self.buttons + self.checkBoxes.values():
