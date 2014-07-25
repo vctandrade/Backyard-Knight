@@ -18,11 +18,11 @@ class Sprite(object):
 
         self.angle = 0
 
-        width = data.getResource(table).width
-        height = data.getResource(table).height
+        self.width = data.getResource(table).width
+        self.height = data.getResource(table).height
 
-        self.xCenter = width / 2
-        self.yCenter = height / 2
+        self.xCenter = self.width / 2
+        self.yCenter = self.height / 2
 
         self.xTrueCenter = self.xCenter
         self.yTrueCenter = self.yCenter
@@ -45,7 +45,7 @@ class Sprite(object):
             img = pygame.transform.flip(img, self.xScale < 0, self.yScale < 0)
 
         if self.xScale != 1 or self.yScale != 1:
-            img = pygame.transform.scale(img, (height, width))
+            img = pygame.transform.scale(img, (width, height))
 
         if self.angle % 360 != 0:
             img = pygame.transform.rotate(img, self.angle)
@@ -58,17 +58,17 @@ class Sprite(object):
             sin2 = math.sin(math.radians(self.angle))
 
             if self.angle % 180 < 90:
-                x = (cos * height + sin * width) / 2
-                y = (cos * width + sin * height) / 2
-            else:
                 x = (cos * width + sin * height) / 2
                 y = (cos * height + sin * width) / 2
+            else:
+                x = (cos * height + sin * width) / 2
+                y = (cos * width + sin * height) / 2
 
             xRefinedCenter = self.xCenter * abs(self.xScale) - width / 2
             yRefinedCenter = self.yCenter * abs(self.yScale) - height / 2
 
-            x += sin2 * xRefinedCenter + cos2 * yRefinedCenter
-            y += cos2 * xRefinedCenter - sin2 * yRefinedCenter
+            x += cos2 * xRefinedCenter - sin2 * yRefinedCenter
+            y += sin2 * xRefinedCenter + cos2 * yRefinedCenter
 
             self.xTrueCenter, self.yTrueCenter = x, y
             self.centerOutdated = False

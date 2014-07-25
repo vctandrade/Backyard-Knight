@@ -4,6 +4,11 @@ def loadImage(imgPath):
     img = pygame.image.load(imgPath)
     img.set_colorkey(0xFF00FF)
 
+    width = img.get_width() * 2
+    height = img.get_height() * 2
+
+    img = pygame.transform.scale(img, (width, height))
+
     return img
 
 def formatValue(value):

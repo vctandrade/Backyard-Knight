@@ -18,7 +18,7 @@ display = pygame.display.set_mode(resolution)
 
 clock = pygame.time.Clock()
 
-screen = screen.TextFieldTest()
+screen = screen.GamePlayTest()
 
 def repaint():
     display.fill(0x000000)
