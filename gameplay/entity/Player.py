@@ -1,75 +1,109 @@
-import pygame
 import graphics
+import gameplay
 
 class Player(object):
 
     def __init__(self, world):
         self.world = world
-        self.xVel, self.yVel = (0, 0)
-        self.sprite = graphics.Sprite(0, "bob.png", (0, 0))
+
         self.animation = graphics.AnimationInfo()
+        self.sprite = graphics.Sprite(0, "bob.png", (0, 0))
+
         self.state = "idle"
+        self.stance = "standing"
+
+        self.xVel, self.yVel = (0, 0)
+
+        self.leftBox = 22
+        self.rightBox = 22
+        self.upperBox = 34
+        self.lowerBox = 48
 
     def draw(self, display, offset=(0, 0)):
         if self.xVel > 0: self.sprite.xScale = 1
         if self.xVel < 0: self.sprite.xScale = -1
 
-        if self.onSurface():
+        if self.stance == "falling":
+            self.animation.set(index=lambda: 2)
+
+        if self.stance == "crouched":
+            if self.state == "walking":
+                self.animation.set(index=lambda: 3 + (self.animation.timer % 8) / 4)
+            else: self.animation.set(index=lambda: 3)
+
+        if self.stance == "standing":
             if self.state == "walking":
                 self.animation.set(index=lambda: (self.animation.timer % 8) / 4)
             else: self.animation.set(index=lambda: 0)
-        else: self.animation.set(index=lambda: 2)
 
+        self.animation.timer += 1
         self.animation.animate(self.sprite)
-
         self.sprite.draw(display, offset)
 
-    def handle(self, event):
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_d: self.moveRight()
-            if event.key == pygame.K_a: self.moveLeft()
-            if event.key == pygame.K_SPACE: self.jump()
-
     def moveLeft(self):
-        self.xVel = max(self.xVel - 1, -5)
+        if self.stance == "falling": self.xVel = max(self.xVel - 0.2, -5)
+        if self.stance == "crouched": self.xVel = max(self.xVel - 0.5, -3)
+        if self.stance == "standing": self.xVel = max(self.xVel - 1, -5)
+
         self.state = "walking"
 
     def moveRight(self):
-        self.xVel = min(self.xVel + 1, 5)
+        if self.stance == "falling": self.xVel = min(self.xVel + 0.2, 5)
+        if self.stance == "crouched": self.xVel = min(self.xVel + 0.5, 3)
+        if self.stance == "standing": self.xVel = min(self.xVel + 1, 5)
+
         self.state = "walking"
 
+    def crouch(self):
+        if self.stance != "falling":
+            self.stance = "crouched"
+            self.upperBox = 16
+
+    def stand(self):
+        self.upperBox = 34
+
+        if self.collided():
+            self.crouch()
+            return False
+
+        return True
+
     def jump(self):
-        if self.onSurface():
+        if self.stance == "crouched":
+            if self.stand():
+                self.yVel = -12
+
+        if self.stance == "standing":
             self.yVel = -10
 
     def update(self):
-        self.state = "idle"
-        self.animation.timer += 1
-
         self.sprite.x += self.xVel
 
         if self.collided():
-            if self.xVel >= 0: self.sprite.x -= (self.sprite.x + self.sprite.xCenter - 10) % 64
-            else: self.sprite.x += 64 - (self.sprite.x - self.sprite.xCenter + 10) % 64
+            if self.xVel >= 0: self.sprite.x -= (self.sprite.x + self.leftBox) % gameplay.tile.size
+            else: self.sprite.x += gameplay.tile.size - (self.sprite.x - self.rightBox) % gameplay.tile.size
 
             self.xVel = 0
-
-        self.applyGravity()
 
         self.sprite.y += self.yVel
 
         if self.collided():
-            if self.yVel >= 0: self.sprite.y -= (self.sprite.y + self.sprite.yCenter) % 64
-            else: self.sprite.y += 64 - (self.sprite.y - self.sprite.yCenter + 10) % 64
+            if self.yVel >= 0: self.sprite.y -= (self.sprite.y + self.lowerBox) % gameplay.tile.size
+            else: self.sprite.y += gameplay.tile.size - (self.sprite.y - self.upperBox) % gameplay.tile.size
 
             self.yVel = 0
 
-    def collided(self):
-        l = int(self.sprite.x - self.sprite.xCenter + 10) / 64
-        r = int(self.sprite.x + self.sprite.xCenter - 1 - 10) / 64
+        self.applyGravity()
 
-        t = int(self.sprite.y - self.sprite.yCenter + 10) / 64
-        b = int(self.sprite.y + self.sprite.yCenter - 1) / 64
+        self.stand()
+        self.state = "idle"
+
+    def collided(self):
+        l = int(self.sprite.x - self.leftBox) / gameplay.tile.size
+        r = int(self.sprite.x + self.rightBox - 1) / gameplay.tile.size
+
+        t = int(self.sprite.y - self.upperBox) / gameplay.tile.size
+        b = int(self.sprite.y + self.lowerBox - 1) / gameplay.tile.size
 
         for x in range(l, r + 1):
             for y in range(t, b + 1):
@@ -85,5 +119,12 @@ class Player(object):
         return check
 
     def applyGravity(self):
-        if self.onSurface(): self.xVel *= 0.8
-        else: self.yVel = min(self.yVel + 0.5, 64)
+        if self.onSurface():
+            self.stance = "standing"
+            if self.state == "idle":
+                self.xVel *= 0.6
+        else:
+            if self.stance == "crouched" and self.yVel >= 0:
+                self.sprite.y += 23
+            self.stance = "falling"
+            self.yVel = min(self.yVel + 0.5, gameplay.tile.size)
