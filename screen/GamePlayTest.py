@@ -5,7 +5,7 @@ import pygame
 class GamePlayTest(object):
 
     def __init__(self):
-        keyboard.setMultiKeys(pygame.K_a, pygame.K_d, pygame.K_s)
+        keyboard.setMultiKeys(pygame.K_s, pygame.K_a, pygame.K_d)
         self.world = gameplay.World()
 
     def displayOutput(self, display):

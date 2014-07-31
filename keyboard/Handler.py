@@ -1,4 +1,5 @@
 import pygame
+import collections
 
 delay = 20
 period = 4
@@ -6,7 +7,7 @@ period = 4
 ticks = 0
 lastUni = None
 
-multiKeys = dict()
+multiKeys = collections.OrderedDict()
 
 def setMultiKeys(*keys):
     multiKeys.clear()
@@ -34,7 +35,7 @@ def tick():
 def getPressed():
     eventList = list()
 
-    for i in multiKeys.values():
+    for i in  multiKeys.values():
         if i: eventList.append(i)
 
     if (lastUni == None or ticks != 0) \

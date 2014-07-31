@@ -41,18 +41,18 @@ class Player(object):
         self.sprite.draw(display, offset)
 
     def moveLeft(self):
-        if self.stance == "falling": self.xVel = max(self.xVel - 0.2, -5)
-        if self.stance == "crouched": self.xVel = max(self.xVel - 0.5, -3)
-        if self.stance == "standing": self.xVel = max(self.xVel - 1, -5)
+        if self.stance == "falling": self.xVel = max(self.xVel - 0.2, -3)
+        if self.stance == "crouched": self.xVel = max(self.xVel - 0.5, -1.5)
+        if self.stance == "standing": self.xVel = max(self.xVel - 1, -3)
 
-        self.state = "walking"
+        self.state = "walking" if self.state == "idle" else "idle"
 
     def moveRight(self):
-        if self.stance == "falling": self.xVel = min(self.xVel + 0.2, 5)
-        if self.stance == "crouched": self.xVel = min(self.xVel + 0.5, 3)
-        if self.stance == "standing": self.xVel = min(self.xVel + 1, 5)
+        if self.stance == "falling": self.xVel = min(self.xVel + 0.2, 3)
+        if self.stance == "crouched": self.xVel = min(self.xVel + 0.5, 1.5)
+        if self.stance == "standing": self.xVel = min(self.xVel + 1, 3)
 
-        self.state = "walking"
+        self.state = "walking" if self.state == "idle" else "idle"
 
     def crouch(self):
         if self.stance != "falling":
@@ -71,10 +71,10 @@ class Player(object):
     def jump(self):
         if self.stance == "crouched":
             if self.stand():
-                self.yVel = -12
+                self.yVel = -10
 
         if self.stance == "standing":
-            self.yVel = -10
+            self.yVel = -9
 
     def update(self):
         self.sprite.x += self.xVel
