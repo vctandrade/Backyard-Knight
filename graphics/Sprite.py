@@ -9,6 +9,10 @@ class Sprite(object):
         self.index = index
         self.table = table
 
+        img = data.getResource(table)
+
+        self.pixelArray = pygame.PixelArray(img[0].copy())
+
         self.alpha = 255
 
         self.x, self.y = pos
@@ -18,8 +22,8 @@ class Sprite(object):
 
         self.angle = 0
 
-        self.width = data.getResource(table).width
-        self.height = data.getResource(table).height
+        self.width = img.width
+        self.height = img.height
 
         self.xCenter = self.width / 2
         self.yCenter = self.height / 2
@@ -76,7 +80,21 @@ class Sprite(object):
         x = self.x - self.xTrueCenter - offset[0]
         y = self.y - self.yTrueCenter - offset[1]
 
+        self.pixelArray = pygame.PixelArray(img.copy())
+
         display.blit(img, graphics.drawPos(x, y))
+
+    def collidesWith(self, other):
+        if abs(self.x - other.x) <= self.xTrueCenter + other.xTrueCenter \
+        and abs(self.y - other.y) <= self.yTrueCenter + other.yTrueCenter:
+            for x1 in range(0, 2 * int(self.xTrueCenter)):
+                for y1 in range(0, 2 * int(self.yTrueCenter)):
+                    x2 = x1 + int(self.x - self.xTrueCenter - other.x + other.xTrueCenter)
+                    y2 = y1 + int(self.y - self.yTrueCenter - other.y + other.yTrueCenter)
+                    if 0 <= x2 < 2 * int(other.xTrueCenter) and 0 <= y2 < 2 * int(other.yTrueCenter):
+                        if self.pixelArray[x1][y1] != 0xFF00FF and other.pixelArray[x2][y2] != 0xFF00FF:
+                            return True
+        return False
 
     def __setattr__(self, name, value):
         if name in ("xScale", "yScale", "angle", "xCenter", "yCenter") \

@@ -4,11 +4,11 @@ import data
 class World(object):
 
     def __init__(self):
-        self.player = gameplay.entity.Player(self)
-        self.player.sprite.x = 512
-        self.player.sprite.y = 100
-
         self.map = gameplay.level.Test()
+
+        self.player = gameplay.entity.Player(self.map)
+        self.player.sprite.x = 512
+        self.player.sprite.y = 400
 
         self.camera = [0, 0]
 
@@ -18,6 +18,7 @@ class World(object):
 
     def update(self):
         self.player.update()
+        self.map.update()
         self.updateCamera()
         pass
 
@@ -25,10 +26,10 @@ class World(object):
         x = self.player.sprite.x - data.config.WIDTH / 2
         y = self.player.sprite.y - data.config.HEIGHT / 2
 
-        if abs(self.camera[0] - x) > 1:
-            self.camera[0] += (x - self.camera[0]) / 20
+        if abs(self.camera[0] - x) > 8:
+            self.camera[0] += (x - self.camera[0]) / 32
 
-        if abs(self.camera[1] - y) > 1:
-            self.camera[1] += (y - self.camera[1]) / 20
+        if abs(self.camera[1] - y) > 8:
+            self.camera[1] += (y - self.camera[1]) / 32
 
         return x, y
