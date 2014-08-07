@@ -15,7 +15,7 @@ class Slider(object):
         self.width = data.getResource(icon).width
         self.height = data.getResource(icon).height
 
-        self.extra = int(self.width * 0.06)
+        self.threshold = int(self.width * 0.06)
 
         self.vertical = vertical
 
@@ -29,10 +29,10 @@ class Slider(object):
         self.clicked = False
 
     def getPos(self):
-        return (self.width - 2 * self.extra) * (self.value - self.left) / (self.right - self.left) + self.extra
+        return (self.width - 2 * self.threshold) * (self.value - self.left) / (self.right - self.left) + self.threshold
 
     def setPos(self, x):
-        self.value = (x - self.extra) * (self.right - self.left) / (self.width - 2 * self.extra) + self.left
+        self.value = (x - self.threshold) * (self.right - self.left) / (self.width - 2 * self.threshold) + self.left
 
     def getIcon(self):
         if not self.visible: return graphics.blankImage
@@ -74,8 +74,10 @@ class Slider(object):
         else: self.hovered = False
 
         if self.clicked:
-            x -= self.width / 2 - self.getPos() - (self.width - 2 * self.extra) / (self.right - self.left) / 2
-            self.setPos(max(self.extra, min(x, self.width - self.extra)))
+            x -= self.width / 2 - self.getPos() - (self.width - 2 * self.threshold) / (self.right - self.left) / 2
+            self.setPos(max(self.threshold, min(x, self.width - self.threshold)))
+
+        return self.active and (self.hovered or self.clicked)
 
     def clickDown(self):
         if self.hovered: self.clicked = True

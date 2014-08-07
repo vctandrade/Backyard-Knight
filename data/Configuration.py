@@ -5,6 +5,8 @@ class Configuration:
     WIDTH = 1024
     HEIGHT = 768
     LANG = "en_us"
+    MUSIC = 50
+    SOUND = 50
 
     def __getitem__(self, key): return Configuration.__dict__[key]
     def __setitem__(self, key, value): Configuration.__dict__[key] = value
