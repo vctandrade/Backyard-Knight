@@ -1,9 +1,11 @@
 import pygame
+import data
 
 class Mask(object):
 
     def __init__(self, maskPath):
-        image = pygame.image.load(maskPath)
+        image = data.loadImage(maskPath)
+
         pixelArray = pygame.PixelArray(image)
 
         width = len(pixelArray)

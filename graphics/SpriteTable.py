@@ -6,8 +6,10 @@ class SpriteTable(object):
     def __init__(self, imgPath, width=1, height=1):
         uncutTable = pygame.image.load(imgPath)
 
-        uncutWidth = uncutTable.get_width()
-        uncutHeight = uncutTable.get_height()
+        uncutWidth = uncutTable.get_width() * 2
+        uncutHeight = uncutTable.get_height() * 2
+
+        uncutTable = pygame.transform.scale(uncutTable, (uncutWidth, uncutHeight))
 
         width = uncutWidth / width
         height = uncutHeight / height

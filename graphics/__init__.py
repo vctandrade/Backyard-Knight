@@ -8,3 +8,4 @@ from Mask import *
 from Sprite import *
 from SpriteTable import *
 from SpriteHandler import *
+from Text import *

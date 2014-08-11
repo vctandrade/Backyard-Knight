@@ -11,7 +11,7 @@ def loadResources():
     workingDir = os.getcwd()
 
     for font in os.listdir(workingDir + "/font"):
-        resourceList[font] = pygame.font.Font("font/" + font, 18)
+        resourceList[font] = graphics.SpriteTable("font/" + font, 16, 16)
 
     for icon in os.listdir(workingDir + "/icon"):
         resourceList[icon] = graphics.SpriteTable("icon/" + icon, 1, 4)

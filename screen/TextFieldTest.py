@@ -1,24 +1,17 @@
-import pygame
 import graphics
 
 class TextFieldTest(object):
 
     def __init__(self):
-        self.tf = graphics.userInterface.TextField("textField.png", 380, 320)
-
-
-
         self.interface = graphics.userInterface.Interface()
         self.interface.addButton(0, "button.png", 50, 50)
         self.interface.addCheckBox("fu", "checkbox.png", 50, 400)
-        self.interface.addSlider("FUU", "slider.png", "slidermask.png", (0, 100), 0, 400, 400)
-
+        self.interface.addSlider("FUU", "slider.png", "slidermask.png", (0, 100), 0, 400, 500)
+        self.interface.addTextField("eain", "textField.png", 380, 320, color=0x124562, size=32)
         pass
 
     def displayOutput(self, display):
         self.interface.draw(display)
-
-        display.blit(self.tf.getIcon(), self.tf.getDrawPos())
 
         pass
 
@@ -34,16 +27,6 @@ class TextFieldTest(object):
 
             if e.type == graphics.userInterface.BUTTONCLICKED:
                 if e.button == 0: self.interface.sliders["FUU"].active = not self.interface.sliders["FUU"].active
-
-        self.tf.updateHover()
-
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            self.tf.clickDown()
-
-        if event.type == pygame.MOUSEBUTTONUP:
-            self.tf.clickUp()
-
-        self.tf.inputText(event)
 
         return self
 
