@@ -24,9 +24,14 @@ class Player(object):
         self.health = 6
         self.maxHealth = 6
 
+        self.weapon = gameplay.item.Sword()
+
     def draw(self, display, offset=(0, 0)):
         if self.xVel > 0: self.sprite.xScale = 1
         if self.xVel < 0: self.sprite.xScale = -1
+
+        if self.xVel > 0: self.weapon.sprite.xScale = 1
+        if self.xVel < 0: self.weapon.sprite.xScale = -1
 
         self.sprite.alpha = 255 - self.invincibility
 
@@ -48,12 +53,20 @@ class Player(object):
                 self.animation.set(index=lambda: 6 if self.knock > 10 else 5)
             else: self.animation.set(index=lambda: 7)
 
+        if self.state == "attacking":
+            self.animation.set(index=lambda: 8 if self.animation.timer < self.weapon.pre else 9 if self.animation.timer < self.weapon.swing else 10)
+            self.weapon.sprite.index = self.animation.index() - 8
+            self.weapon.sprite.x, self.weapon.sprite.y = self.sprite.x + self.weapon.xFix[self.weapon.sprite.index] * self.weapon.sprite.xScale, self.sprite.y
+
         self.animation.timer += 1
         self.animation.animate(self.sprite)
         self.sprite.draw(display, offset)
 
+        if self.state == "attacking":
+            self.weapon.sprite.draw(display, offset)
+
     def moveLeft(self):
-        if self.knock > 0: return
+        if self.knock > 0 or self.state == "attacking": return
 
         if self.stance == "falling": self.xVel = max(self.xVel - 0.2, -3)
         if self.stance == "crouched": self.xVel = max(self.xVel - 0.5, -1.5)
@@ -62,7 +75,7 @@ class Player(object):
         self.state = "walking" if self.state == "idle" else "idle"
 
     def moveRight(self):
-        if self.knock > 0: return
+        if self.knock > 0 or self.state == "attacking": return
 
         if self.stance == "falling": self.xVel = min(self.xVel + 0.2, 3)
         if self.stance == "crouched": self.xVel = min(self.xVel + 0.5, 1.5)
@@ -85,6 +98,8 @@ class Player(object):
         return True
 
     def jump(self):
+        if self.state == "attacking": return
+
         if self.knock > 0: return
 
         if self.stance == "crouched":
@@ -94,21 +109,36 @@ class Player(object):
         if self.stance == "standing":
             self.yVel = -9
 
+    def attack(self):
+        if self.knock > 0 or self.state == "attacking": return
+        if not self.weapon: return
+
+        self.stance = "standing"
+        self.state = "attacking"
+
+        self.animation.timer = 0
+
     def knockBack(self, origin):
         self.knock = 64
+        self.state = "idle"
 
         self.xVel = 4 * cmp(self.sprite.x, origin.sprite.x)
-        self.yVel = -4
+        if self.stand(): self.yVel = -4
 
-    def damage(self, origin):
+        else: self.knock -= 1
+
+    def getHurt(self, origin):
         if self.invincibility > 0:
             return
 
         self.knockBack(origin)
-        self.health -= origin.damage
+        self.health -= origin.damage()
 
         if self.health > 0:
             self.invincibility = 128
+
+    def damage(self):
+        return self.weapon.damage
 
     def update(self):
         self.sprite.x += self.xVel
@@ -130,7 +160,16 @@ class Player(object):
         self.applyGravity()
 
         self.stand()
-        self.state = "idle"
+        if self.state != "attacking" or self.animation.timer >= self.weapon.pos:
+            self.state = "idle"
+
+        if self.state == "attacking":
+            if self.animation.timer == self.weapon.pre:
+                self.xVel = self.weapon.jump * self.sprite.xScale
+            if self.weapon.pre <= self.animation.timer < self.weapon.swing:
+                for entity in self.world.entities:
+                    if self.weapon.sprite.collidesWith(entity.sprite):
+                        entity.getHurt(self)
 
         self.invincibility = max(self.invincibility - 1, self.health <= 0)
 
@@ -161,9 +200,10 @@ class Player(object):
     def applyGravity(self):
         if self.onSurface():
             if self.knock == 0:
-                if self.state == "idle":
+                if self.state != "walking":
                     self.xVel *= 0.6
-                self.stance = "standing"
+                if self.stance != "attacking" or self.animation.timer >= self.weapon.pos:
+                    self.stance = "standing"
 
             else: self.xVel *= 0.9
 

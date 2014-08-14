@@ -15,12 +15,16 @@ class Slime(object):
 
         self.xVel, self.yVel = (0, 0)
 
-        self.damage = 1
         self.jumpTimer = random.randint(96, 128)
+        self.health = 1
+
+        self.invincibility = 0
+        self.dead = False
 
     def draw(self, display, offset=(0, 0)):
         self.animation.timer += 1
         self.animation.animate(self.sprite)
+
         self.sprite.draw(display, offset)
 
     def moveLeft(self):
@@ -32,6 +36,22 @@ class Slime(object):
         if self.onSurface():
             self.xVel = 5 + random.random()
             self.yVel = -6
+
+    def knockBack(self, origin):
+        self.xVel = 4 * cmp(self.sprite.x, origin.sprite.x)
+        self.yVel = -4
+
+    def getHurt(self, origin):
+        if self.invincibility > 0:
+            return
+
+        self.knockBack(origin)
+        self.health -= origin.damage()
+
+        self.invincibility = origin.weapon.swing - origin.weapon.pre
+
+    def damage(self):
+        return 1
 
     def update(self):
         self.sprite.x += self.xVel
@@ -51,6 +71,13 @@ class Slime(object):
             self.yVel = 0
 
         self.applyGravity()
+
+        self.invincibility -= 1
+
+        if self.health <= 0:
+            if self.invincibility < -20:
+                self.dead = True
+            return
 
         if self.jumpTimer == 0:
             if random.random() < 0.5:
@@ -75,7 +102,8 @@ class Slime(object):
 
     def collidedWith(self, entity):
         if isinstance(entity, gameplay.entity.Player):
-            entity.damage(self)
+            if self.health > 0:
+                entity.getHurt(self)
 
     def onSurface(self):
         self.sprite.y += 1

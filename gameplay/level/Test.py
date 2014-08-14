@@ -38,6 +38,7 @@ class Test(object):
         self.entities = list()
 
         self.entities.append(gameplay.entity.Slime(self, [412, 500]))
+        self.entities.append(gameplay.entity.Slime(self, [712, 500]))
         self.entities.append(gameplay.entity.Slime(self, [812, 200]))
 
     def draw(self, display, offset=(0, 0)):
@@ -56,3 +57,5 @@ class Test(object):
     def update(self):
         for entity in self.entities:
             entity.update()
+
+            if entity.dead: self.entities.remove(entity)

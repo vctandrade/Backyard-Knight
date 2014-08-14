@@ -6,7 +6,7 @@ import data
 class GamePlayTest(object):
 
     def __init__(self):
-        keyboard.setMultiKeys(pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT)
+        keyboard.setMultiKeys(pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_x)
         self.world = gameplay.World()
 
     def displayOutput(self, display):
@@ -26,6 +26,7 @@ class GamePlayTest(object):
             if event.key == pygame.K_LEFT: self.world.player.moveLeft()
             if event.key == pygame.K_DOWN: self.world.player.crouch()
             if event.key == pygame.K_z: self.world.player.jump()
+            if event.key == pygame.K_x: self.world.player.attack()
 
         return self
 
