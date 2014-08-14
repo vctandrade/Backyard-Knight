@@ -2,17 +2,19 @@ import data
 import os
 
 class Configuration:
+
+    LANG = "en_us"
     WIDTH = 1024
     HEIGHT = 768
-    LANG = "en_us"
     MUSIC = 50
     SOUND = 50
 
     def __getitem__(self, key): return Configuration.__dict__[key]
     def __setitem__(self, key, value): Configuration.__dict__[key] = value
+    def __getattr__(self, key): return self.__getitem__(key)
+    def __setattr__(self, key, value): self.__setitem__(key, value)
     def __contains__(self, key): return key in Configuration.__dict__
-    def __iter__(self):
-        for k in Configuration.__dict__: yield k
+    def __iter__(self): return Configuration.__dict__.iterkeys()
 
 config = Configuration()
 
@@ -27,8 +29,8 @@ def loadConfig():
                 except: continue
                 config[key] = data.formatValue(value)
 
-def saveConfig(filePath):
-    with open(filePath, 'w') as f:
+def saveConfig():
+    with open("../../config.ini", 'w') as f:
         for k in config:
             if '__' in k: continue
             f.write(k + ": " + str(config[k]) + "\n")
