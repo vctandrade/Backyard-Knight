@@ -41,22 +41,27 @@ class Player(object):
         if self.stance == "crouched":
             if self.state == "walking":
                 self.animation.set(index=lambda: 3 + (self.animation.timer % 8) / 4)
+            elif self.state == "attacking":
+                self.animation.set(index=lambda: 10 if self.animation.timer < self.weapon.pre else 11)
+                self.weapon.sprite.index = 3 if self.animation.timer < self.weapon.pre else 4 if self.animation.timer < self.weapon.swing else 5
             else: self.animation.set(index=lambda: 3)
 
         if self.stance == "standing":
             if self.state == "walking":
                 self.animation.set(index=lambda: (self.animation.timer % 8) / 4)
+            elif self.state == "attacking":
+                self.animation.set(index=lambda: 8 if self.animation.timer < self.weapon.pre else 9)
+                self.weapon.sprite.index = 0 if self.animation.timer < self.weapon.pre else 1 if self.animation.timer < self.weapon.swing else 2
             else: self.animation.set(index=lambda: 0)
+
+        if self.state == "attacking":
+            self.weapon.sprite.x = self.sprite.x + self.weapon.xFix[self.weapon.sprite.index] * self.weapon.sprite.xScale
+            self.weapon.sprite.y = self.sprite.y
 
         if self.knock > 0:
             if self.knock < 64:
                 self.animation.set(index=lambda: 6 if self.knock > 10 else 5)
             else: self.animation.set(index=lambda: 7)
-
-        if self.state == "attacking":
-            self.animation.set(index=lambda: 8 if self.animation.timer < self.weapon.pre else 9 if self.animation.timer < self.weapon.swing else 10)
-            self.weapon.sprite.index = self.animation.index() - 8
-            self.weapon.sprite.x, self.weapon.sprite.y = self.sprite.x + self.weapon.xFix[self.weapon.sprite.index] * self.weapon.sprite.xScale, self.sprite.y
 
         self.animation.timer += 1
         self.animation.animate(self.sprite)
@@ -84,11 +89,15 @@ class Player(object):
         self.state = "walking" if self.state == "idle" else "idle"
 
     def crouch(self):
+        if self.state == "attacking": return
+
         if self.stance == "standing" or self.stance == "crouched":
             self.stance = "crouched"
             self.upperBox = 16
 
     def stand(self):
+        if self.state == "attacking": return
+
         self.upperBox = 34
 
         if self.collided():
@@ -111,11 +120,9 @@ class Player(object):
 
     def attack(self):
         if self.knock > 0 or self.state == "attacking": return
-        if not self.weapon: return
+        if not self.weapon or self.stance == "falling": return
 
-        self.stance = "standing"
         self.state = "attacking"
-
         self.animation.timer = 0
 
     def knockBack(self, origin):
@@ -164,12 +171,14 @@ class Player(object):
             self.state = "idle"
 
         if self.state == "attacking":
-            if self.animation.timer == self.weapon.pre:
+            if self.animation.timer == self.weapon.pre and self.onSurface():
                 self.xVel = self.weapon.jump * self.sprite.xScale
             if self.weapon.pre <= self.animation.timer < self.weapon.swing:
                 for entity in self.world.entities:
                     if self.weapon.sprite.collidesWith(entity.sprite):
                         entity.getHurt(self)
+            self.weapon.sprite.x = self.sprite.x + self.weapon.xFix[self.weapon.sprite.index] * self.weapon.sprite.xScale
+            self.weapon.sprite.y = self.sprite.y
 
         self.invincibility = max(self.invincibility - 1, self.health <= 0)
 
@@ -202,7 +211,7 @@ class Player(object):
             if self.knock == 0:
                 if self.state != "walking":
                     self.xVel *= 0.6
-                if self.stance != "attacking" or self.animation.timer >= self.weapon.pos:
+                if self.state != "attacking" or self.animation.timer > self.weapon.pos:
                     self.stance = "standing"
 
             else: self.xVel *= 0.9
@@ -211,6 +220,8 @@ class Player(object):
             if self.health <= 0: self.knock = 16
 
         else:
+            if self.state == "attacking" and self.stance != "falling":
+                self.xVel *= 0.5
             if self.knock == 0:
                 if self.stance == "crouched" and self.yVel >= 0:
                     self.sprite.y += 23

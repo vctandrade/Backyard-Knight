@@ -7,13 +7,13 @@ class Sword(object):
 
         self.pre = 8
         self.swing = 8
-        self.pos = 8
+        self.pos = 16
 
         self.swing += self.pre
         self.pos += self.swing
 
         self.damage = 2
 
-        self.xFix = [0, 42, 36]
+        self.xFix = [0, 42, 42, 0, 32, 32]
 
         self.sprite = graphics.Sprite(0, "sword.png", (0, 0))

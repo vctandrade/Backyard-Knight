@@ -39,7 +39,8 @@ class Test(object):
 
         self.entities.append(gameplay.entity.Slime(self, [412, 500]))
         self.entities.append(gameplay.entity.Slime(self, [712, 500]))
-        self.entities.append(gameplay.entity.Slime(self, [812, 200]))
+        for i in range(10):
+            self.entities.append(gameplay.entity.Slime(self, [812, 200]))
 
     def draw(self, display, offset=(0, 0)):
         y = 0
