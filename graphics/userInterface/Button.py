@@ -31,13 +31,13 @@ class Button(object):
         return data.getResource(self.icon)[index]
 
     def getDrawPos(self):
-        return [(self.x, self.y), (0, 0)]
+        return [(self.x - self.width / 2, self.y - self.height / 2), (0, 0)]
 
     def updateHover(self):
         pos = pygame.mouse.get_pos()
 
-        x = pos[0] - self.x
-        y = pos[1] - self.y
+        x = pos[0] - int(self.x - self.width / 2)
+        y = pos[1] - int(self.y - self.height / 2)
 
         mask = data.getResource(self.mask)
 

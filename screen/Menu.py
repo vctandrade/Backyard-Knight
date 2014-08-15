@@ -7,15 +7,12 @@ class Menu(object):
     def __init__(self):
         self.menu_list = graphics.userInterface.Interface()
 
-        button_width = data.getResource("button.png").width
-        button_height = data.getResource("button.png").height
-
-        self.menu_list.addButton(0, "button.png", data.config.WIDTH * 0.5 - (button_width) / 2, data.config.HEIGHT * 0.5 - (button_height) / 2)
-        self.menu_list.addButton(1, "button.png", data.config.WIDTH * 0.1 - (button_width) / 2, data.config.HEIGHT * 0.91 - (button_height) / 2)
-        self.menu_list.addButton(2, "button.png", data.config.WIDTH * 0.3 - (button_width) / 2, data.config.HEIGHT * 0.91 - (button_height) / 2)
-        self.menu_list.addButton(3, "button.png", data.config.WIDTH * 0.5 - (button_width) / 2, data.config.HEIGHT * 0.91 - (button_height) / 2)
-        self.menu_list.addButton(4, "button.png", data.config.WIDTH * 0.7 - (button_width) / 2, data.config.HEIGHT * 0.91 - (button_height) / 2)
-        self.menu_list.addButton(5, "button.png", data.config.WIDTH * 0.9 - (button_width) / 2, data.config.HEIGHT * 0.91 - (button_height) / 2)
+        self.menu_list.addButton(0, "button.png", data.config.WIDTH * 0.5, data.config.HEIGHT * 0.5)
+        self.menu_list.addButton(1, "button.png", data.config.WIDTH * 0.1, data.config.HEIGHT * 0.91)
+        self.menu_list.addButton(2, "button.png", data.config.WIDTH * 0.3, data.config.HEIGHT * 0.91)
+        self.menu_list.addButton(3, "button.png", data.config.WIDTH * 0.5, data.config.HEIGHT * 0.91)
+        self.menu_list.addButton(4, "button.png", data.config.WIDTH * 0.7, data.config.HEIGHT * 0.91)
+        self.menu_list.addButton(5, "button.png", data.config.WIDTH * 0.9, data.config.HEIGHT * 0.91)
 
     def displayOutput(self, display):
         display.blit(data.getResource("help_image1.png"), (400, 200))

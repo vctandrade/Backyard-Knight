@@ -1,3 +1,7 @@
 {
-	"caption": "Jogo"
+	"caption": "Jogo",
+	"sound": "SOM",
+	"music": "Musica",
+	"volume": "VOLUME",
+	"resolution": "resolução"
 }

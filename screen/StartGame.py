@@ -7,13 +7,10 @@ class StartGame(object):
     def __init__(self):
         self.startgame_list = graphics.userInterface.Interface()
 
-        button_width = data.getResource("button.png").width
-        button_height = data.getResource("button.png").height
-
-        self.startgame_list.addButton(0, "button.png", data.config.WIDTH * 0.5 - (button_width) / 2, data.config.HEIGHT * 0.2 - (button_height) / 2)
-        self.startgame_list.addButton(1, "button.png", data.config.WIDTH * 0.5 - (button_width) / 2, data.config.HEIGHT * 0.4 - (button_height) / 2)
-        self.startgame_list.addButton(2, "button.png", data.config.WIDTH * 0.5 - (button_width) / 2, data.config.HEIGHT * 0.6 - (button_height) / 2)
-        self.startgame_list.addButton(3, "button.png", data.config.WIDTH * 0.1 - (button_width) / 2, data.config.HEIGHT * 0.1 - (button_height) / 2)
+        self.startgame_list.addButton(0, "button.png", data.config.WIDTH * 0.5, data.config.HEIGHT * 0.2)
+        self.startgame_list.addButton(1, "button.png", data.config.WIDTH * 0.5, data.config.HEIGHT * 0.4)
+        self.startgame_list.addButton(2, "button.png", data.config.WIDTH * 0.5, data.config.HEIGHT * 0.6)
+        self.startgame_list.addButton(3, "button.png", data.config.WIDTH * 0.1, data.config.HEIGHT * 0.1)
 
     def displayOutput(self, display):
         self.startgame_list.draw(display)

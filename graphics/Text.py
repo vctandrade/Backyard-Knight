@@ -20,5 +20,5 @@ def drawText(display, string, x, y, color=0xFFFFFF, size=16, formatting="left"):
         char = pixelarray.make_surface()
         char = pygame.transform.scale(char, (size, size))
         char.set_colorkey(0xFF00FF)
-        display.blit(char, graphics.drawPos(x - begin, y))
+        display.blit(char, graphics.drawPos(x - begin, y - size / 2))
         x += size

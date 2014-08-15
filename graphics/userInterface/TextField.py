@@ -35,7 +35,7 @@ class TextField(object):
         if not self.visible: return graphics.blankImage
 
         icon = data.getResource(self.image).copy()
-        graphics.drawText(icon, self.text, self.width * 0.06, self.height / 2 - self.size / 2, self.color, self.size)
+        graphics.drawText(icon, self.text, self.width * 0.06, self.height / 2, self.color, self.size)
 
         if (self.tick / 24) % 2 == 0 and self.focused:
             graphics.drawText(icon, "|", self.width * 0.06 + (self.pos - 0.5) * self.size - 3, self.height / 2 - (self.size + 8) / 2, 0x000000, self.size + 8)
@@ -44,13 +44,13 @@ class TextField(object):
         return icon
 
     def getDrawPos(self):
-        return [(self.x, self.y), (0, 0)]
+        return [(self.x - self.width / 2, self.y - self.height / 2), (0, 0)]
 
     def updateHover(self):
         pos = pygame.mouse.get_pos()
 
-        x = pos[0] - self.x
-        y = pos[1] - self.y
+        x = pos[0] - int(self.x - self.width / 2)
+        y = pos[1] - int(self.y - self.height / 2)
 
         mask = data.getResource(self.mask)
 
