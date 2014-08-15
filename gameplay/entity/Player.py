@@ -221,7 +221,8 @@ class Player(object):
 
         else:
             if self.state == "attacking" and self.stance != "falling":
-                self.xVel *= 0.5
+                self.xVel = max(-5, min(self.xVel, 5))
+                print self.xVel
             if self.knock == 0:
                 if self.stance == "crouched" and self.yVel >= 0:
                     self.sprite.y += 23

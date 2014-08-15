@@ -12,7 +12,7 @@ class Sword(object):
         self.swing += self.pre
         self.pos += self.swing
 
-        self.damage = 2
+        self.damage = 1
 
         self.xFix = [0, 42, 42, 0, 32, 32]
 

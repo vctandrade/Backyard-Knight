@@ -85,15 +85,21 @@ class Sprite(object):
         display.blit(img, graphics.drawPos(x, y))
 
     def collidesWith(self, other):
-        if abs(self.x - other.x) <= self.xTrueCenter + other.xTrueCenter \
-        and abs(self.y - other.y) <= self.yTrueCenter + other.yTrueCenter:
-            for x1 in range(0, 2 * int(self.xTrueCenter)):
-                for y1 in range(0, 2 * int(self.yTrueCenter)):
-                    x2 = x1 + int(self.x - self.xTrueCenter - other.x + other.xTrueCenter)
-                    y2 = y1 + int(self.y - self.yTrueCenter - other.y + other.yTrueCenter)
-                    if 0 <= x2 < 2 * int(other.xTrueCenter) and 0 <= y2 < 2 * int(other.yTrueCenter):
-                        if self.pixelArray[x1][y1] != 0xFF00FF and other.pixelArray[x2][y2] != 0xFF00FF:
-                            return True
+
+        # DOESN'T WORK WITH ROTATED IMAGES!
+
+        left = int(other.x - other.xCenter - self.x + self.xCenter)
+        right = left + other.width
+        up = int(other.y - other.yCenter - self.y + self.yCenter)
+        down = up + other.height
+
+        for x1 in range(max(0, left), min(right, self.width)):
+            for y1 in range(max(0, up), min(down, self.height)):
+                x2 = x1 + int(self.x - self.xTrueCenter - other.x + other.xTrueCenter)
+                y2 = y1 + int(self.y - self.yTrueCenter - other.y + other.yTrueCenter)
+                if self.pixelArray[x1][y1] != 0xFF00FF and other.pixelArray[x2][y2] != 0xFF00FF:
+                    return True
+
         return False
 
     def __setattr__(self, name, value):
