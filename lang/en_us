@@ -1,7 +1,7 @@
 {
-	"caption": "Game",
-	"sound": "SOUND",
+	"caption": "Backyard Knight",
+	"sound": "Sound",
 	"music": "Music",
-	"volume": "VOLUME",
-	"resolution": "RESOLUTION"
+	"volume": "Volume",
+	"resolution": "Resolution"
 }

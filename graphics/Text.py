@@ -5,12 +5,10 @@ import pygame
 def drawText(display, string, x, y, color=0xFFFFFF, size=16, formatting="left"):
 
     font = data.getResource("Cheepicus_8x8.png")
-
     begin = size * len(string) / 2 if formatting == "center" else 0
 
-
     for c in string:
-        c = ord(c)
+        c = ord(c.encode("cp437", "replace"))
         pixelarray = pygame.PixelArray(font[c].copy())
         for i in range(len(pixelarray)):
             for j in range(len(pixelarray[i])):

@@ -13,14 +13,12 @@ class ConfigMenu(object):
         self.resolutions_strings = ["1024x768", "1280x768", "1600x900", "1920x1080"]
         self.resolutions = [(1024, 768), (1280, 768), (1600, 900), (1920, 1080)]
         self.index = self.resolutions.index((data.config.WIDTH, data.config.HEIGHT))
-        slider_width = data.getResource("slider.png").width
-        slider_height = data.getResource("slider.png").height
 
         self.configMenu_list.addButton(0, "arrow_back.png", data.config.WIDTH * 0.1, data.config.HEIGHT * 0.1, mask="arrow_leftMask.png")
         self.configMenu_list.addButton(1, "arrow_left.png", data.config.WIDTH * 0.5, data.config.HEIGHT * 0.6, mask="arrow_leftMask.png")
         self.configMenu_list.addButton(2, "arrow_right.png", data.config.WIDTH * 0.9, data.config.HEIGHT * 0.6, mask="arrow_rightMask.png")
-        self.configMenu_list.addSlider("musicVolume", "slider.png", "slidermask.png", (0, 100), data.config.MUSIC, int(data.config.WIDTH * 0.7 - (slider_width) / 2) , int(data.config.HEIGHT * 0.3 - (slider_height) / 2))
-        self.configMenu_list.addSlider("musicSound", "slider.png", "slidermask.png", (0, 100), data.config.SOUND, int(data.config.WIDTH * 0.7 - (slider_width) / 2) , int(data.config.HEIGHT * 0.4 - (slider_height) / 2))
+        self.configMenu_list.addSlider("musicVolume", "slider.png", "slidermask.png", (0, 100), data.config.MUSIC, data.config.WIDTH * 0.7 , data.config.HEIGHT * 0.3)
+        self.configMenu_list.addSlider("musicSound", "slider.png", "slidermask.png", (0, 100), data.config.SOUND, data.config.WIDTH * 0.7 , data.config.HEIGHT * 0.4)
 
     def displayOutput(self, display):
         display.blit(data.getResource("castle.jpg"), graphics.drawPos(0, 0))
@@ -35,9 +33,9 @@ class ConfigMenu(object):
         for e in self.configMenu_list.handle(event):
             if e.type == graphics.userInterface.BUTTONCLICKED:
                 if e.button == 0:
-                    data.saveConfig()
                     data.config.WIDTH, data.config.HEIGHT = self.resolutions[self.index]
                     pygame.display.set_mode(self.resolutions[self.index])
+                    data.saveConfig()
                     return screen.Menu()
                 if e.button == 1:
                     self.index -= 1

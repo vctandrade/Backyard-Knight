@@ -4,10 +4,10 @@ import os
 class Configuration:
 
     LANG = "en_us"
-    WIDTH = 1024
+    WIDTH = 1280
     HEIGHT = 768
-    MUSIC = 50
-    SOUND = 50
+    MUSIC = 100
+    SOUND = 100
 
     def __getitem__(self, key): return Configuration.__dict__[key]
     def __setitem__(self, key, value): Configuration.__dict__[key] = value

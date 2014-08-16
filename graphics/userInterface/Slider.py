@@ -49,7 +49,8 @@ class Slider(object):
         return icon
 
     def getDrawPos(self):
-        return [(self.x, self.y), (0, 0)]
+        if self.vertical: return [(self.x - self.height / 2, self.y - self.width / 2), (0, 0)]
+        return [(self.x - self.width / 2, self.y - self.height / 2), (0, 0)]
 
     def updateHover(self):
         if not self.active:
@@ -59,12 +60,12 @@ class Slider(object):
 
         pos = pygame.mouse.get_pos()
 
-        x = pos[0] - (self.x - self.width / 2 + self.getPos())
-        y = pos[1] - self.y
+        x = pos[0] - int(self.x - self.width / 2 + self.getPos()) + self.width / 2
+        y = pos[1] - int(self.y) + self.height / 2
 
         if self.vertical:
-            x = pos[1] - (self.y - self.width / 2 + self.getPos())
-            y = self.height - (pos[0] - self.x)
+            x = pos[1] - int(self.y - self.width / 2 + self.getPos()) + self.width / 2
+            y = self.height - int(pos[0] - self.x) - self.height / 2
 
         mask = data.getResource(self.mask)
 
