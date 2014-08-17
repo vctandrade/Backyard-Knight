@@ -48,7 +48,8 @@ class Slime(object):
         self.knockBack(origin)
         self.health -= origin.damage()
 
-        self.invincibility = origin.weapon.swing - origin.weapon.pre
+        self.invincibility = origin.weapon.pos - origin.weapon.pre
+        self.jumpTimer = random.randint(96, 128)
 
     def damage(self):
         return 1
@@ -75,7 +76,7 @@ class Slime(object):
         self.invincibility -= 1
 
         if self.health <= 0:
-            if self.invincibility < -20:
+            if self.invincibility < 0:
                 self.dead = True
             return
 
@@ -102,7 +103,7 @@ class Slime(object):
 
     def collidedWith(self, entity):
         if isinstance(entity, gameplay.entity.Player):
-            if self.health > 0:
+            if self.health > 0 and self.invincibility <= 0:
                 entity.getHurt(self)
 
     def onSurface(self):

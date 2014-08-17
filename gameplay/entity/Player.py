@@ -36,13 +36,16 @@ class Player(object):
         self.sprite.alpha = 255 - self.invincibility
 
         if self.stance == "falling":
-            self.animation.set(index=lambda: 2)
+            if self.state == "attacking":
+                self.animation.set(index=lambda: 12 if self.animation.timer <= self.weapon.pre else 13)
+                self.weapon.sprite.index = 6 if self.animation.timer < self.weapon.pre else 7 if self.animation.timer < self.weapon.swing else 8
+            else: self.animation.set(index=lambda: 2)
 
         if self.stance == "crouched":
             if self.state == "walking":
                 self.animation.set(index=lambda: 3 + (self.animation.timer % 8) / 4)
             elif self.state == "attacking":
-                self.animation.set(index=lambda: 10 if self.animation.timer < self.weapon.pre else 11)
+                self.animation.set(index=lambda: 10 if self.animation.timer <= self.weapon.pre else 11)
                 self.weapon.sprite.index = 3 if self.animation.timer < self.weapon.pre else 4 if self.animation.timer < self.weapon.swing else 5
             else: self.animation.set(index=lambda: 3)
 
@@ -50,13 +53,13 @@ class Player(object):
             if self.state == "walking":
                 self.animation.set(index=lambda: (self.animation.timer % 8) / 4)
             elif self.state == "attacking":
-                self.animation.set(index=lambda: 8 if self.animation.timer < self.weapon.pre else 9)
+                self.animation.set(index=lambda: 8 if self.animation.timer <= self.weapon.pre else 9)
                 self.weapon.sprite.index = 0 if self.animation.timer < self.weapon.pre else 1 if self.animation.timer < self.weapon.swing else 2
             else: self.animation.set(index=lambda: 0)
 
         if self.state == "attacking":
             self.weapon.sprite.x = self.sprite.x + self.weapon.xFix[self.weapon.sprite.index] * self.weapon.sprite.xScale
-            self.weapon.sprite.y = self.sprite.y
+            self.weapon.sprite.y = self.sprite.y + self.weapon.yFix[self.weapon.sprite.index]
 
         if self.knock > 0:
             if self.knock < 64:
@@ -119,8 +122,8 @@ class Player(object):
             self.yVel = -9
 
     def attack(self):
-        if self.knock > 0 or self.state == "attacking": return
-        if not self.weapon or self.stance == "falling": return
+        if self.knock > 0 or self.state == "attacking" \
+        or not self.weapon: return
 
         self.state = "attacking"
         self.animation.timer = 0
@@ -164,11 +167,11 @@ class Player(object):
 
             self.yVel = 0
 
+        if self.state != "attacking" or self.animation.timer > self.weapon.pos:
+            self.state = "idle"
         self.applyGravity()
 
         self.stand()
-        if self.state != "attacking" or self.animation.timer >= self.weapon.pos:
-            self.state = "idle"
 
         if self.state == "attacking":
             if self.animation.timer == self.weapon.pre and self.onSurface():
@@ -211,7 +214,7 @@ class Player(object):
             if self.knock == 0:
                 if self.state != "walking":
                     self.xVel *= 0.6
-                if self.state != "attacking" or self.animation.timer > self.weapon.pos:
+                if self.state != "attacking" or self.stance == "falling":
                     self.stance = "standing"
 
             else: self.xVel *= 0.9
@@ -221,8 +224,7 @@ class Player(object):
 
         else:
             if self.state == "attacking" and self.stance != "falling":
-                self.xVel = max(-5, min(self.xVel, 5))
-                print self.xVel
+                self.xVel = max(-5, min(self.xVel * 0.2, 5))
             if self.knock == 0:
                 if self.stance == "crouched" and self.yVel >= 0:
                     self.sprite.y += 23

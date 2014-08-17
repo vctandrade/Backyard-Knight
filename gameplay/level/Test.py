@@ -57,5 +57,4 @@ class Test(object):
     def update(self):
         for entity in self.entities:
             entity.update()
-
             if entity.dead: self.entities.remove(entity)
