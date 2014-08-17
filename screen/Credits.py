@@ -7,7 +7,7 @@ class Credits(object):
     def __init__(self):
         self.credits_list = graphics.userInterface.Interface()
 
-        self.credits_list.addButton(0, "arrow_back.png", data.config.WIDTH * 0.5, data.config.HEIGHT * 0.9)
+        self.credits_list.addButton(0, "arrow_back.png", data.config.WIDTH * 0.1, data.config.HEIGHT * 0.1,mask = "arrow_leftMask.png")
 
     def displayOutput(self, display):
         display.blit(data.getResource("credits.png"), (0, 0))

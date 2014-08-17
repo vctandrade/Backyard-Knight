@@ -1,7 +1,17 @@
 {
 	"caption": "Game",
-	"sound": "SOUND",
+	"configurations": "Config.",
+	"credits": "Credits",
+	"english": "English",
+	"exit": "Exit",
+	"help": "Help",
+	"language": "Language",
 	"music": "Music",
-	"volume": "VOLUME",
-	"resolution": "RESOLUTION"
+	"portuguese": "Portuguese",
+	"ranking": "Ranking",
+	"resolution": "RESOLUTION",
+	"sound": "SOUND",
+	"start" : "Start",
+	"volume": "VOLUME"
+
 }

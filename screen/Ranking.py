@@ -7,7 +7,7 @@ class Ranking(object):
     def __init__(self):
         self.ranking_list = graphics.userInterface.Interface()
 
-        self.ranking_list.addButton(0, "button.png", data.config.WIDTH * 0.1, data.config.HEIGHT * 0.1)
+        self.ranking_list.addButton(0, "arrow_back.png", data.config.WIDTH * 0.1, data.config.HEIGHT * 0.1,mask="arrow_leftMask.png")
 
     def displayOutput(self, display):
         self.ranking_list.draw(display)

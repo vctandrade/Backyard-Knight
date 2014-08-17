@@ -1,7 +1,17 @@
 {
 	"caption": "Jogo",
-	"sound": "SOM",
+	"configurations": "Config.",
+	"credits": "Creditos",
+	"english": "Ingles",
+	"exit": "Sair",
+	"help": "Ajuda",
+	"language": "Linguagem",
 	"music": "Musica",
-	"volume": "VOLUME",
-	"resolution": "resolução"
+	"portuguese": "Portugues",
+	"ranking": "Ranking",
+	"resolution": "resolução",
+	"sound": "SOM",
+	"start": "Iniciar",
+	"volume": "VOLUME"
+
 }
