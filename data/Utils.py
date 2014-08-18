@@ -11,12 +11,12 @@ def loadImage(imgPath):
     return img
 
 def formatValue(value):
-    if value == "true": value = True
-    if value == "false": value = False
-
     try: value = int(value)
     except:
         try: value = float(value)
         except: pass
+
+    if value == "true": value = True
+    if value == "false": value = False
 
     return value
