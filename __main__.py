@@ -14,7 +14,10 @@ graphics.userInterface.cursor.init()
 
 pygame.display.set_caption(data.translate("caption"))
 resolution = data.config.WIDTH, data.config.HEIGHT
-display = pygame.display.set_mode(resolution)
+
+if data.config.FULLSCREEN:
+    display = pygame.display.set_mode(resolution, pygame.FULLSCREEN)
+else: display = pygame.display.set_mode(resolution)
 
 clock = pygame.time.Clock()
 

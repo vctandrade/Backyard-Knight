@@ -1,17 +1,16 @@
 {
-	"caption": "Jogo",
+	"caption": "Backyard Knight",
 	"configurations": "Config.",
-	"credits": "Creditos",
-	"english": "Ingles",
+	"credits": "Créditos",
+	"english": "Inglês",
 	"exit": "Sair",
 	"help": "Ajuda",
-	"language": "Linguagem",
-	"music": "Musica",
-	"portuguese": "Portugues",
+	"language": "Língua",
+	"music": "Música",
+	"portuguese": "Português",
 	"ranking": "Ranking",
-	"resolution": "resoluÃ§Ã£o",
-	"sound": "SOM",
-	"start": "Iniciar",
-	"volume": "VOLUME"
-
+	"fullscreen": "Tela Cheia",
+	"resolution": "Resolução",
+	"sound": "Som",
+	"start": "Iniciar"
 }

@@ -1,5 +1,5 @@
 {
-	"caption": "Game",
+	"caption": "Backyard Knight",
 	"configurations": "Config.",
 	"credits": "Credits",
 	"english": "English",
@@ -9,9 +9,8 @@
 	"music": "Music",
 	"portuguese": "Portuguese",
 	"ranking": "Ranking",
-	"resolution": "RESOLUTION",
-	"sound": "SOUND",
-	"start" : "Start",
-	"volume": "VOLUME"
-
+	"fullscreen": "Fullscreen",
+	"resolution": "Resolution",
+	"sound": "Sound",
+	"start" : "Start"
 }
