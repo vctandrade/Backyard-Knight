@@ -25,6 +25,7 @@ class Player(object):
         self.maxHealth = 6
 
         self.weapon = gameplay.item.Sword()
+        self.item = gameplay.item.Bomb()
 
     def draw(self, display, offset=(0, 0)):
         if self.xVel > 0: self.sprite.xScale = 1
@@ -33,7 +34,7 @@ class Player(object):
         if self.xVel > 0: self.weapon.sprite.xScale = 1
         if self.xVel < 0: self.weapon.sprite.xScale = -1
 
-        self.sprite.alpha = 255 - self.invincibility
+        self.sprite.alpha = 255 - min(self.invincibility, 128)
 
         if self.stance == "falling":
             if self.state == "attacking":
@@ -121,8 +122,13 @@ class Player(object):
         if self.stance == "standing":
             self.yVel = -9
 
+    def useItem(self):
+        if self.state == "attacking" or self.knock > 0 \
+        or not self.item: return
+        self.item.use(self)
+
     def attack(self):
-        if self.knock > 0 or self.state == "attacking" \
+        if self.state == "attacking" or self.knock > 0 \
         or not self.weapon: return
 
         self.state = "attacking"
@@ -149,6 +155,9 @@ class Player(object):
 
     def damage(self):
         return self.weapon.damage
+
+    def living(self):
+        return True
 
     def update(self):
         self.sprite.x += self.xVel
@@ -178,7 +187,7 @@ class Player(object):
                 self.xVel = self.weapon.jump * self.sprite.xScale
             if self.weapon.pre <= self.animation.timer < self.weapon.swing:
                 for entity in self.world.entities:
-                    if self.weapon.sprite.collidesWith(entity.sprite):
+                    if entity.living() and self.weapon.sprite.collidesWith(entity.sprite):
                         entity.getHurt(self)
             self.weapon.sprite.x = self.sprite.x + self.weapon.xFix[self.weapon.sprite.index] * self.weapon.sprite.xScale
             self.weapon.sprite.y = self.sprite.y

@@ -11,12 +11,12 @@ class Slime(object):
         self.animation.timer = random.randint(0, 24)
         self.sprite = graphics.Sprite(0, "slime.png", pos)
 
-        self.topBox = 16
+        self.upperBox = 16
 
         self.xVel, self.yVel = (0, 0)
 
         self.jumpTimer = random.randint(96, 128)
-        self.health = 1
+        self.health = 2
 
         self.invincibility = 0
         self.dead = False
@@ -54,6 +54,9 @@ class Slime(object):
     def damage(self):
         return 1
 
+    def living(self):
+        return True
+
     def update(self):
         self.sprite.x += self.xVel
 
@@ -67,7 +70,7 @@ class Slime(object):
 
         if self.collided():
             if self.yVel >= 0: self.sprite.y -= (self.sprite.y + self.sprite.yCenter) % gameplay.tile.size
-            else: self.sprite.y += gameplay.tile.size - (self.sprite.y - self.sprite.yCenter + self.topBox) % gameplay.tile.size
+            else: self.sprite.y += gameplay.tile.size - (self.sprite.y - self.sprite.yCenter + self.upperBox) % gameplay.tile.size
 
             self.yVel = 0
 
@@ -91,7 +94,7 @@ class Slime(object):
         l = int(self.sprite.x - self.sprite.xCenter) / gameplay.tile.size
         r = int(self.sprite.x + self.sprite.xCenter - 1) / gameplay.tile.size
 
-        t = int(self.sprite.y - self.sprite.yCenter + self.topBox) / gameplay.tile.size
+        t = int(self.sprite.y - self.sprite.yCenter + self.upperBox) / gameplay.tile.size
         b = int(self.sprite.y + self.sprite.yCenter - 1) / gameplay.tile.size
 
         for x in range(l, r + 1):

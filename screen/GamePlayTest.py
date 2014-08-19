@@ -27,6 +27,7 @@ class GamePlayTest(object):
             if event.key == pygame.K_DOWN: self.world.player.crouch()
             if event.key == pygame.K_z: self.world.player.jump()
             if event.key == pygame.K_x: self.world.player.attack()
+            if event.key == pygame.K_c: self.world.player.useItem()
 
         return self
 
