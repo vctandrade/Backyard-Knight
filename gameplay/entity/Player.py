@@ -77,18 +77,18 @@ class Player(object):
     def moveLeft(self):
         if self.knock > 0 or self.state == "attacking": return
 
-        if self.stance == "falling": self.xVel = max(self.xVel - 0.2, -3)
+        if self.stance == "falling": self.xVel = max(self.xVel - 0.2, -2.5)
         if self.stance == "crouched": self.xVel = max(self.xVel - 0.5, -1.5)
-        if self.stance == "standing": self.xVel = max(self.xVel - 1, -3)
+        if self.stance == "standing": self.xVel = max(self.xVel - 1, -2.5)
 
         self.state = "walking" if self.state == "idle" else "idle"
 
     def moveRight(self):
         if self.knock > 0 or self.state == "attacking": return
 
-        if self.stance == "falling": self.xVel = min(self.xVel + 0.2, 3)
+        if self.stance == "falling": self.xVel = min(self.xVel + 0.2, 2.5)
         if self.stance == "crouched": self.xVel = min(self.xVel + 0.5, 1.5)
-        if self.stance == "standing": self.xVel = min(self.xVel + 1, 3)
+        if self.stance == "standing": self.xVel = min(self.xVel + 1, 2.5)
 
         self.state = "walking" if self.state == "idle" else "idle"
 
@@ -176,11 +176,13 @@ class Player(object):
 
             self.yVel = 0
 
-        if self.state != "attacking" or self.animation.timer > self.weapon.pos:
+        if self.state == "attacking" and self.animation.timer > self.weapon.pos:
             self.state = "idle"
-        self.applyGravity()
 
+        self.applyGravity()
         self.stand()
+
+        if self.state != "attacking": self.state = "idle"
 
         if self.state == "attacking":
             if self.animation.timer == self.weapon.pre and self.onSurface():

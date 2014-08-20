@@ -1,4 +1,3 @@
-import graphics
 import pygame
 import data
 import math
@@ -82,7 +81,7 @@ class Sprite(object):
 
         self.pixelArray = pygame.PixelArray(img.copy())
 
-        display.blit(img, graphics.drawPos(x, y))
+        display.blit(img, (x, y))
 
     def collidesWith(self, other):
 

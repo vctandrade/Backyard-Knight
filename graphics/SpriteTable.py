@@ -1,5 +1,4 @@
 import pygame
-import graphics
 
 class SpriteTable(object):
 
@@ -24,7 +23,7 @@ class SpriteTable(object):
             i = 0
             while i < uncutWidth:
                 self.table.append(pygame.Surface((width, height)))
-                self.table[-1].blit(uncutTable, graphics.drawPos(0, 0), [(i, j), (width, height)])
+                self.table[-1].blit(uncutTable, (0, 0), [(i, j), (width, height)])
 
                 self.table[-1].set_colorkey(0xFF00FF)
 
