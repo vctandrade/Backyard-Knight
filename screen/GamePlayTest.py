@@ -19,6 +19,14 @@ class GamePlayTest(object):
                 display.blit(data.getResource("life.png")[1], (16 + i * 48, 16))
             if self.world.player.health < 1 + 2 * i:
                 display.blit(data.getResource("life.png")[2], (16 + i * 48, 16))
+        
+        display.blit(data.getResource("item_box.png"), (16,60))
+        display.blit(data.getResource("weapon_box.png"), (16,140))
+        
+        if self.world.player.item != None:
+            display.blit(self.world.player.item.icon, (40, 80))
+        display.blit(self.world.player.weapon.icon, (50, 160))    
+        
 
     def respondToUserInput(self, event):
         if event.type == pygame.KEYDOWN:
