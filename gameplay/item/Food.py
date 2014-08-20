@@ -1,11 +1,10 @@
 import random
-import data
+import graphics
 
 class Food(object):
 
     def __init__(self):
-        self.icon_index = random.randint(0, 7)
-        self.icon = data.getResource("items.png")[self.icon_index]
+        self.icon = graphics.Sprite(random.randint(0, 7), "items.png", (0, 0))
 
     def use(self, player):
         if player.health != player.maxHealth:

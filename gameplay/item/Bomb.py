@@ -1,10 +1,10 @@
 import gameplay
-import data
+import graphics
 
 class Bomb(object):
 
     def __init__(self):
-        self.icon = data.getResource("items.png")[13]
+        self.icon = graphics.Sprite(11, "items.png", (0, 0))
 
     def use(self, player):
         pos = (player.sprite.x, player.sprite.y)

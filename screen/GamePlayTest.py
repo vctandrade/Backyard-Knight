@@ -14,19 +14,19 @@ class GamePlayTest(object):
 
         for i in range(self.world.player.maxHealth / 2 + self.world.player.maxHealth % 2):
             if self.world.player.health >= 2 + 2 * i:
-                display.blit(data.getResource("life.png")[0], (16 + i * 48, 16))
+                display.blit(data.getResource("life.png")[0], (24 + i * 48, 32))
             if self.world.player.health == 1 + 2 * i:
-                display.blit(data.getResource("life.png")[1], (16 + i * 48, 16))
+                display.blit(data.getResource("life.png")[1], (24 + i * 48, 32))
             if self.world.player.health < 1 + 2 * i:
-                display.blit(data.getResource("life.png")[2], (16 + i * 48, 16))
-        
-        display.blit(data.getResource("item_box.png"), (16,60))
-        display.blit(data.getResource("weapon_box.png"), (16,140))
-        
+                display.blit(data.getResource("life.png")[2], (24 + i * 48, 32))
+
+        display.blit(data.getResource("weapon_box.png"), (data.config.WIDTH - 152, 24))
+        display.blit(data.getResource("item_box.png"), (data.config.WIDTH - 80, 24))
+
         if self.world.player.item != None:
-            display.blit(self.world.player.item.icon, (40, 80))
-        display.blit(self.world.player.weapon.icon, (50, 160))    
-        
+            self.world.player.item.icon.draw(display, (50 - data.config.WIDTH, -54))
+        self.world.player.weapon.icon.draw(display, (122 - data.config.WIDTH, -54))
+
 
     def respondToUserInput(self, event):
         if event.type == pygame.KEYDOWN:

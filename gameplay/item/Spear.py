@@ -1,5 +1,4 @@
 import graphics
-import data
 
 class Spear(object):
 
@@ -19,4 +18,4 @@ class Spear(object):
         self.yFix = [0, 0, 0, 0, 0, 0, -18, 0, 0]
 
         self.sprite = graphics.Sprite(0, "sword.png", (0, 0))
-        self.icon = data.getResource("items.png")[19]
+        self.icon = graphics.Sprite(17, "items.png", (0, 0))
