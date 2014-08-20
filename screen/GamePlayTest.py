@@ -6,8 +6,8 @@ import data
 class GamePlayTest(object):
 
     def __init__(self):
+        self.world = gameplay.level.Test()
         keyboard.setMultiKeys(pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_x)
-        self.world = gameplay.World()
 
     def displayOutput(self, display):
         self.world.draw(display)

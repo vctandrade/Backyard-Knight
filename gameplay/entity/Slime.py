@@ -16,7 +16,7 @@ class Slime(object):
         self.xVel, self.yVel = (0, 0)
 
         self.jumpTimer = random.randint(96, 128)
-        self.health = 2
+        self.health = 1
 
         self.invincibility = 0
         self.dead = False

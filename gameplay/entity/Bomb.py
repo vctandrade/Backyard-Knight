@@ -2,8 +2,18 @@ import graphics
 import gameplay
 
 class Explosion:
-    pre = 64
-    pos = 12
+
+    prelen = 7
+    poslen = 12
+
+    preperiod = 16
+    posperiod = 2
+
+    magnitude = 512
+    decay = 0.8
+
+    pre = prelen * preperiod
+    pos = poslen * posperiod
 
     pos += pre
 
@@ -17,8 +27,13 @@ class Bomb(object):
 
         self.weapon = Explosion()
 
-        self.box = 16
+        self.animation.angle = lambda: self.angle if self.animation.timer < self.weapon.pre else 0
+        self.animation.index = lambda: self.animation.timer / self.weapon.preperiod if self.animation.timer <= self.weapon.pre \
+            else (self.animation.timer - self.weapon.pre) / self.weapon.posperiod + self.weapon.prelen
 
+        self.box = 20
+
+        self.angle = 0
         self.xVel, self.yVel = (0, 0)
         self.dead = False
 
@@ -26,12 +41,12 @@ class Bomb(object):
         self.animation.timer += 1
         self.animation.animate(self.sprite)
 
-        self.animation.set(index=lambda: (self.animation.timer / 8) % 2 if self.animation.timer < self.weapon.pre else self.animation.timer - self.weapon.pre)
+        self.angle -= 2 * self.xVel
 
         self.sprite.draw(display, offset)
 
     def damage(self):
-        return 2
+        return 3
 
     def living(self):
         return False
@@ -43,7 +58,7 @@ class Bomb(object):
             if self.xVel >= 0: self.sprite.x -= (self.sprite.x + self.box) % gameplay.tile.size
             else: self.sprite.x += gameplay.tile.size - (self.sprite.x - self.box) % gameplay.tile.size
 
-            self.xVel = 0
+            self.xVel *= -0.5
 
         self.sprite.y += self.yVel
 
@@ -51,9 +66,14 @@ class Bomb(object):
             if self.yVel >= 0: self.sprite.y -= (self.sprite.y + self.box) % gameplay.tile.size
             else: self.sprite.y += gameplay.tile.size - (self.sprite.y - self.box) % gameplay.tile.size
 
-            self.yVel = 0
+            self.yVel *= -0.5
 
         self.applyGravity()
+
+        if self.animation.timer == self.weapon.pre:
+            self.world.camera.setShake(self.weapon.magnitude, self.weapon.decay)
+            self.xVel = 0
+            self.yVel = 0
 
         if self.animation.timer > self.weapon.pre:
             for entity in self.world.entities:
@@ -92,5 +112,5 @@ class Bomb(object):
         return check
 
     def applyGravity(self):
-        if self.onSurface(): self.xVel *= 0.8
+        if self.onSurface(): self.xVel *= 0.95
         else:  self.yVel = min(self.yVel + 0.5, gameplay.tile.size)

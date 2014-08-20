@@ -4,6 +4,12 @@ import graphics
 class Test(object):
 
     def __init__(self):
+
+        self.camera = gameplay.Camera()
+        self.player = gameplay.entity.Player(self)
+
+        self.player.sprite.x, self.player.sprite.y = 512, 400
+
         sketch = [
                   "##############################################",
                   "###############......#########################",
@@ -41,7 +47,10 @@ class Test(object):
         for i in range(1): self.entities.append(gameplay.entity.Slime(self, [712, 500]))
         for i in range(8): self.entities.append(gameplay.entity.Slime(self, [812, 200]))
 
-    def draw(self, display, offset=(0, 0)):
+    def draw(self, display):
+
+        offset = self.camera.convert()
+
         y = 0
         for line in self.map:
             x = 0
@@ -54,7 +63,12 @@ class Test(object):
         for entity in self.entities:
             entity.draw(display, offset)
 
+        self.player.draw(display, offset)
+
     def update(self):
         for entity in self.entities:
             entity.update()
             if entity.dead: self.entities.remove(entity)
+
+        self.player.update()
+        self.camera.update(self.player.sprite)
