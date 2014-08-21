@@ -7,7 +7,7 @@ class Test(object):
         self.camera = gameplay.Camera()
         self.player = gameplay.entity.Player(self)
 
-        self.player.sprite.x, self.player.sprite.y = 312, 350
+        self.player.sprite.x, self.player.sprite.y = 740, 160
 
         sketch = [
                   "##############################################",
@@ -42,8 +42,13 @@ class Test(object):
 
         self.entities = list()
 
-        self.entities.append(gameplay.entity.Skeleton(self, [812, 350]))
-        self.entities.append(gameplay.entity.Skeleton(self, [300, 500]))
+        self.entities.append(gameplay.entity.Skeleton(self, [300, 150]))
+        self.entities.append(gameplay.entity.Skeleton(self, [812, 320]))
+        self.entities.append(gameplay.entity.Skeleton(self, [300, 480]))
+
+        self.entities.append(gameplay.entity.Golem(self, [1150, 120]))
+
+        self.entities.append(gameplay.entity.Slime(self, [1200, 500]))
 
     def draw(self, display):
 

@@ -10,9 +10,11 @@ class Skeleton(object):
         self.sprite = graphics.Sprite(0, "skeleton.png", pos)
 
         self.xVel, self.yVel = (0, 0)
-        self.sprite.xScale = cmp(self.world.player.sprite.x, self.sprite.x)
 
-        self.health = 4
+        self.sprite.xScale = cmp(self.world.player.sprite.x, self.sprite.x)
+        if self.sprite.xScale == 0: self.sprite.xScale = -1
+
+        self.health = 3
 
         self.state = "idle"
         self.dir = 0
@@ -93,7 +95,7 @@ class Skeleton(object):
         self.invincibility = origin.weapon.pos - origin.weapon.pre
 
     def damage(self):
-        return 2
+        return 2 if self.state == "attacking" and 32 <= self.animation.timer < 64 else 1
 
     def living(self):
         return True
@@ -128,14 +130,14 @@ class Skeleton(object):
             if self.state != "knockback" or (self.animation.timer >= 16 and self.onSurface()):
                 self.state = "idle"
 
-            if self.playerClose() and self.world.player.health > 0 and self.state != "attacking":
+            if self.playerClose() and self.world.player.health > 0:
                 distance = abs(self.sprite.x - self.world.player.sprite.x)
 
                 if distance < 256:
                     if distance > 192:
                         self.dir = self.sprite.xScale
                     if distance < 128:
-                        if self.animation.timer > 128: self.attack()
+                        if self.animation.timer > 96: self.attack()
                         self.dir = -self.sprite.xScale
 
                 else: self.dir = self.sprite.xScale
