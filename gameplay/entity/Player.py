@@ -25,7 +25,7 @@ class Player(object):
         self.maxHealth = 6
 
         self.weapon = gameplay.item.Sword()
-        self.item = gameplay.item.Bomb()
+        self.item = gameplay.item.InvincibilityPotion()
 
     def draw(self, display, offset=(0, 0)):
         if self.xVel > 0: self.sprite.xScale = 1
@@ -187,7 +187,7 @@ class Player(object):
         if self.state == "attacking":
             if self.animation.timer == self.weapon.pre and self.onSurface():
                 self.xVel = self.weapon.jump * self.sprite.xScale
-            if self.weapon.pre <= self.animation.timer < self.weapon.swing:
+            if self.weapon.pre < self.animation.timer < self.weapon.swing:
                 for entity in self.world.entities:
                     if entity.living() and self.weapon.sprite.collidesWith(entity.sprite):
                         entity.getHurt(self)

@@ -42,7 +42,7 @@ class Test(object):
 
         self.entities = list()
 
-        self.entities.append(gameplay.entity.Beholder(self, [300, 200]))
+        self.entities.append(gameplay.entity.Beholder(self, [300, 320]))
         self.entities.append(gameplay.entity.Skeleton(self, [300, 480]))
         self.entities.append(gameplay.entity.Golem(self, [1150, 120]))
         self.entities.append(gameplay.entity.Slime(self, [1200, 500]))
