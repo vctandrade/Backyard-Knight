@@ -3,12 +3,13 @@ import keyboard
 import pygame
 import data
 
+        
 class GamePlayTest(object):
 
     def __init__(self):
         self.world = gameplay.level.Test()
         keyboard.setMultiKeys(pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_x)
-
+        self.n = 0
     def displayOutput(self, display):
         self.world.draw(display)
 
@@ -19,10 +20,15 @@ class GamePlayTest(object):
                 display.blit(data.getResource("life.png")[1], (24 + i * 48, 32))
             if self.world.player.health < 1 + 2 * i:
                 display.blit(data.getResource("life.png")[2], (24 + i * 48, 32))
-
+        
         display.blit(data.getResource("weapon_box.png"), (data.config.WIDTH - 152, 24))
         display.blit(data.getResource("item_box.png"), (data.config.WIDTH - 80, 24))
 
+        if (self.world.chest1.state == "alreadyOpen" or self.world.chest2.state == "alreadyOpen") and self.n < 5:
+            self.n += 1
+            display.blit(data.getResource("changed_box.png"), (data.config.WIDTH - 152, 24))
+            display.blit(data.getResource("changed_box.png"), (data.config.WIDTH - 80, 24))
+            
         if self.world.player.item != None:
             self.world.player.item.icon.draw(display, (50 - data.config.WIDTH, -54))
         self.world.player.weapon.icon.draw(display, (122 - data.config.WIDTH, -54))
@@ -36,6 +42,7 @@ class GamePlayTest(object):
             if event.key == pygame.K_z: self.world.player.jump()
             if event.key == pygame.K_x: self.world.player.attack()
             if event.key == pygame.K_c: self.world.player.useItem()
+            if event.key == pygame.K_o: self.world.chest1.openChest(); self.world.chest2.openChest()
 
         return self
 

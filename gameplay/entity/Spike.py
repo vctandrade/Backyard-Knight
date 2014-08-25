@@ -2,71 +2,96 @@ import graphics
 import gameplay
 import math
 
-class Spike(object):
+class SettledSpike(object):
 
-    def __init__(self, world, pos):
+    def __init__(self, world, pos, mode):
         self.world = world
-
-        self.state = "down"
+        self.mode = mode
         self.animation = graphics.AnimationInfo()
         self.sprite = graphics.Sprite(0, "spike_change.png", pos)
 
-        self.upLimit = self.sprite.y + 100
-        self.downLimit = self.sprite.y
-
         self.xVel, self.yVel = (0, 0)
 
-        self.upperBox = 16
         self.dead = False
 
         self.moveTimer = 0
+        self.up = 1
+        self.down = -1
+        
+        if self.mode == "UpDown":
+            self.upLimit = self.sprite.y + self.sprite.height
+            self.downLimit = self.sprite.y
+        if self.mode == "DownUp":
+            self.sprite.yScale = -1
+            
+            self.up = -1
+            self.down = 1
+            
+            self.upLimit = self.sprite.y - self.sprite.height
+            self.downLimit = self.sprite.y
+        if self.mode == "LeftRight":
+            self.sprite.angle = 90
+            
+            self.upLimit = self.sprite.x + self.sprite.height
+            self.downLimit = self.sprite.x                 
+        if self.mode == "RightLeft":  
+            self.sprite.angle = 270        
+            self.up = -1
+            self.down = 1
 
-    def draw(self, display, offset=(0, 0)):
-        origin = self.sprite.y
-
+            self.upLimit = self.sprite.x - self.sprite.height
+            self.downLimit = self.sprite.x
+            
+    def draw(self, display, offset=(0, 0)):            
         self.animation.index = lambda: (self.animation.timer / 7) % 7
-
+        
         self.animation.timer += 1
         self.animation.animate(self.sprite)
-
-        if self.animation.timer < 10:
-            self.sprite.y += math.cos(self.moveTimer / 4.0) * 20
-        else:
-            self.sprite.y += math.cos(self.moveTimer / 32.0) * 20
-
         self.sprite.draw(display, offset)
 
-        self.sprite.y = origin
-        self.moveTimer += 1
-
-
     def update(self):
-        if self.collided():
-            if self.xVel >= 0: self.sprite.x -= (self.sprite.x + self.sprite.xCenter) % gameplay.tile.size
-            else: self.sprite.x += gameplay.tile.size - (self.sprite.x - self.sprite.xCenter) % gameplay.tile.size
-
-            self.xVel = 0
-
         self.sprite.y += self.yVel
-
-        if self.collided():
-            if self.yVel >= 0: self.sprite.y -= (self.sprite.y + self.sprite.yCenter) % gameplay.tile.size
-            else: self.sprite.y += gameplay.tile.size - (self.sprite.y - self.sprite.yCenter) % gameplay.tile.size
-
-            self.yVel = 0
-
-
-        if self.sprite.y == self.upLimit:
-            self.moveDown()
-        if self.sprite.y == self.downLimit:
-            self.moveUp()
-
+        self.sprite.x += self.xVel
+        
+        if self.mode == "UpDown":
+            if self.sprite.y >= self.upLimit:
+                self.yVel = 0
+                self.moveDown()
+            if self.sprite.y <= self.downLimit:
+                self.moveUp()
+                
+        if self.mode == "DownUp":
+            if self.sprite.y <= self.upLimit:
+                self.yVel = 0
+                self.moveDown()
+            if self.sprite.y >= self.downLimit:
+                self.moveUp()
+                
+        if self.mode == "RightLeft":
+            if self.sprite.x <= self.upLimit:
+                self.xVel = 0
+                self.moveDown()
+            if self.sprite.x >= self.downLimit:
+                self.moveUp()
+                
+        if self.mode == "LeftRight":
+            if self.sprite.x >= self.upLimit:
+                self.xVel = 0
+                self.moveDown()
+            if self.sprite.x <= self.downLimit:
+                self.moveUp()
+        
     def moveUp(self):
-        self.yVel = 10
-        self.state = "up"
+        if self.mode == "DownUp" or self.mode == "UpDown":
+            self.yVel = 20 * self.up
+        else:
+            self.xVel = 20 * self.up
+            
     def moveDown(self):
-        self.yVel = -2
-        self.state = "down"
+        if self.mode == "DownUp" or self.mode == "UpDown":
+            self.yVel = 2 * self.down
+        else:
+            self.xVel = 2 * self.down
     def getHurt(self, origin):
         self.world.player.knockBack(self)
 

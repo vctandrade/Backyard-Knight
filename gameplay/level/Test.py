@@ -6,7 +6,6 @@ class Test(object):
 
         self.camera = gameplay.Camera()
         self.player = gameplay.entity.Player(self)
-
         self.player.sprite.x, self.player.sprite.y = 740, 160
 
         sketch = [
@@ -17,12 +16,12 @@ class Test(object):
                   "##...........................................#",
                   "##...........................................#",
                   "##...........................................#",
-                  "##...............#...###################.....#",
-                  "##.....................................##....#",
+                  "##...................###################.....#",
+                  "##...............#.....................##....#",
                   "##...........................................#",
                   "####.........................................#",
                   "##..............................#..........###",
-                  "##....###########################..........###",
+                  "##..............#################..........###",
                   "##..###........................##..........###",
                   "##..#...........................#.........####",
                   "##........................................####",
@@ -41,12 +40,15 @@ class Test(object):
             self.map.append(newLine)
 
         self.entities = list()
-
-        self.entities.append(gameplay.entity.Beholder(self, [300, 320]))
+        
+        self.entities.append(gameplay.entity.Chest(self,[650, 348]))
+        self.entities.append(gameplay.entity.Chest(self,[650,480]))
         self.entities.append(gameplay.entity.Skeleton(self, [300, 480]))
         self.entities.append(gameplay.entity.Golem(self, [1150, 120]))
         self.entities.append(gameplay.entity.Slime(self, [1200, 500]))
-
+        
+        self.chest1 = self.entities[0]
+        self.chest2 = self.entities[1]
     def draw(self, display):
 
         offset = self.camera.convert()
