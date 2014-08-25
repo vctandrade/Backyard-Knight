@@ -29,11 +29,13 @@ class Skeleton(object):
     def rightBox(self): return 56 if self.sprite.xScale == 1 else 32
 
     def draw(self, display, offset=(0, 0)):
-        if self.playerClose():
-            self.sprite.xScale = cmp(self.world.player.sprite.x, self.sprite.x)
-        else:
-            if self.xVel > 0: self.sprite.xScale = 1
-            if self.xVel < 0: self.sprite.xScale = -1
+        if self.playerClose() and self.state != "attacking":
+            side = cmp(self.world.player.sprite.x, self.sprite.x)
+            distance = abs(self.world.player.sprite.x - self.sprite.x)
+
+            if self.sprite.xScale != side and distance > 38:
+                self.sprite.x += 30 * side
+                self.sprite.xScale = side
 
         if self.state == "knockback":
             self.animation.index = lambda: 26

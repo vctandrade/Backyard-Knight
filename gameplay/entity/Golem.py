@@ -79,7 +79,7 @@ class Golem(object):
         self.invincibility = origin.weapon.pos - origin.weapon.pre
 
     def damage(self):
-        return 4 if self.state == "attacking" and 48 <= self.animation.timer < 96 else 1
+        return 3 if self.state == "attacking" and 48 <= self.animation.timer < 96 else 1
 
     def living(self):
         return True
