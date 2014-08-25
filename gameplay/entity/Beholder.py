@@ -24,7 +24,6 @@ class Beholder(object):
 
         self.floatTimer = 0
 
-
     def draw(self, display, offset=(0, 0)):
         if self.dir > 0: self.sprite.xScale = 1
         if self.dir < 0: self.sprite.xScale = -1
@@ -151,7 +150,7 @@ class Beholder(object):
                 self.state = "idle"
                 self.animation.timer = 0
 
-        if self.playerClose() and self.world.player.health > 0:
+        if self.playerClose() and (self.world.player.health > 0 or self.state == "running"):
             if self.state != "running":
                 self.animation.timer = 0
 
@@ -173,14 +172,14 @@ class Beholder(object):
                 if abs(self.world.player.sprite.x - self.sprite.x) > 320 \
                 and self.dir != cmp(self.world.player.sprite.x, self.sprite.x):
                     if self.speed < 2:
+                        if self.speed < 1: self.state = "idle"
                         self.animation.timer = 0
-                        self.state = "idle"
                     self.speed *= 0.95
 
         elif self.state == "running":
-            if self.speed < 2 or self.animation.timer >= 64:
+            if self.speed < 2 and self.animation.timer >= 64:
+                if self.speed < 1: self.state = "idle"
                 self.animation.timer = 0
-                self.state = "idle"
             self.speed *= 0.95
 
     def collided(self):
@@ -211,4 +210,3 @@ class Beholder(object):
     def applyGravity(self):
         if self.onSurface(): self.xVel *= 0.95
         else:  self.yVel = min(self.yVel + 0.1, 2)
-

@@ -1,6 +1,7 @@
 from Beholder import *
 from Bomb import *
 from Chest import *
+from Door import *
 from Golem import *
 from Player import *
 from Skeleton import *

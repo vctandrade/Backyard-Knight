@@ -4,8 +4,8 @@ import random
 class Camera(object):
 
     def __init__(self, x=0, y=0):
-        self.x = x
-        self.y = y
+        self.x = x - data.config.WIDTH / 2
+        self.y = y - data.config.HEIGHT / 2
 
         self.shake = 0
         self.decay = 0

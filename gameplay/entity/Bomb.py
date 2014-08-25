@@ -113,4 +113,4 @@ class Bomb(object):
 
     def applyGravity(self):
         if self.onSurface(): self.xVel *= 0.95
-        else:  self.yVel = min(self.yVel + 0.5, gameplay.tile.size)
+        else:  self.yVel = min(self.yVel + 0.5, gameplay.tile.size - 1)

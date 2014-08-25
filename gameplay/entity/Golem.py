@@ -162,4 +162,4 @@ class Golem(object):
 
     def applyGravity(self):
         if self.onSurface() and self.state != "walking": self.xVel *= 0.6
-        else:  self.yVel = min(self.yVel + 0.5, gameplay.tile.size)
+        else:  self.yVel = min(self.yVel + 0.5, gameplay.tile.size - 1)

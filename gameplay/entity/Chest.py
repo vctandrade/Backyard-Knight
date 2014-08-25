@@ -1,75 +1,73 @@
-import data
 import graphics
 import gameplay
 import random
+
 class Chest(object):
-    
-    def __init__(self,world,pos):
-        
+
+    def __init__(self, world, pos):
         self.world = world
+
         self.animation = graphics.AnimationInfo()
         self.sprite = graphics.Sprite(0, "chest.png", (0, 0))
-        
+
         self.sprite.x, self.sprite.y = pos
         self.state = "closed"
-        
+
         self.dead = False
-    
-    
-    def draw(self,display, offset=(0, 0)):
-        
+
+    def draw(self, display, offset=(0, 0)):
+
         if self.state == "closed":
-            self.sprite.index = 0
+            self.animation.index = lambda: 0
         if self.state == "open":
-            self.sprite.index =  1 if self.animation.timer < 48 else 2 if self.animation.timer < 56 else 3 if self.animation.timer < 64 else 4
-        if self.state == "alreadyOpen":
-            self.sprite.index =  4
-    
+            self.animation.index = lambda: 1 + (self.animation.timer / 8) % 3 if self.animation.timer < 24 else 4
+
         self.animation.timer += 1
         self.animation.animate(self.sprite)
 
         self.sprite.draw(display, offset)
-    
-    def playerClose(self):
-        return abs(self.sprite.y - self.world.player.sprite.y) < 30 and abs(self.sprite.x - self.world.player.sprite.x) < 30
-    
-    def RandomizeItem(self):
-        num = random.randint(0,100)
-        if num in range(0,4):
-            return num, gameplay.item.Sword()
-        if num in range(5,9):
-            return num, gameplay.item.Spear()
-        if num in range(10,14):
-            return num, gameplay.item.Hammer()
-        if num in range(15,24):
-            return num, gameplay.item.Food()
-        if num in range(25,29):
-            return num, gameplay.item.HealthPotion()
-        if num in range(30,33):
-            return num, gameplay.item.InvincibilityPotion()
-        if num in range(34,38):
-            return num, gameplay.item.Bomb()
-        else:
-            return num, gameplay.item.Food()
-    
-    def openChest(self):
-        if self.playerClose() and self.state == "closed" :
-            self.state = "open"
-            
-            n, item = self.RandomizeItem()
-            print n
-            if n <14:
+
+    def randomizeItem(self):
+        chance = random.random()
+
+        if chance < 0.14: item = gameplay.item.Sword()
+        elif chance < 0.28: item = gameplay.item.Spear()
+        elif chance < 0.42: item = gameplay.item.Hammer()
+        elif chance < 0.56: item = gameplay.item.HealthPotion()
+        elif chance < 0.60: item = gameplay.item.InvincibilityPotion()
+        elif chance < 0.74: item = gameplay.item.Bomb()
+        else: item = gameplay.item.Food()
+
+        if type(item) in (type(self.world.player.item), type(self.world.player.weapon)):
+            return self.randomizeItem()
+
+        return item
+
+    def use(self):
+        if self.state == "closed":
+            item = self.randomizeItem()
+
+            if hasattr(item, "damage"):
                 self.world.player.weapon = item
+                self.world.player.flashMode = "weapon"
+
             else:
-                self.world.player.item = item    
+                self.world.player.item = item
+                self.world.player.flashMode = "item"
+
+            self.world.player.flashTimer = 32
+
+            self.state = "open"
             self.animation.timer = 0
-            
-    def collidedWith(self,origin):
-        pass
+
+    def collidedWith(self, origin):
+        if isinstance(origin, gameplay.entity.Player):
+            origin.interactibles.add(self)
+
     def living(self):
         return False
-                   
-    def update(self):       
-        if self.state == "open":
-            self.state = "alreadyOpen"
+
+    def update(self):
+        try: self.world.player.interactibles.remove(self)
+        except: pass
 

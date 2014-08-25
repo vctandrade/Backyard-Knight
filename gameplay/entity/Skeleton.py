@@ -177,4 +177,4 @@ class Skeleton(object):
 
     def applyGravity(self):
         if self.onSurface() and self.state != "walking": self.xVel *= 0.8
-        else:  self.yVel = min(self.yVel + 0.5, gameplay.tile.size)
+        else:  self.yVel = min(self.yVel + 0.5, gameplay.tile.size - 1)

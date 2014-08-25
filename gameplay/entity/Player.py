@@ -27,6 +27,10 @@ class Player(object):
         self.weapon = gameplay.item.Sword()
         self.item = gameplay.item.InvincibilityPotion()
 
+        self.flashTimer = 0
+        self.flashMode = None
+        self.interactibles = set()
+
     def draw(self, display, offset=(0, 0)):
         if self.xVel > 0: self.sprite.xScale = 1
         if self.xVel < 0: self.sprite.xScale = -1
@@ -126,6 +130,13 @@ class Player(object):
         if self.state == "attacking" or self.knock > 0 \
         or not self.item: return
         self.item.use(self)
+
+    def interact(self):
+        if self.state == "attacking" or self.knock > 0:
+            return
+
+        for entity in self.interactibles:
+            entity.use()
 
     def attack(self):
         if self.state == "attacking" or self.knock > 0 \
@@ -241,4 +252,4 @@ class Player(object):
                     self.sprite.y += 23
                 self.stance = "falling"
 
-            self.yVel = min(self.yVel + 0.5, gameplay.tile.size)
+            self.yVel = min(self.yVel + 0.5, gameplay.tile.size - 1)
