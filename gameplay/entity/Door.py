@@ -8,7 +8,7 @@ class Door(object):
         self.world = world
         self.next = nextLvl
 
-        self.sprite = graphics.Sprite(-1, "golem.png", (0, 0))
+        self.sprite = graphics.Sprite(56, "golem.png", (0, 0))
         self.sprite.x, self.sprite.y = pos
 
         self.sprite.yCenter = 212

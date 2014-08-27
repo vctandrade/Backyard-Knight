@@ -22,7 +22,6 @@ class Chest(object):
         if self.state == "open":
             self.animation.index = lambda: 1 + (self.animation.timer / 8) % 3 if self.animation.timer < 24 else 4
 
-        self.animation.timer += 1
         self.animation.animate(self.sprite)
 
         self.sprite.draw(display, offset)
@@ -68,6 +67,7 @@ class Chest(object):
         return False
 
     def update(self):
+        self.animation.timer += 1
         try: self.world.player.interactibles.remove(self)
         except: pass
 

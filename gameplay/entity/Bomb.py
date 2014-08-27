@@ -38,7 +38,6 @@ class Bomb(object):
         self.dead = False
 
     def draw(self, display, offset=(0, 0)):
-        self.animation.timer += 1
         self.animation.animate(self.sprite)
 
         self.angle -= 2 * self.xVel
@@ -52,6 +51,8 @@ class Bomb(object):
         return False
 
     def update(self):
+        self.animation.timer += 1
+
         self.sprite.x += self.xVel
 
         if self.collided():

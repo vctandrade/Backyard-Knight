@@ -71,7 +71,6 @@ class Player(object):
                 self.animation.set(index=lambda: 6 if self.knock > 10 else 5)
             else: self.animation.set(index=lambda: 7)
 
-        self.animation.timer += 1
         self.animation.animate(self.sprite)
         self.sprite.draw(display, offset)
 
@@ -164,6 +163,8 @@ class Player(object):
         if self.health > 0:
             self.invincibility = 128
 
+        self.animation.timer = 0
+
     def damage(self):
         return self.weapon.damage
 
@@ -171,6 +172,7 @@ class Player(object):
         return True
 
     def update(self):
+        self.animation.timer += 1
         self.sprite.x += self.xVel
 
         if self.collided():

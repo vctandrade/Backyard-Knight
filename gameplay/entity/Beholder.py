@@ -52,12 +52,9 @@ class Beholder(object):
             self.sprite.y += math.cos(self.floatTimer / 32.0) * 8
 
         self.animation.animate(self.sprite)
-        self.animation.timer += 1
-
         self.sprite.draw(display, offset)
 
         self.sprite.y = origin
-        self.floatTimer += 1
 
     def knockBack(self, origin):
         self.xVel = 8 * cmp(self.sprite.x, origin.sprite.x)
@@ -107,6 +104,9 @@ class Beholder(object):
         return stuck
 
     def update(self):
+        self.animation.timer += 1
+        self.floatTimer += 1
+
         self.sprite.x += self.xVel
 
         if self.collided():

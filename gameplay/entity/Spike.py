@@ -36,7 +36,6 @@ class Spike(object):
     def draw(self, display, offset=(0, 0)):
         self.skull.draw(display, offset)
 
-        self.animation.timer += 1
         self.animation.animate(self.sprite)
 
         buff = pygame.Surface([78, 180])
@@ -62,6 +61,8 @@ class Spike(object):
         display.blit(buff, pos, rect)
 
     def update(self):
+        self.animation.timer += 1
+
         self.sprite.y += self.yVel
         self.sprite.x += self.xVel
 

@@ -2,6 +2,7 @@ import gameplay
 import keyboard
 import pygame
 import data
+import screen
 
 class GamePlayTest(object):
 
@@ -13,6 +14,7 @@ class GamePlayTest(object):
         pygame.mixer.music.play(-1)
 
         self.transitionTimer = 1
+        self.overlay = None
 
     def displayOutput(self, display):
         self.world.draw(display)
@@ -44,8 +46,13 @@ class GamePlayTest(object):
             buff.fill((0, 0, 0, 255 - self.transitionTimer % 64 * 4))
             display.blit(buff, (0, 0))
 
+        if self.overlay:
+            self.overlay.displayOutput(display)
+
     def respondToUserInput(self, event):
-        if self.world.next == None and event.type == pygame.KEYDOWN:
+        if self.overlay: self.overlay = self.overlay.respondToUserInput(event)
+
+        elif self.world.next == None and event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT: self.world.player.moveRight()
             if event.key == pygame.K_LEFT: self.world.player.moveLeft()
             if event.key == pygame.K_DOWN: self.world.player.crouch()
@@ -53,10 +60,17 @@ class GamePlayTest(object):
             if event.key == pygame.K_z: self.world.player.jump()
             if event.key == pygame.K_x: self.world.player.attack()
             if event.key == pygame.K_c: self.world.player.useItem()
+            if event.key == pygame.K_ESCAPE: self.overlay = screen.Pause()
 
         return self
 
     def update(self):
+        if self.overlay: return
+
+        if self.world.player.health <= 0 and \
+        self.world.player.animation.timer >= 128:
+            self.overlay = screen.Dead()
+
         if self.transitionTimer < 0:
             if self.world.next != None:
                 self.transitionTimer = 64

@@ -51,8 +51,6 @@ class Skeleton(object):
             self.animation.index = lambda: (self.animation.timer / 16) % 2
 
         self.animation.animate(self.sprite)
-        self.animation.timer += 1
-
         self.sprite.draw(display, offset)
 
     def playerClose(self):
@@ -103,6 +101,8 @@ class Skeleton(object):
         return True
 
     def update(self):
+        self.animation.timer += 1
+
         self.sprite.x += self.xVel
 
         if self.collided():

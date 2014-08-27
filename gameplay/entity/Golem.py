@@ -54,7 +54,6 @@ class Golem(object):
             self.sprite.x -= 78 * self.sprite.xScale
 
         self.animation.animate(self.sprite)
-        self.animation.timer += 1
 
         if self.invincibility > 0: self.sprite.index += 32
 
@@ -85,6 +84,7 @@ class Golem(object):
         return True
 
     def update(self):
+        self.animation.timer += 1
         self.sprite.x += self.xVel
 
         if self.collided():
