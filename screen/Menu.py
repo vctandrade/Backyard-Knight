@@ -39,11 +39,11 @@ class Menu(object):
                 if e.button == 0:
                     return screen.StartGame()
                 if e.button == 1:
-                    return screen.Help()
+                    return screen.Help("menu")
                 if e.button == 2:
                     return screen.Ranking()
                 if e.button == 3:
-                    return screen.ConfigMenu()
+                    return screen.ConfigMenu("menu")
                 if e.button == 4:
                     return screen.Credits()
                 if e.button == 5:

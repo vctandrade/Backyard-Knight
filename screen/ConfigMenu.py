@@ -5,7 +5,9 @@ import pygame
 
 class ConfigMenu(object):
 
-    def __init__(self):
+    def __init__(self,origin):
+        self.origin = origin
+
         self.configMenu_list = graphics.userInterface.Interface()
 
         self.resolutions_strings = ["1024x768", "1280x768", "1600x900", "1920x1080"]
@@ -30,7 +32,11 @@ class ConfigMenu(object):
         self.configMenu_list.addSlider("musicSound", "slider.png", "slidermask.png", (0, 100), data.config.SOUND, data.config.WIDTH * 0.7 , data.config.HEIGHT * 0.4)
 
     def displayOutput(self, display):
-        display.blit(data.getResource("rocks.png"), graphics.drawPos(0, 0))
+        if self.origin == "menu":
+            display.blit(data.getResource("rocks.png"), graphics.drawPos(0, 0))
+        else:
+            display.fill(0X000000)
+            display.set_alpha(0)
         self.configMenu_list.draw(display)
 
 
@@ -58,7 +64,8 @@ class ConfigMenu(object):
 
                     data.saveConfig()
                     data.loadLanguage()
-                    return screen.Menu()
+                    if self.origin == "menu":
+                        return screen.Menu()
                 if e.button == 1:
                     self.resolution_index -= 1
                 if e.button == 2:
