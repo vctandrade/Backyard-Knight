@@ -1,4 +1,3 @@
-import graphics
 import pygame
 import data
 import math
@@ -9,6 +8,10 @@ class Sprite(object):
         self.index = index
         self.table = table
 
+        img = data.getResource(table)
+
+        self.pixelArray = pygame.PixelArray(img[0].copy())
+
         self.alpha = 255
 
         self.x, self.y = pos
@@ -18,11 +21,11 @@ class Sprite(object):
 
         self.angle = 0
 
-        width = data.getResource(table).width
-        height = data.getResource(table).height
+        self.width = img.width
+        self.height = img.height
 
-        self.xCenter = width / 2
-        self.yCenter = height / 2
+        self.xCenter = self.width / 2
+        self.yCenter = self.height / 2
 
         self.xTrueCenter = self.xCenter
         self.yTrueCenter = self.yCenter
@@ -45,7 +48,7 @@ class Sprite(object):
             img = pygame.transform.flip(img, self.xScale < 0, self.yScale < 0)
 
         if self.xScale != 1 or self.yScale != 1:
-            img = pygame.transform.scale(img, (height, width))
+            img = pygame.transform.scale(img, (width, height))
 
         if self.angle % 360 != 0:
             img = pygame.transform.rotate(img, self.angle)
@@ -58,17 +61,17 @@ class Sprite(object):
             sin2 = math.sin(math.radians(self.angle))
 
             if self.angle % 180 < 90:
-                x = (cos * height + sin * width) / 2
-                y = (cos * width + sin * height) / 2
-            else:
                 x = (cos * width + sin * height) / 2
                 y = (cos * height + sin * width) / 2
+            else:
+                x = (cos * height + sin * width) / 2
+                y = (cos * width + sin * height) / 2
 
             xRefinedCenter = self.xCenter * abs(self.xScale) - width / 2
             yRefinedCenter = self.yCenter * abs(self.yScale) - height / 2
 
-            x += sin2 * xRefinedCenter + cos2 * yRefinedCenter
-            y += cos2 * xRefinedCenter - sin2 * yRefinedCenter
+            x += cos2 * xRefinedCenter - sin2 * yRefinedCenter
+            y += sin2 * xRefinedCenter + cos2 * yRefinedCenter
 
             self.xTrueCenter, self.yTrueCenter = x, y
             self.centerOutdated = False
@@ -76,7 +79,27 @@ class Sprite(object):
         x = self.x - self.xTrueCenter - offset[0]
         y = self.y - self.yTrueCenter - offset[1]
 
+        self.pixelArray = pygame.PixelArray(img.copy())
+
         display.blit(img, (x, y))
+
+    def collidesWith(self, other):
+
+        # DOESN'T WORK WITH ROTATED IMAGES!
+
+        left = int(other.x - other.xCenter - self.x + self.xCenter)
+        right = left + other.width
+        up = int(other.y - other.yCenter - self.y + self.yCenter)
+        down = up + other.height
+
+        for x1 in range(max(0, left), min(right, self.width)):
+            for y1 in range(max(0, up), min(down, self.height)):
+                x2 = x1 + int(self.x - self.xTrueCenter - other.x + other.xTrueCenter)
+                y2 = y1 + int(self.y - self.yTrueCenter - other.y + other.yTrueCenter)
+                if self.pixelArray[x1][y1] != 0xFF00FF and other.pixelArray[x2][y2] != 0xFF00FF:
+                    return True
+
+        return False
 
     def __setattr__(self, name, value):
         if name in ("xScale", "yScale", "angle", "xCenter", "yCenter") \

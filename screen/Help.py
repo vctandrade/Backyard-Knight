@@ -17,7 +17,7 @@ class Help(object):
         self.help_list.addButton(2, "arrow_right.png", data.config.WIDTH * 0.6, data.config.HEIGHT * 0.9, mask="arrow_rightMask.png")
 
     def displayOutput(self, display):
-        if not isinstance(self.origin, screen.Menu):
+        if self.origin is not screen.Menu:
             resolution = (data.config.WIDTH, data.config.HEIGHT)
             shadow = pygame.Surface(resolution, pygame.SRCALPHA)
             shadow.fill((0, 0, 0, 128))
@@ -31,12 +31,11 @@ class Help(object):
         for e in self.help_list.handle(event):
             if e.type == graphics.userInterface.BUTTONCLICKED:
                     if e.button == 0:
-                        return self.origin
+                        return self.origin()
                     if e.button == 1 :
                         self.image -= 1
                     if e.button == 2:
                         self.image += 1
-
                     self.image %= 3
 
         return self

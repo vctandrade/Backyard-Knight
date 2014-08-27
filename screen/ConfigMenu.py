@@ -33,7 +33,7 @@ class ConfigMenu(object):
 
     def displayOutput(self, display):
 
-        if not isinstance(self.origin, screen.Menu):
+        if self.origin is not screen.Menu:
             resolution = (data.config.WIDTH, data.config.HEIGHT)
             shadow = pygame.Surface(resolution, pygame.SRCALPHA)
             shadow.fill((0, 0, 0, 128))
@@ -66,7 +66,8 @@ class ConfigMenu(object):
 
                     data.saveConfig()
                     data.loadLanguage()
-                    return self.origin
+
+                    return self.origin()
 
                 if e.button == 1:
                     self.resolution_index -= 1

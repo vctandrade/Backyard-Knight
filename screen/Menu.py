@@ -9,7 +9,7 @@ class Menu(object):
         if not pygame.mixer.music.get_busy():
             pygame.mixer.music.load("theday.xm")
             pygame.mixer.music.set_volume(data.config.MUSIC / 100.0)
-            pygame.mixer.music.play()
+            pygame.mixer.music.play(-1)
 
         self.menu_list = graphics.userInterface.Interface()
 
@@ -36,13 +36,29 @@ class Menu(object):
         for e in self.menu_list.handle(event):
             if e.type == graphics.userInterface.BUTTONCLICKED:
                 if e.button == 0:
-                    return screen.StartGame()
+                    pygame.mixer.music.fadeout(1024)
+
+                    transitionTimer = 0
+                    display = pygame.display.get_surface()
+
+                    while transitionTimer <= 255:
+                        self.displayOutput(display)
+
+                        buff = pygame.Surface((data.config.WIDTH, data.config.HEIGHT), pygame.SRCALPHA)
+                        buff.fill((0, 0, 0, transitionTimer))
+                        display.blit(buff, (0, 0))
+
+                        transitionTimer += 4
+                        pygame.display.flip()
+
+                    return screen.GamePlayTest()
+
                 if e.button == 1:
-                    return screen.Help(self)
+                    return screen.Help(self.__class__)
                 if e.button == 2:
                     return screen.Ranking()
                 if e.button == 3:
-                    return screen.ConfigMenu(self)
+                    return screen.ConfigMenu(self.__class__)
                 if e.button == 4:
                     return screen.Credits()
                 if e.button == 5:

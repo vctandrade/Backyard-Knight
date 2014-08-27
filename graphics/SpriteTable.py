@@ -1,5 +1,4 @@
 import pygame
-import graphics
 
 class SpriteTable(object):
 

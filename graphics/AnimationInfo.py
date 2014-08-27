@@ -5,6 +5,9 @@ class AnimationInfo():
         self.deathTime = -1
 
     def set(self, **value):
+        self.__dict__ = {"timer": self.timer,
+                         "deathTime": self.deathTime}
+
         for key in value:
             self.__dict__[key] = value[key]
 

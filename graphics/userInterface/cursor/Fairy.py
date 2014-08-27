@@ -5,7 +5,6 @@ def load():
     global sprite, info
 
     sprite = graphics.Sprite(3, "sprite.png", (0, 0))
-    sprite.xScale, sprite.yScale = 2, 2
 
     info = graphics.AnimationInfo()
     info.set(index=lambda: 3 + (info.timer % 6) / 3)
