@@ -21,8 +21,8 @@ class Menu(object):
         self.menu_list.addButton(5, "button.png", data.config.WIDTH * 0.9, data.config.HEIGHT * 0.9)
 
     def displayOutput(self, display):
-        display.blit(data.getResource("windows_xp.png"), graphics.drawPos(0, 0))
-        display.blit(data.getResource("logo.png"), graphics.drawPos(data.config.WIDTH * 0.5 - 461, data.config.HEIGHT * 0.05))
+        display.blit(data.getResource("windows_xp.png"), (0, 0))
+        display.blit(data.getResource("logo.png"), (data.config.WIDTH * 0.5 - 461, data.config.HEIGHT * 0.05))
         self.menu_list.draw(display)
 
         graphics.drawText(display, data.translate("start"), data.config.WIDTH * 0.5, data.config.HEIGHT * 0.6, size=20 , formatting="center")
@@ -32,18 +32,17 @@ class Menu(object):
         graphics.drawText(display, data.translate("credits"), data.config.WIDTH * 0.7, data.config.HEIGHT * 0.9, size=20 , formatting="center")
         graphics.drawText(display, data.translate("exit"), data.config.WIDTH * 0.9, data.config.HEIGHT * 0.9, size=20 , formatting="center")
 
-
     def respondToUserInput(self, event):
         for e in self.menu_list.handle(event):
             if e.type == graphics.userInterface.BUTTONCLICKED:
                 if e.button == 0:
                     return screen.StartGame()
                 if e.button == 1:
-                    return screen.Help("menu")
+                    return screen.Help(self)
                 if e.button == 2:
                     return screen.Ranking()
                 if e.button == 3:
-                    return screen.ConfigMenu("menu")
+                    return screen.ConfigMenu(self)
                 if e.button == 4:
                     return screen.Credits()
                 if e.button == 5:

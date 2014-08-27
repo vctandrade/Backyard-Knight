@@ -1,6 +1,5 @@
-import data
-import graphics
 import pygame
+import data
 
 def drawText(display, string, x, y, color=0x262626, size=16, formatting="left"):
 
@@ -18,5 +17,5 @@ def drawText(display, string, x, y, color=0x262626, size=16, formatting="left"):
         char = pixelarray.make_surface()
         char = pygame.transform.scale(char, (size, size))
         char.set_colorkey(0xFF00FF)
-        display.blit(char, graphics.drawPos(x - begin, y - size / 2))
+        display.blit(char, (x - begin, y - size / 2))
         x += size

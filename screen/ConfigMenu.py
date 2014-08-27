@@ -5,7 +5,7 @@ import pygame
 
 class ConfigMenu(object):
 
-    def __init__(self,origin):
+    def __init__(self, origin):
         self.origin = origin
 
         self.configMenu_list = graphics.userInterface.Interface()
@@ -32,13 +32,15 @@ class ConfigMenu(object):
         self.configMenu_list.addSlider("musicSound", "slider.png", "slidermask.png", (0, 100), data.config.SOUND, data.config.WIDTH * 0.7 , data.config.HEIGHT * 0.4)
 
     def displayOutput(self, display):
-        if self.origin == "menu":
-            display.blit(data.getResource("rocks.png"), graphics.drawPos(0, 0))
-        else:
-            display.fill(0X000000)
-            display.set_alpha(0)
-        self.configMenu_list.draw(display)
 
+        if not isinstance(self.origin, screen.Menu):
+            resolution = (data.config.WIDTH, data.config.HEIGHT)
+            shadow = pygame.Surface(resolution, pygame.SRCALPHA)
+            shadow.fill((0, 0, 0, 128))
+            display.blit(shadow, (0, 0))
+        else: display.blit(data.getResource("rocks.png"), (0, 0))
+
+        self.configMenu_list.draw(display)
 
         graphics.drawText(display, data.translate("configurations"), data.config.WIDTH * 0.5, data.config.HEIGHT * 0.1, color=0xE0E0E0, size=40, formatting="center")
         graphics.drawText(display, data.translate("music"), data.config.WIDTH * 0.2, data.config.HEIGHT * 0.3, color=0xE0E0E0, size=30, formatting="center")
@@ -64,8 +66,8 @@ class ConfigMenu(object):
 
                     data.saveConfig()
                     data.loadLanguage()
-                    if self.origin == "menu":
-                        return screen.Menu()
+                    return self.origin
+
                 if e.button == 1:
                     self.resolution_index -= 1
                 if e.button == 2:

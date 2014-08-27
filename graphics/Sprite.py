@@ -76,7 +76,7 @@ class Sprite(object):
         x = self.x - self.xTrueCenter - offset[0]
         y = self.y - self.yTrueCenter - offset[1]
 
-        display.blit(img, graphics.drawPos(x, y))
+        display.blit(img, (x, y))
 
     def __setattr__(self, name, value):
         if name in ("xScale", "yScale", "angle", "xCenter", "yCenter") \

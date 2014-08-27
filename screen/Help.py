@@ -1,13 +1,13 @@
 import graphics
+import pygame
 import screen
 import data
 
-
 class Help(object):
 
-    def __init__(self,origin):
+    def __init__(self, origin):
         self.origin = origin
-        
+
         self.help_list = graphics.userInterface.Interface()
         self.help_images = ["help_image1.png", "help_image2.png", "help_image3.png"]
         self.image = 0
@@ -17,21 +17,21 @@ class Help(object):
         self.help_list.addButton(2, "arrow_right.png", data.config.WIDTH * 0.6, data.config.HEIGHT * 0.9, mask="arrow_rightMask.png")
 
     def displayOutput(self, display):
-        if self.origin == "menu":
-            display.blit(data.getResource("rocks.png"), graphics.drawPos(0, 0))
-        else:
-            display.fill(0X000000)
-            display.set_alpha(0) 
+        if not isinstance(self.origin, screen.Menu):
+            resolution = (data.config.WIDTH, data.config.HEIGHT)
+            shadow = pygame.Surface(resolution, pygame.SRCALPHA)
+            shadow.fill((0, 0, 0, 128))
+            display.blit(shadow, (0, 0))
+        else: display.blit(data.getResource("rocks.png"), (0, 0))
+
         display.blit(data.getResource(self.help_images[self.image]), (400, 200))
         self.help_list.draw(display)
-
 
     def respondToUserInput(self, event):
         for e in self.help_list.handle(event):
             if e.type == graphics.userInterface.BUTTONCLICKED:
                     if e.button == 0:
-                        if self.origin == "menu":
-                            return screen.Menu()
+                        return self.origin
                     if e.button == 1 :
                         self.image -= 1
                     if e.button == 2:
