@@ -1,6 +1,5 @@
 import graphics
 import gameplay
-import pygame
 
 class Door(object):
 
@@ -8,6 +7,7 @@ class Door(object):
         self.world = world
         self.next = nextLvl
 
+        self.animation = graphics.AnimationInfo()
         self.sprite = graphics.Sprite(56, "golem.png", (0, 0))
         self.sprite.x, self.sprite.y = pos
 
@@ -16,11 +16,16 @@ class Door(object):
         self.dead = False
 
     def draw(self, display, offset=(0, 0)):
+        if self.world.next:
+            self.animation.index = lambda: 57 + (self.animation.timer / 24) % 3
+
+        self.animation.animate(self.sprite)
         self.sprite.draw(display, offset)
+        self.animation.timer += 1
 
     def use(self):
-        self.world.static = pygame.display.get_surface().copy()
-        self.world.next = self.next(self.world.player)
+        self.world.next = self.next
+        self.animation.timer = 0
 
     def collidedWith(self, origin):
         if isinstance(origin, gameplay.entity.Player):

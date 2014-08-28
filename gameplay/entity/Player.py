@@ -25,7 +25,7 @@ class Player(object):
         self.maxHealth = 6
 
         self.weapon = gameplay.item.Sword()
-        self.item = gameplay.item.InvincibilityPotion()
+        self.item = None
 
         self.flashTimer = 0
         self.flashMode = None

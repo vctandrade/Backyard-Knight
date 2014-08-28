@@ -1,7 +1,7 @@
 import pygame
 
 def loadImage(imgPath):
-    img = pygame.image.load(imgPath)
+    img = pygame.image.load(imgPath).convert_alpha()
 
     width = img.get_width() * 2
     height = img.get_height() * 2

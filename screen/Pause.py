@@ -17,7 +17,7 @@ class Pause(object):
     def displayOutput(self, display):
         resolution = (data.config.WIDTH, data.config.HEIGHT)
         shadow = pygame.Surface(resolution, pygame.SRCALPHA)
-        shadow.fill((0, 0, 0, 128))
+        shadow.fill((0, 0, 0, 224))
         display.blit(shadow, (0, 0))
 
         self.menu_list.draw(display)
@@ -26,6 +26,7 @@ class Pause(object):
         graphics.drawText(display, data.translate("help"), data.config.WIDTH * 0.3, data.config.HEIGHT * 0.5, size=20 , formatting="center")
         graphics.drawText(display, data.translate("configurations"), data.config.WIDTH * 0.7, data.config.HEIGHT * 0.5, size=20 , formatting="center")
         graphics.drawText(display, data.translate("exit"), data.config.WIDTH * 0.5, data.config.HEIGHT * 0.7, size=20 , formatting="center")
+        graphics.drawText(display, data.translate("pause"), data.config.WIDTH * 0.5, data.config.HEIGHT * 0.5, size=40 , color=0xFFFFFF, formatting="center")
 
     def respondToUserInput(self, event):
         for e in self.menu_list.handle(event):
@@ -33,9 +34,9 @@ class Pause(object):
                 if e.button == 0:
                     return None
                 if e.button == 1:
-                    return screen.Help(self.__class__)
+                    return screen.Help(screen.Pause)
                 if e.button == 2:
-                    return screen.ConfigMenu(self.__class__)
+                    return screen.ConfigMenu(screen.Pause)
                 if e.button == 3:
                     return screen.Menu()
 

@@ -7,10 +7,7 @@ import data
 pygame.init()
 
 data.loadConfig()
-data.loadResources()
 data.loadLanguage()
-
-graphics.userInterface.cursor.init()
 
 pygame.display.set_caption(data.translate("caption"))
 resolution = data.config.WIDTH, data.config.HEIGHT
@@ -19,8 +16,10 @@ if data.config.FULLSCREEN:
     display = pygame.display.set_mode(resolution, pygame.FULLSCREEN)
 else: display = pygame.display.set_mode(resolution)
 
-clock = pygame.time.Clock()
+data.loadResources()
+graphics.userInterface.cursor.init()
 
+clock = pygame.time.Clock()
 screen = screen.Menu()
 
 def repaint():

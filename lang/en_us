@@ -6,14 +6,15 @@
 	"exit": "Exit",
 	"help": "Help",
 	"language": "Language",
-	"menu": "Menu",
 	"music": "Music",
+	"menu": "Menu",
 	"portuguese": "Portuguese",
+	"pause": "Pause",
 	"ranking": "Ranking",
 	"fullscreen": "Fullscreen",
 	"resolution": "Resolution",
-	"restart": "Restart",
 	"return": "Return",
+	"restart": "Restart",
 	"sound": "Sound",
-	"start" : "Start"
+	"start": "Start"
 }

@@ -63,7 +63,7 @@ class Golem(object):
     def attack(self):
         self.state = "attacking"
         self.animation.timer = 0
-        self.sprite.x -= 52 * self.sprite.xScale
+        self.sprite.x -= 50 * self.sprite.xScale
 
     def knockBack(self, origin):
         pass
@@ -107,7 +107,7 @@ class Golem(object):
 
         if self.health <= 0 and self.state != "dead":
             if self.state == "attacking" and self.animation.timer < 48:
-                self.sprite.x += 52 * self.sprite.xScale
+                self.sprite.x += 50 * self.sprite.xScale
             self.state = "idle"
 
             if self.invincibility < 0:

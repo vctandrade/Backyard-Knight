@@ -2,7 +2,6 @@
 /Main.pyc
 /__init__.pyc
 /TextFieldTest.pyc
-/GamePlayTest.pyc
 /ConfigMenu.pyc
 /Credits.pyc
 /Help.pyc
@@ -11,3 +10,4 @@
 /StartGame.pyc
 /Dead.pyc
 /Pause.pyc
+/Gameplay.pyc

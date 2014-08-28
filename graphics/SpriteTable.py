@@ -25,7 +25,7 @@ class SpriteTable(object):
                 self.table.append(pygame.Surface((width, height)))
                 self.table[-1].blit(uncutTable, (0, 0), [(i, j), (width, height)])
 
-                self.table[-1].set_colorkey(0xFF00FF)
+                self.table[-1].set_colorkey(0xFF00FF, pygame.RLEACCEL)
 
                 i += width
             j += height

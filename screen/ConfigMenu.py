@@ -36,7 +36,7 @@ class ConfigMenu(object):
         if self.origin is not screen.Menu:
             resolution = (data.config.WIDTH, data.config.HEIGHT)
             shadow = pygame.Surface(resolution, pygame.SRCALPHA)
-            shadow.fill((0, 0, 0, 128))
+            shadow.fill((0, 0, 0, 224))
             display.blit(shadow, (0, 0))
         else: display.blit(data.getResource("rocks.png"), (0, 0))
 

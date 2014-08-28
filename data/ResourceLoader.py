@@ -29,6 +29,7 @@ def loadResources():
         resourceList[sprite] = graphics.SpriteTable("sprite/" + sprite, 8, 8)
 
     os.chdir("music")
+    data.Language.folder = "../../lang/"
 
 def getResource(name):
     if not resourceList.has_key(name):

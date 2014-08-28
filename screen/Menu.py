@@ -51,14 +51,14 @@ class Menu(object):
                         transitionTimer += 4
                         pygame.display.flip()
 
-                    return screen.GamePlayTest()
+                    return screen.Gameplay()
 
                 if e.button == 1:
-                    return screen.Help(self.__class__)
+                    return screen.Help(screen.Menu)
                 if e.button == 2:
                     return screen.Ranking()
                 if e.button == 3:
-                    return screen.ConfigMenu(self.__class__)
+                    return screen.ConfigMenu(screen.Menu)
                 if e.button == 4:
                     return screen.Credits()
                 if e.button == 5:

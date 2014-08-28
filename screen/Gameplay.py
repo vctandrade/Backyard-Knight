@@ -4,7 +4,7 @@ import pygame
 import data
 import screen
 
-class GamePlayTest(object):
+class Gameplay(object):
 
     def __init__(self):
         self.world = gameplay.level.Test()
@@ -41,16 +41,17 @@ class GamePlayTest(object):
         self.world.player.weapon.icon.draw(display, (122 - data.config.WIDTH, -54))
 
         if self.transitionTimer >= 0 or self.world.next:
-            if self.world.next: display.blit(self.world.static, (0, 0))
             buff = pygame.Surface((data.config.WIDTH, data.config.HEIGHT), pygame.SRCALPHA)
             buff.fill((0, 0, 0, 255 - self.transitionTimer % 64 * 4))
             display.blit(buff, (0, 0))
 
-        if self.overlay:
-            self.overlay.displayOutput(display)
+        if self.overlay: self.overlay.displayOutput(display)
 
     def respondToUserInput(self, event):
-        if self.overlay: self.overlay = self.overlay.respondToUserInput(event)
+        if self.overlay:
+            self.overlay = self.overlay.respondToUserInput(event)
+            if type(self.overlay) in (screen.Gameplay, screen.Menu):
+                return self.overlay
 
         elif self.world.next == None and event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT: self.world.player.moveRight()
@@ -60,11 +61,15 @@ class GamePlayTest(object):
             if event.key == pygame.K_z: self.world.player.jump()
             if event.key == pygame.K_x: self.world.player.attack()
             if event.key == pygame.K_c: self.world.player.useItem()
-            if event.key == pygame.K_ESCAPE: self.overlay = screen.Pause()
+
+            if event.key == pygame.K_ESCAPE and self.world.player.health > 0:
+                self.overlay = screen.Pause()
 
         return self
 
     def update(self):
+        if isinstance(self.overlay, screen.Dead):
+            self.world.update()
         if self.overlay: return
 
         if self.world.player.health <= 0 and \
@@ -76,7 +81,7 @@ class GamePlayTest(object):
                 self.transitionTimer = 64
 
         if self.transitionTimer == 0:
-            self.world = self.world.next
+            self.world = self.world.next(self.world.player)
 
         if self.world.next == None:
             if self.transitionTimer >= 0:

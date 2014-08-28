@@ -1,9 +1,11 @@
 import json
 import data
 
+folder = "lang/"
+
 def loadLanguage():
     global langPack
-    with open("../../lang/" + data.config.LANG) as f:
+    with open(folder + data.config.LANG) as f:
         langPack = json.load(f, encoding="latin")
 
 def translate(key):
