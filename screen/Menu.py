@@ -6,10 +6,8 @@ import data
 class Menu(object):
 
     def __init__(self):
-        if not pygame.mixer.music.get_busy():
-            pygame.mixer.music.load("theday.xm")
-            pygame.mixer.music.set_volume(data.config.MUSIC / 100.0)
-            pygame.mixer.music.play(-1)
+        if data.getMusic() != "theday.xm":
+            data.playMusic("theday.xm")
 
         self.menu_list = graphics.userInterface.Interface()
 

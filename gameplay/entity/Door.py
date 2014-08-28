@@ -17,7 +17,7 @@ class Door(object):
 
     def draw(self, display, offset=(0, 0)):
         if self.world.next:
-            self.animation.index = lambda: 57 + (self.animation.timer / 24) % 3
+            self.animation.index = lambda: 57 + (self.animation.timer / 20) % 3
 
         self.animation.animate(self.sprite)
         self.sprite.draw(display, offset)

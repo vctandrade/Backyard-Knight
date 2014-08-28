@@ -1,8 +1,11 @@
 import gameplay
+import data
 
 class Boss(object):
 
     def __init__(self, player):
+
+        data.playMusic("a-violent-encounter.ogg")
 
         self.player = player
         self.player.world = self

@@ -10,8 +10,7 @@ class Gameplay(object):
         self.world = gameplay.level.Test()
         keyboard.setMultiKeys(pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_x)
 
-        pygame.mixer.music.load("pull-me-under.ogg")
-        pygame.mixer.music.play(-1)
+        data.playMusic("pull-me-under.ogg")
 
         self.transitionTimer = 1
         self.overlay = None
@@ -78,6 +77,8 @@ class Gameplay(object):
 
         if self.transitionTimer < 0:
             if self.world.next != None:
+                if self.world.next == gameplay.level.Boss:
+                    pygame.mixer.music.fadeout(1024)
                 self.transitionTimer = 64
 
         if self.transitionTimer == 0:

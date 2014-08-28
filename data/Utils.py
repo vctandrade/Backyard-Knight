@@ -1,4 +1,7 @@
 import pygame
+import data
+
+currentMusic = None
 
 def loadImage(imgPath):
     img = pygame.image.load(imgPath).convert_alpha()
@@ -20,3 +23,20 @@ def formatValue(value):
     if value == "false": value = False
 
     return value
+
+def playMusic(song):
+    global currentMusic
+    currentMusic = song
+
+    pygame.mixer.music.load(song)
+    pygame.mixer.music.set_volume(data.config.MUSIC / 100.0)
+    pygame.mixer.music.play(-1)
+
+def stopMusic():
+    global currentMusic
+    currentMusic = None
+
+    pygame.mixer.music.stop()
+
+def getMusic():
+    return currentMusic
