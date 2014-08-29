@@ -168,9 +168,6 @@ class Player(object):
     def damage(self):
         return self.weapon.damage
 
-    def living(self):
-        return True
-
     def update(self):
         self.animation.timer += 1
         self.sprite.x += self.xVel
@@ -202,7 +199,7 @@ class Player(object):
                 self.xVel = self.weapon.jump * self.sprite.xScale
             if self.weapon.pre < self.animation.timer < self.weapon.swing:
                 for entity in self.world.entities:
-                    if entity.living() and self.weapon.sprite.collidesWith(entity.sprite):
+                    if self.weapon.sprite.collidesWith(entity.sprite):
                         entity.getHurt(self)
             self.weapon.sprite.x = self.sprite.x + self.weapon.xFix[self.weapon.sprite.index] * self.weapon.sprite.xScale
             self.weapon.sprite.y = self.sprite.y

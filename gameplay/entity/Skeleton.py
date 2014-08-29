@@ -97,9 +97,6 @@ class Skeleton(object):
     def damage(self):
         return 2 if self.state == "attacking" and 32 <= self.animation.timer < 64 else 1
 
-    def living(self):
-        return True
-
     def update(self):
         self.animation.timer += 1
 

@@ -80,9 +80,6 @@ class Golem(object):
     def damage(self):
         return 3 if self.state == "attacking" and 48 <= self.animation.timer < 96 else 1
 
-    def living(self):
-        return True
-
     def update(self):
         self.animation.timer += 1
         self.sprite.x += self.xVel

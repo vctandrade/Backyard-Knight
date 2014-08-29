@@ -17,7 +17,7 @@ class Door(object):
 
     def draw(self, display, offset=(0, 0)):
         if self.world.next:
-            self.animation.index = lambda: 57 + (self.animation.timer / 20) % 3
+            self.animation.index = lambda: 57 + (self.animation.timer / 24) % 3
 
         self.animation.animate(self.sprite)
         self.sprite.draw(display, offset)
@@ -27,6 +27,9 @@ class Door(object):
         self.world.next = self.next
         self.animation.timer = 0
 
+    def getHurt(self, origin):
+        pass
+
     def collidedWith(self, origin):
         if isinstance(origin, gameplay.entity.Player):
             origin.interactibles.add(self)
@@ -34,6 +37,3 @@ class Door(object):
     def update(self):
         try: self.world.player.interactibles.remove(self)
         except: pass
-
-    def living(self):
-        return False

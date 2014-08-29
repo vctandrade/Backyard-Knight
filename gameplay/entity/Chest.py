@@ -59,12 +59,12 @@ class Chest(object):
             self.state = "open"
             self.animation.timer = 0
 
+    def getHurt(self, origin):
+        pass
+
     def collidedWith(self, origin):
         if isinstance(origin, gameplay.entity.Player):
             origin.interactibles.add(self)
-
-    def living(self):
-        return False
 
     def update(self):
         self.animation.timer += 1

@@ -43,7 +43,6 @@ class Test(object):
 
         self.entities = list()
 
-        self.entities.append(gameplay.entity.Boomerang(self, [740, 100]))
         self.entities.append(gameplay.entity.Chest(self, [750, 348]))
         self.entities.append(gameplay.entity.Chest(self, [1250, 508]))
         self.entities.append(gameplay.entity.Door(self, [1550, 320], gameplay.level.Boss))

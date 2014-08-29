@@ -47,9 +47,6 @@ class Bomb(object):
     def damage(self):
         return 3
 
-    def living(self):
-        return False
-
     def update(self):
         self.animation.timer += 1
 
@@ -78,7 +75,7 @@ class Bomb(object):
 
         if self.animation.timer > self.weapon.pre:
             for entity in self.world.entities:
-                if entity.living() and self.sprite.collidesWith(entity.sprite):
+                if self.sprite.collidesWith(entity.sprite):
                     entity.getHurt(self)
 
         if self.animation.timer > self.weapon.pos:

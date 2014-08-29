@@ -82,9 +82,6 @@ class Beholder(object):
     def damage(self):
         return 1
 
-    def living(self):
-        return True
-
     def playerClose(self):
         return abs(self.sprite.y - self.world.player.sprite.y) < 96 \
         and abs(self.sprite.x - self.world.player.sprite.x) < 460

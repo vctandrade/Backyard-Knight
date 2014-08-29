@@ -17,7 +17,7 @@ class Dead(object):
         self.buff = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))
 
     def displayOutput(self, display):
-        self.buff.fill((max(64 - self.transitionTimer / 2, 0), 0, 0))
+        self.buff.fill((64 - self.transitionTimer / 2, 0, 0))
         self.buff.set_alpha(self.transitionTimer * 2 + 1, pygame.RLEACCEL)
 
         self.menu_list.draw(self.buff)
@@ -32,6 +32,24 @@ class Dead(object):
     def respondToUserInput(self, event):
         for e in self.menu_list.handle(event):
             if e.type == graphics.userInterface.BUTTONCLICKED:
+
+                pygame.mixer.music.fadeout(1024)
+
+                transitionTimer = 0
+                display = pygame.display.get_surface()
+
+                blackness = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))
+                blackness.fill(0x000000)
+
+                while transitionTimer <= 255:
+                    self.displayOutput(display)
+
+                    blackness.set_alpha(transitionTimer, pygame.RLEACCEL)
+                    display.blit(blackness, (0, 0))
+
+                    transitionTimer += 2.5
+                    pygame.display.flip()
+
                 if e.button == 0:
                     return screen.Menu()
                 if e.button == 1:

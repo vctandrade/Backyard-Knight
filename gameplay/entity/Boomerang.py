@@ -1,16 +1,23 @@
 import graphics
 import gameplay
-import random
+
+class Crush:
+    pre = 32
+    pos = 64
 
 class Boomerang(object):
 
-    def __init__(self, world, pos):
-        self.world = world
+    def __init__(self, summoner, pos):
+        self.world = summoner.world
+        self.summoner = summoner
 
         self.animation = graphics.AnimationInfo()
-        self.animation.timer = random.randint(0, 24)
+        self.animation.index = lambda: 48 + (self.animation.timer / 2) % 12
+        self.animation.alpha = lambda: self.invincibility * 8 if self.invincibility >= 0 else 255
+
         self.sprite = graphics.Sprite(56, "items.png", pos)
 
+        self.weapon = Crush()
         self.setAim(self.world.player)
 
         self.dead = False
@@ -18,33 +25,35 @@ class Boomerang(object):
 
     def draw(self, display, offset=(0, 0)):
         self.animation.animate(self.sprite)
-        self.animation.index = lambda: 48 + (self.animation.timer / 2) % 12
-
-        if self.invincibility >= 0:
-            self.animation.alpha = lambda: self.invincibility * 8
-
         self.sprite.draw(display, offset)
 
     def getHurt(self, origin):
-        if self.invincibility < 0:
-            if (self.world.player.sprite.x, self.world.entities[7].sprite.x) == self.world.player.sprite.xScale:
-                self.setAim(self.world.entities[7])
+        if self.invincibility == -1:
+            side = cmp(self.summoner.sprite.x, self.world.player.sprite.x)
+
+            if side == self.world.player.sprite.xScale:
+                self.setAim(self.summoner)
             else: self.xVel *= -1
+
+            self.invincibility = -64
 
     def damage(self):
         return 1
-
-    def living(self):
-        return True
 
     def setAim(self, target):
         xDist = target.sprite.x - self.sprite.x
         yDist = target.sprite.y - self.sprite.y
 
+        if yDist == 0:
+            self.xVel = 6 * cmp(xDist, 0)
+            self.yVel = 0
+
+            return
+
         P = xDist / yDist
 
-        self.yVel = (36 / (P ** 2 + 1)) ** 0.5 / 3
-        self.xVel = (36 - self.yVel ** 2) ** 0.5 / 3
+        self.yVel = (36 / (P ** 2.0 + 1)) ** 0.5
+        self.xVel = (36 - self.yVel ** 2.0) ** 0.5
 
         if cmp(self.xVel, 0) != cmp(xDist, 0):
             self.xVel *= -1
@@ -82,7 +91,13 @@ class Boomerang(object):
         if self.invincibility == 0:
             self.dead = True
 
-        self.invincibility -= 1
+        if self.invincibility < 0:
+            for entity in self.world.entities:
+                if entity != self and self.sprite.collidesWith(entity.sprite):
+                    entity.getHurt(self)
+
+        if self.invincibility > 0: self.invincibility -= 1
+        else: self.invincibility = min(self.invincibility + 1, -1)
 
     def collided(self):
         l = int(self.sprite.x - self.sprite.xCenter) / gameplay.tile.size
@@ -100,5 +115,5 @@ class Boomerang(object):
 
     def collidedWith(self, entity):
         if isinstance(entity, gameplay.entity.Player):
-            if self.invincibility <= 0:
+            if self.invincibility < 0:
                 entity.getHurt(self)

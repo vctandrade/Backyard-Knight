@@ -7,6 +7,5 @@ class Food(object):
         self.icon = graphics.Sprite(random.randint(0, 7), "items.png", (0, 0))
 
     def use(self, player):
-        if player.health != player.maxHealth:
-            player.health += 1
-            player.item = None
+        player.health = min(player.health + 1, player.maxHealth)
+        player.item = None

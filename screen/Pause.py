@@ -14,12 +14,11 @@ class Pause(object):
         self.menu_list.addButton(2, "button.png", data.config.WIDTH * 0.7, data.config.HEIGHT * 0.5)
         self.menu_list.addButton(3, "button.png", data.config.WIDTH * 0.5, data.config.HEIGHT * 0.7)
 
-    def displayOutput(self, display):
-        resolution = (data.config.WIDTH, data.config.HEIGHT)
-        shadow = pygame.Surface(resolution, pygame.SRCALPHA)
-        shadow.fill((0, 0, 0, 224))
-        display.blit(shadow, (0, 0))
+        self.shadow = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))
+        self.shadow.set_alpha(224, pygame.RLEACCEL)
 
+    def displayOutput(self, display):
+        display.blit(self.shadow, (0, 0))
         self.menu_list.draw(display)
 
         graphics.drawText(display, data.translate("return"), data.config.WIDTH * 0.5, data.config.HEIGHT * 0.3, size=20 , formatting="center")

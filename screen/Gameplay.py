@@ -40,9 +40,11 @@ class Gameplay(object):
         self.world.player.weapon.icon.draw(display, (122 - data.config.WIDTH, -54))
 
         if self.transitionTimer >= 0 or self.world.next:
-            buff = pygame.Surface((data.config.WIDTH, data.config.HEIGHT), pygame.SRCALPHA)
-            buff.fill((0, 0, 0, 255 - self.transitionTimer % 64 * 4))
-            display.blit(buff, (0, 0))
+            blackness = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))
+            blackness.set_alpha(255 - self.transitionTimer % 64 * 4, pygame.RLEACCEL)
+            blackness.fill(0x000000)
+
+            display.blit(blackness, (0, 0))
 
         if self.overlay: self.overlay.displayOutput(display)
 
@@ -71,9 +73,10 @@ class Gameplay(object):
             self.world.update()
         if self.overlay: return
 
-        if self.world.player.health <= 0 and \
-        self.world.player.animation.timer >= 128:
-            self.overlay = screen.Dead()
+        if self.world.player.health <= 0:
+            pygame.mixer.music.fadeout(1024)
+            if self.world.player.animation.timer >= 64:
+                self.overlay = screen.Dead()
 
         if self.transitionTimer < 0:
             if self.world.next != None:

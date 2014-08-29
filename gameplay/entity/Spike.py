@@ -110,9 +110,6 @@ class Spike(object):
     def damage(self):
         return 1
 
-    def living(self):
-        return False
-
     def collidedWith(self, entity):
         if isinstance(entity, gameplay.entity.Player):
             if self.mode == "up" and (entity.sprite.y + entity.upperBox) < self.origin \

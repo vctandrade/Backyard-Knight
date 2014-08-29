@@ -39,14 +39,16 @@ class Menu(object):
                     transitionTimer = 0
                     display = pygame.display.get_surface()
 
+                    blackness = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))
+                    blackness.fill(0x000000)
+
                     while transitionTimer <= 255:
                         self.displayOutput(display)
 
-                        buff = pygame.Surface((data.config.WIDTH, data.config.HEIGHT), pygame.SRCALPHA)
-                        buff.fill((0, 0, 0, transitionTimer))
-                        display.blit(buff, (0, 0))
+                        blackness.set_alpha(transitionTimer, pygame.RLEACCEL)
+                        display.blit(blackness, (0, 0))
 
-                        transitionTimer += 4
+                        transitionTimer += 2.5
                         pygame.display.flip()
 
                     return screen.Gameplay()

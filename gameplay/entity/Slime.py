@@ -53,9 +53,6 @@ class Slime(object):
     def damage(self):
         return 1
 
-    def living(self):
-        return True
-
     def update(self):
         self.animation.timer += 1
 
