@@ -1,8 +1,9 @@
 import gameplay
+import graphics
 import keyboard
+import screen
 import pygame
 import data
-import screen
 
 class Gameplay(object):
 
@@ -38,6 +39,8 @@ class Gameplay(object):
         if self.world.player.item != None:
             self.world.player.item.icon.draw(display, (50 - data.config.WIDTH, -54))
         self.world.player.weapon.icon.draw(display, (122 - data.config.WIDTH, -54))
+
+        graphics.drawText(display, "%.6d" % self.world.player.score, data.config.WIDTH / 2, 48, 0xFFEE00, 30, "center")
 
         if self.transitionTimer >= 0 or self.world.next:
             blackness = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))

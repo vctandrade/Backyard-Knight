@@ -1,4 +1,5 @@
 import graphics
+import data
 
 class HealthPotion(object):
 
@@ -11,4 +12,5 @@ class HealthPotion(object):
             player.health += 2
         else: player.health = player.maxHealth
 
+        data.playSound("item.ogg")
         player.item = None

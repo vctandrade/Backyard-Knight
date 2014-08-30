@@ -1,5 +1,6 @@
 import graphics
 import gameplay
+import data
 
 class Skeleton(object):
 
@@ -93,6 +94,7 @@ class Skeleton(object):
         self.health -= origin.damage()
 
         self.invincibility = origin.weapon.pos - origin.weapon.pre
+        data.playSound("bone-smash.ogg")
 
     def damage(self):
         return 2 if self.state == "attacking" and 32 <= self.animation.timer < 64 else 1
@@ -122,6 +124,12 @@ class Skeleton(object):
 
         if self.health <= 0:
             if self.invincibility < 0:
+                pos = self.sprite.x, self.sprite.y
+
+                for i in range(8):
+                    newOrb = gameplay.entity.Orb(self.world, pos)
+                    self.world.entities.append(newOrb)
+
                 self.dead = True
             return
 

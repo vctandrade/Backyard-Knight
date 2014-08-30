@@ -1,5 +1,6 @@
 import graphics
 import gameplay
+import data
 
 class Explosion:
 
@@ -37,11 +38,10 @@ class Bomb(object):
         self.xVel, self.yVel = (0, 0)
         self.dead = False
 
+        data.playSound("fuse.ogg")
+
     def draw(self, display, offset=(0, 0)):
         self.animation.animate(self.sprite)
-
-        self.angle -= 2 * self.xVel
-
         self.sprite.draw(display, offset)
 
     def damage(self):
@@ -49,6 +49,7 @@ class Bomb(object):
 
     def update(self):
         self.animation.timer += 1
+        self.angle -= 2 * self.xVel
 
         self.sprite.x += self.xVel
 
@@ -69,6 +70,8 @@ class Bomb(object):
         self.applyGravity()
 
         if self.animation.timer == self.weapon.pre:
+            data.stopSound("fuse.ogg")
+            data.playSound("explosion.ogg")
             self.world.camera.setShake(self.weapon.magnitude, self.weapon.decay)
             self.xVel = 0
             self.yVel = 0

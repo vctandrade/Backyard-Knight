@@ -1,6 +1,7 @@
 import graphics
 import gameplay
 import random
+import data
 
 class Chest(object):
 
@@ -58,6 +59,8 @@ class Chest(object):
 
             self.state = "open"
             self.animation.timer = 0
+
+            data.playSound("chest.ogg")
 
     def getHurt(self, origin):
         pass

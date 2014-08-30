@@ -4,6 +4,7 @@ import keyboard
 import graphics
 import data
 
+pygame.mixer.pre_init(buffer=1024)
 pygame.init()
 
 data.loadConfig()

@@ -40,3 +40,10 @@ def stopMusic():
 
 def getMusic():
     return currentMusic
+
+def playSound(sound):
+    data.getResource(sound).set_volume(data.config.SOUND / 100.0)
+    data.getResource(sound).play()
+
+def stopSound(sound):
+    data.getResource(sound).stop()

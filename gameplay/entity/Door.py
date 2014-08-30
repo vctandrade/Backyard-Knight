@@ -1,5 +1,7 @@
 import graphics
 import gameplay
+import pygame
+import data
 
 class Door(object):
 
@@ -26,6 +28,8 @@ class Door(object):
     def use(self):
         self.world.next = self.next
         self.animation.timer = 0
+        pygame.mixer.fadeout(1024)
+        data.playSound("door.ogg")
 
     def getHurt(self, origin):
         pass

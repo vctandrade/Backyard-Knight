@@ -30,6 +30,9 @@ class Dead(object):
         self.transitionTimer = min(self.transitionTimer + 1, 128)
 
     def respondToUserInput(self, event):
+        if self.transitionTimer < 128:
+            return self
+
         for e in self.menu_list.handle(event):
             if e.type == graphics.userInterface.BUTTONCLICKED:
 

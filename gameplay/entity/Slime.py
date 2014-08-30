@@ -78,6 +78,12 @@ class Slime(object):
 
         if self.health <= 0:
             if self.invincibility < 0:
+                pos = self.sprite.x, self.sprite.y
+
+                for i in range(4):
+                    newOrb = gameplay.entity.Orb(self.world, pos)
+                    self.world.entities.append(newOrb)
+
                 self.dead = True
             return
 

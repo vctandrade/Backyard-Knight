@@ -2,6 +2,7 @@ import graphics
 import gameplay
 import random
 import math
+import data
 
 class Beholder(object):
 
@@ -126,11 +127,20 @@ class Beholder(object):
 
         if self.health <= 0:
             if self.invincibility < 0 and self.state != "dead":
+                data.playSound("flesh.ogg")
+
                 self.animation.timer = 0
                 self.state = "dead"
                 self.xVel = 0
 
                 self.sprite.x = int(self.sprite.x)
+
+                pos = self.sprite.x, self.sprite.y
+
+                for i in range(8):
+                    newOrb = gameplay.entity.Orb(self.world, pos)
+                    self.world.entities.append(newOrb)
+
             return
 
         if self.state == "stunned" or self.state == "hurt":

@@ -1,5 +1,6 @@
 import graphics
 import gameplay
+import data
 
 class Golem(object):
 
@@ -113,6 +114,16 @@ class Golem(object):
                 self.world.camera.setShake(512, 0.95)
 
         if self.state == "dead":
+            if self.animation.timer == 0:
+                x = self.sprite.x + 180 if self.sprite.xScale == -1 else 0
+                y = self.sprite.y
+
+                for i in range(16):
+                    newOrb = gameplay.entity.Orb(self.world, (x, y))
+                    self.world.entities.append(newOrb)
+
+                data.playSound("rumble.ogg")
+
             return
 
         if self.state != "attacking" or self.animation.timer >= 96:
@@ -127,6 +138,7 @@ class Golem(object):
                     if self.animation.timer >= 256: self.attack()
 
         if self.state == "attacking" and self.animation.timer == 48:
+            data.playSound("smash.ogg")
             self.world.camera.setShake(1024, 0.9)
             self.sprite.x += 52 * self.sprite.xScale
 

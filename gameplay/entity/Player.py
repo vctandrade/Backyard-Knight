@@ -18,14 +18,16 @@ class Player(object):
         self.invincibility = 0
 
         self.sideBox = 22
-        self.upperBox = 34
+        self.upperBox = 90
         self.lowerBox = 48
 
         self.health = 6
         self.maxHealth = 6
 
         self.weapon = gameplay.item.Sword()
-        self.item = None
+        self.item = gameplay.item.Bomb()
+
+        self.score = 0
 
         self.flashTimer = 0
         self.flashMode = None
@@ -42,23 +44,23 @@ class Player(object):
 
         if self.stance == "falling":
             if self.state == "attacking":
-                self.animation.set(index=lambda: 12 if self.animation.timer <= self.weapon.pre else 13)
+                self.animation.set(index=lambda: 14 if self.animation.timer < self.weapon.pre else 15)
                 self.weapon.sprite.index = 6 if self.animation.timer < self.weapon.pre else 7 if self.animation.timer < self.weapon.swing else 8
-            else: self.animation.set(index=lambda: 2)
+            else: self.animation.set(index=lambda: 4)
 
         if self.stance == "crouched":
             if self.state == "walking":
-                self.animation.set(index=lambda: 3 + (self.animation.timer % 8) / 4)
+                self.animation.set(index=lambda: 5 + (self.animation.timer % 8) / 4)
             elif self.state == "attacking":
-                self.animation.set(index=lambda: 10 if self.animation.timer <= self.weapon.pre else 11)
+                self.animation.set(index=lambda: 12 if self.animation.timer < self.weapon.pre else 13)
                 self.weapon.sprite.index = 3 if self.animation.timer < self.weapon.pre else 4 if self.animation.timer < self.weapon.swing else 5
-            else: self.animation.set(index=lambda: 3)
+            else: self.animation.set(index=lambda: 5)
 
         if self.stance == "standing":
             if self.state == "walking":
-                self.animation.set(index=lambda: (self.animation.timer % 8) / 4)
+                self.animation.set(index=lambda: (self.animation.timer / 8) % 4)
             elif self.state == "attacking":
-                self.animation.set(index=lambda: 8 if self.animation.timer <= self.weapon.pre else 9)
+                self.animation.set(index=lambda: 10 if self.animation.timer < self.weapon.pre else 11)
                 self.weapon.sprite.index = 0 if self.animation.timer < self.weapon.pre else 1 if self.animation.timer < self.weapon.swing else 2
             else: self.animation.set(index=lambda: 0)
 
@@ -68,8 +70,8 @@ class Player(object):
 
         if self.knock > 0:
             if self.knock < 64:
-                self.animation.set(index=lambda: 6 if self.knock > 10 else 5)
-            else: self.animation.set(index=lambda: 7)
+                self.animation.set(index=lambda: 8 if self.knock > 10 else 7)
+            else: self.animation.set(index=lambda: 9)
 
         self.animation.animate(self.sprite)
         self.sprite.draw(display, offset)
@@ -105,7 +107,7 @@ class Player(object):
     def stand(self):
         if self.state == "attacking": return
 
-        self.upperBox = 34
+        self.upperBox = 38
 
         if self.collided():
             self.crouch()
