@@ -77,7 +77,6 @@ class Gameplay(object):
         if self.overlay: return
 
         if self.world.player.health <= 0:
-            pygame.mixer.music.fadeout(1024)
             if self.world.player.animation.timer >= 64:
                 self.overlay = screen.Dead()
 

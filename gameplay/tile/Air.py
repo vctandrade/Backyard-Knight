@@ -1,9 +1,9 @@
-import data
+import graphics
 
 class Air(object):
 
     def getSprite(self):
-        return data.getResource("tiles.png")[1]
+        return graphics.blankImage
 
     def isColidable(self):
         return False

@@ -25,7 +25,7 @@ class Player(object):
         self.maxHealth = 6
 
         self.weapon = gameplay.item.Sword()
-        self.item = gameplay.item.Bomb()
+        self.item = gameplay.item.InvincibilityPotion()
 
         self.score = 0
 
@@ -221,6 +221,12 @@ class Player(object):
 
         for x in range(l, r + 1):
             for y in range(t, b + 1):
+
+                if y >= len(self.world.map):
+                    if y >= len(self.world.map) + 5:
+                        self.health = 0
+                    continue
+
                 if self.world.map[y][x].isColidable():
                     return True
 
