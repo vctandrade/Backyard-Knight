@@ -37,7 +37,26 @@ class Pause(object):
                 if e.button == 2:
                     return screen.ConfigMenu(screen.Pause)
                 if e.button == 3:
-                    return screen.Menu()
+
+                    pygame.mixer.music.fadeout(1024)
+
+                    transitionTimer = 0
+                    display = pygame.display.get_surface()
+                    static = display.copy()
+
+                    blackness = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))
+                    blackness.fill(0x000000)
+
+                    while transitionTimer <= 255:
+                        display.blit(static, (0, 0))
+
+                        blackness.set_alpha(transitionTimer, pygame.RLEACCEL)
+                        display.blit(blackness, (0, 0))
+
+                        transitionTimer += 1
+                        pygame.display.flip()
+
+                    return screen.Menu(fadin=True)
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:

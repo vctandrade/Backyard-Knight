@@ -31,7 +31,7 @@ class Test(object):
                   ]
 
         self.map = list()
-        self.next = gameplay.level.Boss
+        self.next = None
 
         for line in sketch:
             newLine = list()

@@ -23,6 +23,9 @@ class Skeleton(object):
         self.invincibility = 0
         self.dead = False
 
+        self.soundTimer = 0
+        self.sound = "bone-rattle1.ogg"
+
     @property
     def leftBox(self): return 32 if self.sprite.xScale == 1 else 56
 
@@ -132,6 +135,17 @@ class Skeleton(object):
 
                 self.dead = True
             return
+
+        if self.state == "walking":
+            if self.soundTimer <= 0:
+                data.playSound(self.sound)
+                self.soundTimer = 24
+
+                if self.sound == "bone-rattle1.ogg":
+                    self.sound = "bone-rattle2.ogg"
+                else: self.sound = "bone-rattle1.ogg"
+        self.soundTimer -= 1
+
 
         if self.state != "attacking" or self.animation.timer >= 64:
             if self.state != "knockback" or (self.animation.timer >= 16 and self.onSurface()):

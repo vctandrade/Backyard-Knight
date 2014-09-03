@@ -25,7 +25,7 @@ class Player(object):
         self.maxHealth = 6
 
         self.weapon = gameplay.item.Sword()
-        self.item = gameplay.item.InvincibilityPotion()
+        self.item = None
 
         self.score = 0
 
@@ -50,7 +50,7 @@ class Player(object):
 
         if self.stance == "crouched":
             if self.state == "walking":
-                self.animation.set(index=lambda: 5 + (self.animation.timer % 8) / 4)
+                self.animation.set(index=lambda: 5 + (self.animation.timer / 8) % 2)
             elif self.state == "attacking":
                 self.animation.set(index=lambda: 12 if self.animation.timer < self.weapon.pre else 13)
                 self.weapon.sprite.index = 3 if self.animation.timer < self.weapon.pre else 4 if self.animation.timer < self.weapon.swing else 5
@@ -223,7 +223,9 @@ class Player(object):
             for y in range(t, b + 1):
 
                 if y >= len(self.world.map):
-                    if y >= len(self.world.map) + 5:
+                    if y < len(self.world.map) + 2:
+                        self.animation.timer = 0
+                    if y >= len(self.world.map) + 3:
                         self.health = 0
                     continue
 

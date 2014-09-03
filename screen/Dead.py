@@ -30,9 +30,6 @@ class Dead(object):
         self.transitionTimer = min(self.transitionTimer + 1, 128)
 
     def respondToUserInput(self, event):
-        if self.transitionTimer < 128:
-            return self
-
         for e in self.menu_list.handle(event):
             if e.type == graphics.userInterface.BUTTONCLICKED:
 
@@ -40,21 +37,22 @@ class Dead(object):
 
                 transitionTimer = 0
                 display = pygame.display.get_surface()
+                static = display.copy()
 
                 blackness = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))
                 blackness.fill(0x000000)
 
                 while transitionTimer <= 255:
-                    self.displayOutput(display)
+                    display.blit(static, (0, 0))
 
                     blackness.set_alpha(transitionTimer, pygame.RLEACCEL)
                     display.blit(blackness, (0, 0))
 
-                    transitionTimer += 2.5
+                    transitionTimer += 1
                     pygame.display.flip()
 
                 if e.button == 0:
-                    return screen.Menu()
+                    return screen.Menu(fadin=True)
                 if e.button == 1:
                     return screen.Gameplay()
 

@@ -45,7 +45,6 @@ class Gameplay(object):
         if self.transitionTimer >= 0 or self.world.next:
             blackness = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))
             blackness.set_alpha(255 - self.transitionTimer % 64 * 4, pygame.RLEACCEL)
-            blackness.fill(0x000000)
 
             display.blit(blackness, (0, 0))
 
@@ -74,10 +73,14 @@ class Gameplay(object):
     def update(self):
         if isinstance(self.overlay, screen.Dead):
             self.world.update()
-        if self.overlay: return
+
+        if self.overlay:
+            self.overlay.update()
+            return
 
         if self.world.player.health <= 0:
-            if self.world.player.animation.timer >= 64:
+            pygame.mixer.music.fadeout(1024)
+            if self.world.player.animation.timer >= 72:
                 self.overlay = screen.Dead()
 
         if self.transitionTimer < 0:

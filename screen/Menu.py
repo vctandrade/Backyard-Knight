@@ -5,7 +5,7 @@ import data
 
 class Menu(object):
 
-    def __init__(self):
+    def __init__(self, fadin=False):
         if data.getMusic() != "theday.xm":
             data.playMusic("theday.xm")
 
@@ -18,6 +18,8 @@ class Menu(object):
         self.menu_list.addButton(4, "button.png", data.config.WIDTH * 0.7, data.config.HEIGHT * 0.9)
         self.menu_list.addButton(5, "button.png", data.config.WIDTH * 0.9, data.config.HEIGHT * 0.9)
 
+        self.fadin = 255 if fadin else 0
+
     def displayOutput(self, display):
         display.blit(data.getResource("windows_xp.png"), (0, 0))
         display.blit(data.getResource("logo.png"), (data.config.WIDTH * 0.5 - 461, data.config.HEIGHT * 0.05))
@@ -29,6 +31,13 @@ class Menu(object):
         graphics.drawText(display, data.translate("configurations"), data.config.WIDTH * 0.5, data.config.HEIGHT * 0.9, size=20 , formatting="center")
         graphics.drawText(display, data.translate("credits"), data.config.WIDTH * 0.7, data.config.HEIGHT * 0.9, size=20 , formatting="center")
         graphics.drawText(display, data.translate("exit"), data.config.WIDTH * 0.9, data.config.HEIGHT * 0.9, size=20 , formatting="center")
+
+        if self.fadin > 0:
+            blackness = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))
+            blackness.set_alpha(self.fadin, pygame.RLEACCEL)
+
+            display.blit(blackness, (0, 0))
+            self.fadin -= 4
 
     def respondToUserInput(self, event):
         for e in self.menu_list.handle(event):
