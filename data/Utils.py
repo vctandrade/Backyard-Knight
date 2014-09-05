@@ -47,3 +47,6 @@ def playSound(sound):
 
 def stopSound(sound):
     data.getResource(sound).stop()
+
+def fadeSound(sound):
+    data.getResource(sound).fadeout(1024)

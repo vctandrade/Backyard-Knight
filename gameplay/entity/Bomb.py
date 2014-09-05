@@ -91,6 +91,16 @@ class Bomb(object):
         t = int(self.sprite.y - self.box) / gameplay.tile.size
         b = int(self.sprite.y + self.box - 1) / gameplay.tile.size
 
+        if b >= len(self.world.map):
+            if t == len(self.world.map) + 1:
+                data.fadeSound("explosion.ogg")
+                data.fadeSound("fuse.ogg")
+                self.dead = True
+            return False
+
+        if l < 0 or r >= len(self.world.map[0]):
+            return False
+
         for x in range(l, r + 1):
             for y in range(t, b + 1):
                 if self.world.map[y][x].isColidable():

@@ -9,9 +9,9 @@ class Boss(object):
 
         self.player = player
         self.player.world = self
-        self.camera = gameplay.Camera(825, 300)
+        self.camera = gameplay.Camera(825, 336)
 
-        self.player.sprite.x, self.player.sprite.y = 825, 300
+        self.player.sprite.x, self.player.sprite.y = 825, 336
         self.player.xVel, self.player.yVel = 0, 0
         self.player.invincibility = 0
 

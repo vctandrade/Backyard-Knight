@@ -1,5 +1,6 @@
 import graphics
 import gameplay
+import data
 
 class Player(object):
 
@@ -24,7 +25,7 @@ class Player(object):
         self.health = 6
         self.maxHealth = 6
 
-        self.weapon = gameplay.item.Sword()
+        self.weapon = gameplay.item.Spear()
         self.item = None
 
         self.score = 0
@@ -74,6 +75,11 @@ class Player(object):
             else: self.animation.set(index=lambda: 9)
 
         self.animation.animate(self.sprite)
+
+        if self.state == "attacking":
+            if type(self.weapon) == gameplay.item.Spear:
+                self.sprite.index += 6
+
         self.sprite.draw(display, offset)
 
         if self.state == "attacking":
@@ -219,16 +225,19 @@ class Player(object):
         t = int(self.sprite.y - self.upperBox) / gameplay.tile.size
         b = int(self.sprite.y + self.lowerBox - 1) / gameplay.tile.size
 
+        if l < 0 or r >= len(self.world.map[0]):
+            return True
+
+        if b >= len(self.world.map):
+            if t == len(self.world.map) + 1:
+                self.sprite.y += gameplay.tile.size
+                data.playSound("fall.ogg")
+                self.animation.timer = 0
+                self.health = 0
+            return False
+
         for x in range(l, r + 1):
             for y in range(t, b + 1):
-
-                if y >= len(self.world.map):
-                    if y < len(self.world.map) + 2:
-                        self.animation.timer = 0
-                    if y >= len(self.world.map) + 3:
-                        self.health = 0
-                    continue
-
                 if self.world.map[y][x].isColidable():
                     return True
 

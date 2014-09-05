@@ -3,19 +3,19 @@ import graphics
 class Spear(object):
 
     def __init__(self):
-        self.jump = 30
+        self.jump = 24
 
-        self.pre = 15
-        self.swing = 20
-        self.pos = 10
+        self.pre = 16
+        self.swing = 18
+        self.pos = 12
 
         self.swing += self.pre
         self.pos += self.swing
 
         self.damage = 1
 
-        self.xFix = [0, 34, 34, 0, 32, 32, 4, 28, 28]
-        self.yFix = [0, 0, 0, 0, 0, 0, -18, 0, 0]
+        self.xFix = [-8, 22, 22, -8, 16, 16, -6, 20, 20]
+        self.yFix = [18, 16, 16, 28, 26, 26, 16, 14, 14]
 
-        self.sprite = graphics.Sprite(0, "sword.png", (0, 0))
+        self.sprite = graphics.Sprite(0, "spear.png", (0, 0))
         self.icon = graphics.Sprite(17, "items.png", (0, 0))
