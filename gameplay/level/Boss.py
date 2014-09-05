@@ -9,6 +9,7 @@ class Boss(object):
 
         self.player = player
         self.player.world = self
+        self.player.interactibles = set()
         self.camera = gameplay.Camera(825, 400)
 
         self.player.sprite.x, self.player.sprite.y = 825, 400
@@ -35,6 +36,14 @@ class Boss(object):
                   "          ###############################          ",
                   "           #############################           ",
                   "            ###########################            ",
+                  "             #########################             ",
+                  "             #########################             ",
+                  "             #########################             ",
+                  "             #########################             ",
+                  "             #########################             ",
+                  "             #########################             ",
+                  "             #########################             ",
+                  "             #########################             ",
                   "             #########################             ",
                   "             #########################             ",
                   "             #########################             ",
@@ -79,4 +88,4 @@ class Boss(object):
             if entity.dead: self.entities.remove(entity)
 
         self.player.update()
-        self.camera.update(self.player.sprite, lim=len(self.map) * gameplay.tile.size)
+        self.camera.update(self.player.sprite, lim=data.config.HEIGHT * 0.9)

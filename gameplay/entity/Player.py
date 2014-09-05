@@ -4,9 +4,7 @@ import data
 
 class Player(object):
 
-    def __init__(self, world):
-        self.world = world
-
+    def __init__(self):
         self.animation = graphics.AnimationInfo()
         self.sprite = graphics.Sprite(0, "bob.png", (0, 0))
 

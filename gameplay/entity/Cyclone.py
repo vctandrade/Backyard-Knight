@@ -9,7 +9,7 @@ class Cyclone(object):
         self.maxTime = 148
 
         self.animation = graphics.AnimationInfo()
-        self.animation.index = lambda: 56 + (self.animation.timer / 4) % 4
+        self.animation.index = lambda: 56 + (self.animation.timer / 4) % 3
         self.animation.alpha = lambda: self.animation.timer * 16 if self.animation.timer < 16 else 255 if self.animation.timer < self.maxTime else 255 - (self.animation.timer - self.maxTime) * 4
 
         self.sprite = graphics.Sprite(56, "bob.png", pos)

@@ -2,36 +2,29 @@ import gameplay
 
 class Test(object):
 
-    def __init__(self):
+    def __init__(self, player):
 
-        self.camera = gameplay.Camera(540, 176)
-        self.player = gameplay.entity.Player(self)
+        self.player = player
+        self.player.world = self
+        self.player.interactibles = set()
+        self.camera = gameplay.Camera(120, 144)
 
-        self.player.sprite.x, self.player.sprite.y = 540, 176
+        self.player.sprite.x, self.player.sprite.y = 120, 144
+        self.player.xVel, self.player.yVel = 0, 0
+        self.player.invincibility = 0
 
         sketch = [
-                  "#####################################################",
-                  "######################################################",
-                  "##..................................................##",
-                  "##..................................................##",
-                  "##..................................................##",
-                  "##..................................................##",
-                  "##..................................................##",
-                  "##..####################################............##",
-                  "##.....................................##...........##",
-                  "##..................................................##",
-                  "####.........................................########",
-                  "##..............................#..........######",
-                  "##....###########################..........###",
-                  "##..###........................##..........###",
-                  "##..#...........................#.........####",
-                  "##........................................####",
-                  "##........................................####",
-                  "##############################################",
+                  "####################################################",
+                  "#..................................................#",
+                  "#..................................................#",
+                  "#..................................................#",
+                  "#..................................................#",
+                  "#..................................................#",
+                  "####################################################",
                   ]
 
         self.map = list()
-        self.next = gameplay.level.Boss
+        self.next = None
 
         for line in sketch:
             newLine = list()
@@ -43,16 +36,14 @@ class Test(object):
 
         self.entities = list()
 
-        self.entities.append(gameplay.entity.Chest(self, [750, 348]))
-        self.entities.append(gameplay.entity.Chest(self, [1250, 508]))
-        self.entities.append(gameplay.entity.Door(self, [1550, 320], gameplay.level.Boss))
+        self.entities.append(gameplay.entity.Chest(self, [300, 156]))
+        self.entities.append(gameplay.entity.Chest(self, [500, 156]))
+        self.entities.append(gameplay.entity.Chest(self, [700, 156]))
+        self.entities.append(gameplay.entity.Chest(self, [900, 156]))
+        self.entities.append(gameplay.entity.Chest(self, [1100, 156]))
+        self.entities.append(gameplay.entity.Chest(self, [1300, 156]))
 
-        self.entities.append(gameplay.entity.Spike(self, [224, 224], "up"))
-
-        self.entities.append(gameplay.entity.Beholder(self, [300, 320]))
-        self.entities.append(gameplay.entity.Skeleton(self, [300, 480]))
-        self.entities.append(gameplay.entity.Golem(self, [1150, 120]))
-        self.entities.append(gameplay.entity.Slime(self, [1200, 500]))
+        self.entities.append(gameplay.entity.Door(self, (1500, 192), gameplay.level.Arena))
 
     def draw(self, display):
 

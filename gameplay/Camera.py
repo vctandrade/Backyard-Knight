@@ -21,6 +21,8 @@ class Camera(object):
         x0 = focus.x - data.config.WIDTH / 2
         y0 = focus.y - data.config.HEIGHT / 2
 
+        if lim != None: y0 = min(lim - data.config.HEIGHT, y0)
+
         x0 += random.random() * self.shake - self.shake / 2
         y0 += random.random() * self.shake - self.shake / 2
 
@@ -31,5 +33,3 @@ class Camera(object):
 
         if abs(self.y - y0) > 8:
             self.y += (y0 - self.y) / 32
-
-        if lim != None: self.y = min(lim - data.config.HEIGHT, self.y)

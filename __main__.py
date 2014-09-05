@@ -21,7 +21,7 @@ data.loadResources()
 graphics.userInterface.cursor.init()
 
 clock = pygame.time.Clock()
-screen = screen.Gameplay()
+screen = screen.Menu()
 
 def repaint():
     display.fill(0x000000)

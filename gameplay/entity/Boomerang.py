@@ -14,7 +14,7 @@ class Boomerang(object):
 
         self.animation = graphics.AnimationInfo()
         self.animation.timer = random.randint(0, 24)
-        self.animation.index = lambda: 48 + (self.animation.timer / 2) % 12
+        self.animation.index = lambda: 48 + (self.animation.timer / 2) % 12 if self.turn == 1 else 59 - (self.animation.timer / 2) % 12
         self.animation.alpha = lambda: self.animation.timer * 8 if self.animation.timer < 32 else self.invincibility * 8 if self.invincibility >= 0 else 255
 
         self.sprite = graphics.Sprite(56, "items.png", pos)
@@ -62,6 +62,8 @@ class Boomerang(object):
 
         if cmp(self.yVel, 0) != cmp(yDist, 0):
             self.yVel *= -1
+
+        self.turn = cmp(self.xVel, 0)
 
     def update(self):
         self.animation.timer += 1

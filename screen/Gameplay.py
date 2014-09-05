@@ -8,7 +8,7 @@ import data
 class Gameplay(object):
 
     def __init__(self):
-        self.world = gameplay.level.Test()
+        self.world = gameplay.level.Test(gameplay.entity.Player())
         keyboard.setMultiKeys(pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_x)
 
         data.playMusic("pull-me-under.ogg")
