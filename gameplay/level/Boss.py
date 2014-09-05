@@ -9,13 +9,15 @@ class Boss(object):
 
         self.player = player
         self.player.world = self
-        self.camera = gameplay.Camera(825, 336)
+        self.camera = gameplay.Camera(825, 400)
 
-        self.player.sprite.x, self.player.sprite.y = 825, 336
+        self.player.sprite.x, self.player.sprite.y = 825, 400
         self.player.xVel, self.player.yVel = 0, 0
         self.player.invincibility = 0
 
         sketch = [
+                  "                                                   ",
+                  "                                                   ",
                   "                                                   ",
                   "                                                   ",
                   "                                                   ",
@@ -33,16 +35,6 @@ class Boss(object):
                   "          ###############################          ",
                   "           #############################           ",
                   "            ###########################            ",
-                  "             #########################             ",
-                  "             #########################             ",
-                  "             #########################             ",
-                  "             #########################             ",
-                  "             #########################             ",
-                  "             #########################             ",
-                  "             #########################             ",
-                  "             #########################             ",
-                  "             #########################             ",
-                  "             #########################             ",
                   "             #########################             ",
                   "             #########################             ",
                   "             #########################             ",
@@ -87,4 +79,4 @@ class Boss(object):
             if entity.dead: self.entities.remove(entity)
 
         self.player.update()
-        self.camera.update(self.player.sprite)
+        self.camera.update(self.player.sprite, lim=len(self.map) * gameplay.tile.size)

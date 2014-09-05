@@ -234,6 +234,7 @@ class Player(object):
                 data.playSound("fall.ogg")
                 self.animation.timer = 0
                 self.health = 0
+            self.xVel *= 0.6
             return False
 
         for x in range(l, r + 1):

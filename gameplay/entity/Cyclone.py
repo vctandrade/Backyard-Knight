@@ -3,18 +3,18 @@ import gameplay
 
 class Cyclone(object):
 
-    def __init__(self, world, pos):
+    def __init__(self, world, pos, direction):
         self.world = world
 
-        self.maxTime = 112
+        self.maxTime = 148
 
         self.animation = graphics.AnimationInfo()
         self.animation.index = lambda: 56 + (self.animation.timer / 4) % 4
-        self.animation.alpha = lambda: 255 - (self.animation.timer - self.maxTime) * 4 if self.animation.timer >= self.maxTime else 255
+        self.animation.alpha = lambda: self.animation.timer * 16 if self.animation.timer < 16 else 255 if self.animation.timer < self.maxTime else 255 - (self.animation.timer - self.maxTime) * 4
 
         self.sprite = graphics.Sprite(56, "bob.png", pos)
 
-        self.xVel = 3 * cmp(self.world.player.sprite.x, self.sprite.x)
+        self.xVel = 4 * direction
         self.yVel = 0
 
         self.dead = False

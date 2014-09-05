@@ -17,7 +17,7 @@ class Camera(object):
         self.shake = magnitude
         self.decay = decay
 
-    def update(self, focus):
+    def update(self, focus, lim=None):
         x0 = focus.x - data.config.WIDTH / 2
         y0 = focus.y - data.config.HEIGHT / 2
 
@@ -31,3 +31,5 @@ class Camera(object):
 
         if abs(self.y - y0) > 8:
             self.y += (y0 - self.y) / 32
+
+        if lim != None: self.y = min(lim - data.config.HEIGHT, self.y)

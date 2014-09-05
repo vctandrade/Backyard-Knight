@@ -1,5 +1,6 @@
 import graphics
 import gameplay
+import random
 
 class Crush:
     pre = 32
@@ -12,8 +13,9 @@ class Boomerang(object):
         self.summoner = summoner
 
         self.animation = graphics.AnimationInfo()
+        self.animation.timer = random.randint(0, 24)
         self.animation.index = lambda: 48 + (self.animation.timer / 2) % 12
-        self.animation.alpha = lambda: self.invincibility * 8 if self.invincibility >= 0 else 255
+        self.animation.alpha = lambda: self.animation.timer * 8 if self.animation.timer < 32 else self.invincibility * 8 if self.invincibility >= 0 else 255
 
         self.sprite = graphics.Sprite(56, "items.png", pos)
 
@@ -28,12 +30,12 @@ class Boomerang(object):
         self.sprite.draw(display, offset)
 
     def getHurt(self, origin):
-        if self.invincibility == -1:
+        if self.invincibility == -1 and type(origin) != gameplay.entity.Boomerang:
             side = cmp(self.summoner.sprite.x, self.world.player.sprite.x)
 
             if side == self.world.player.sprite.xScale:
                 self.setAim(self.summoner)
-            else: self.xVel *= -1
+            else: self.xVel = -6 * side
 
             self.invincibility = -64
 
@@ -105,6 +107,16 @@ class Boomerang(object):
 
         t = int(self.sprite.y - self.sprite.yCenter) / gameplay.tile.size
         b = int(self.sprite.y + self.sprite.yCenter - 1) / gameplay.tile.size
+
+        if l < 0 or r >= len(self.world.map[0]):
+            if r < 0 or l > len(self.world.map[0]):
+                self.dead = True
+            return False
+
+        if t < 0 or b >= len(self.world.map):
+            if b < 0 or t > len(self.world.map[0]):
+                self.dead = True
+            return False
 
         for x in range(l, r + 1):
             for y in range(t, b + 1):

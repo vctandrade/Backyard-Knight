@@ -38,7 +38,7 @@ class TextField(object):
         graphics.drawText(icon, self.text, self.width * 0.06, self.height / 2, self.color, self.size)
 
         if (self.tick / 24) % 2 == 0 and self.focused:
-            graphics.drawText(icon, "|", self.width * 0.06 + (self.pos - 0.5) * self.size - 3, self.height / 2 - (self.size + 8) / 2, 0x000000, self.size + 8)
+            graphics.drawText(icon, "|", self.width * 0.06 + (self.pos - 0.5) * self.size, self.height / 2, 0x000000, self.size)
         self.tick += 1
 
         return icon
