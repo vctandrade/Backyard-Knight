@@ -70,7 +70,8 @@ class Golem(object):
         pass
 
     def getHurt(self, origin):
-        if self.invincibility > 0 or self.state == "dead":
+        if self.invincibility > 0 or self.state == "dead" \
+        or (self.state == "attacking" and self.animation.timer >= 48):
             return
 
         self.knockBack(origin)
@@ -79,7 +80,7 @@ class Golem(object):
         self.invincibility = origin.weapon.pos - origin.weapon.pre
 
     def damage(self):
-        return 3 if self.state == "attacking" and 48 <= self.animation.timer < 96 else 1
+        return 3 if self.state == "attacking" and 48 <= self.animation.timer < 96 else 0
 
     def update(self):
         self.animation.timer += 1
@@ -104,11 +105,15 @@ class Golem(object):
         self.invincibility -= 1
 
         if self.health <= 0 and self.state != "dead":
-            if self.state == "attacking" and self.animation.timer < 48:
-                self.sprite.x += 50 * self.sprite.xScale
-            self.state = "idle"
+            if self.state == "attacking":
+                if self.animation.timer == 48:
+                    self.animation.timer -= 1
 
             if self.invincibility < 0:
+                if self.state == "attacking":
+                    if self.animation.timer < 47: return
+                    self.sprite.x += 50 * self.sprite.xScale
+
                 self.state = "dead"
                 self.animation.timer = 0
                 self.world.camera.setShake(512, 0.95)
@@ -118,7 +123,7 @@ class Golem(object):
                 x = self.sprite.x + 180 if self.sprite.xScale == -1 else 0
                 y = self.sprite.y
 
-                for i in range(16):
+                for i in range(12):
                     newOrb = gameplay.entity.Orb(self.world, (x, y))
                     self.world.entities.append(newOrb)
 

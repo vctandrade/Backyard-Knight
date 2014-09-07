@@ -29,6 +29,9 @@ class Boomerang(object):
         self.animation.animate(self.sprite)
         self.sprite.draw(display, offset)
 
+        if self.sprite.y - offset[1] < -64:
+            self.dead = True
+
     def getHurt(self, origin):
         if self.invincibility == -1 and type(origin) != gameplay.entity.Boomerang:
             side = cmp(self.summoner.sprite.x, self.world.player.sprite.x)
@@ -111,13 +114,8 @@ class Boomerang(object):
         b = int(self.sprite.y + self.sprite.yCenter - 1) / gameplay.tile.size
 
         if l < 0 or r >= len(self.world.map[0]):
-            if r < 0 or l > len(self.world.map[0]):
-                self.dead = True
             return False
-
         if t < 0 or b >= len(self.world.map):
-            if b < 0 or t > len(self.world.map[0]):
-                self.dead = True
             return False
 
         for x in range(l, r + 1):
@@ -129,5 +127,5 @@ class Boomerang(object):
 
     def collidedWith(self, entity):
         if isinstance(entity, gameplay.entity.Player):
-            if self.invincibility < 0:
+            if self.invincibility == -1:
                 entity.getHurt(self)

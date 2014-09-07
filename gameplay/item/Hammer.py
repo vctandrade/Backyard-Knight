@@ -12,10 +12,12 @@ class Hammer(object):
         self.swing += self.pre
         self.pos += self.swing
 
-        self.damage = 2
+        self.damage = 1.5
 
-        self.xFix = [0, 34, 34, 0, 32, 32, 4, 28, 28]
-        self.yFix = [0, 0, 0, 0, 0, 0, -18, 0, 0]
+        self.xFix = [-30, 46, 46, -24, 44, 44, -28, 44, 44]
+        self.yFix = [-16, -2, -2, 2, 12, 12, -20, 0, 0]
 
-        self.sprite = graphics.Sprite(0, "sword.png", (0, 0))
+        self.firstIndex = 3
+
+        self.sprite = graphics.Sprite(0, "hamword.png", (0, 0))
         self.icon = graphics.Sprite(18, "items.png", (0, 0))

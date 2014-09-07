@@ -42,7 +42,7 @@ class Skeleton(object):
                 self.sprite.xScale = side
 
         if self.state == "knockback":
-            self.animation.index = lambda: 26
+            self.animation.index = lambda: 32
 
         if self.state == "attacking":
             self.animation.index = lambda: 8 + (self.animation.timer / 16) % 2 if self.animation.timer < 32 \
@@ -85,12 +85,13 @@ class Skeleton(object):
         self.animation.timer = 0
 
     def knockBack(self, origin):
-        self.state = "knockback"
         self.animation.timer = 0
+        self.state = "knockback"
         self.xVel = 8 * cmp(self.sprite.x, origin.sprite.x)
 
     def getHurt(self, origin):
-        if self.invincibility > 0:
+        if self.invincibility > 0 or \
+        (self.state == "attacking" and self.animation.timer >= 32):
             return
 
         self.knockBack(origin)
@@ -100,7 +101,7 @@ class Skeleton(object):
         data.playSound("bone-smash.ogg")
 
     def damage(self):
-        return 2 if self.state == "attacking" and 32 <= self.animation.timer < 64 else 1
+        return 2 if self.state == "attacking" and 32 <= self.animation.timer < 64 else 0
 
     def update(self):
         self.animation.timer += 1
@@ -148,7 +149,7 @@ class Skeleton(object):
 
 
         if self.state != "attacking" or self.animation.timer >= 64:
-            if self.state != "knockback" or (self.animation.timer >= 16 and self.onSurface()):
+            if self.state != "knockback" or (self.invincibility <= 0 and self.onSurface()):
                 self.state = "idle"
 
             if self.playerClose() and self.world.player.health > 0:
@@ -166,7 +167,9 @@ class Skeleton(object):
             else: self.dir = 0
             self.move()
 
-        elif self.animation.timer == 32: self.xVel = 16 * self.sprite.xScale
+        elif self.animation.timer == 32:
+            self.xVel = 16 * self.sprite.xScale
+            data.playSound("slash.ogg")
 
 
     def collided(self):

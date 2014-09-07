@@ -23,9 +23,10 @@ class Player(object):
         self.health = 6
         self.maxHealth = 6
 
-        self.weapon = gameplay.item.Spear()
+        self.weapon = gameplay.item.Sword()
         self.item = None
 
+        self.dead = False
         self.score = 0
 
         self.flashTimer = 0
@@ -41,10 +42,14 @@ class Player(object):
 
         self.sprite.alpha = 255 - min(self.invincibility, 128)
 
+        if self.state == "attacking":
+            self.weapon.sprite.index = self.weapon.firstIndex + (0 if self.animation.timer < self.weapon.pre else 1 if self.animation.timer < self.weapon.swing else 2)
+
         if self.stance == "falling":
             if self.state == "attacking":
                 self.animation.set(index=lambda: 14 if self.animation.timer < self.weapon.pre else 15)
-                self.weapon.sprite.index = 6 if self.animation.timer < self.weapon.pre else 7 if self.animation.timer < self.weapon.swing else 8
+                self.weapon.sprite.x = self.sprite.x + self.weapon.xFix[6 + self.weapon.sprite.index - self.weapon.firstIndex] * self.weapon.sprite.xScale
+                self.weapon.sprite.y = self.sprite.y + self.weapon.yFix[6 + self.weapon.sprite.index - self.weapon.firstIndex]
             else: self.animation.set(index=lambda: 4)
 
         if self.stance == "crouched":
@@ -52,7 +57,8 @@ class Player(object):
                 self.animation.set(index=lambda: 5 + (self.animation.timer / 8) % 2)
             elif self.state == "attacking":
                 self.animation.set(index=lambda: 12 if self.animation.timer < self.weapon.pre else 13)
-                self.weapon.sprite.index = 3 if self.animation.timer < self.weapon.pre else 4 if self.animation.timer < self.weapon.swing else 5
+                self.weapon.sprite.x = self.sprite.x + self.weapon.xFix[3 + self.weapon.sprite.index - self.weapon.firstIndex] * self.weapon.sprite.xScale
+                self.weapon.sprite.y = self.sprite.y + self.weapon.yFix[3 + self.weapon.sprite.index - self.weapon.firstIndex]
             else: self.animation.set(index=lambda: 5)
 
         if self.stance == "standing":
@@ -60,12 +66,9 @@ class Player(object):
                 self.animation.set(index=lambda: (self.animation.timer / 8) % 4)
             elif self.state == "attacking":
                 self.animation.set(index=lambda: 10 if self.animation.timer < self.weapon.pre else 11)
-                self.weapon.sprite.index = 0 if self.animation.timer < self.weapon.pre else 1 if self.animation.timer < self.weapon.swing else 2
+                self.weapon.sprite.x = self.sprite.x + self.weapon.xFix[self.weapon.sprite.index - self.weapon.firstIndex] * self.weapon.sprite.xScale
+                self.weapon.sprite.y = self.sprite.y + self.weapon.yFix[self.weapon.sprite.index - self.weapon.firstIndex]
             else: self.animation.set(index=lambda: 0)
-
-        if self.state == "attacking":
-            self.weapon.sprite.x = self.sprite.x + self.weapon.xFix[self.weapon.sprite.index] * self.weapon.sprite.xScale
-            self.weapon.sprite.y = self.sprite.y + self.weapon.yFix[self.weapon.sprite.index]
 
         if self.knock > 0:
             if self.knock < 64:
@@ -81,6 +84,7 @@ class Player(object):
         self.sprite.draw(display, offset)
 
         if self.state == "attacking":
+            self.weapon.sprite.alpha = self.sprite.alpha
             self.weapon.sprite.draw(display, offset)
 
     def moveLeft(self):
@@ -166,7 +170,7 @@ class Player(object):
         self.knockBack(origin)
         self.health -= origin.damage()
 
-        if self.health > 0:
+        if self.health > 0 and origin.damage() > 0:
             self.invincibility = 128
 
         self.animation.timer = 0
@@ -198,6 +202,7 @@ class Player(object):
         self.applyGravity()
         self.stand()
 
+        if self.health <= 0: self.dead = True
         if self.state != "attacking": self.state = "idle"
 
         if self.state == "attacking":
@@ -231,6 +236,8 @@ class Player(object):
                 self.sprite.y += gameplay.tile.size
                 data.playSound("fall.ogg")
                 self.animation.timer = 0
+                self.dead = True
+            if self.animation.timer == 136:
                 self.health = 0
             self.xVel *= 0.6
             return False

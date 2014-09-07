@@ -1,4 +1,5 @@
 import gameplay
+import pygame
 import data
 
 class Boss(object):
@@ -10,7 +11,7 @@ class Boss(object):
         self.player = player
         self.player.world = self
         self.player.interactibles = set()
-        self.camera = gameplay.Camera(825, 400)
+        self.camera = gameplay.Camera(825, 304)
 
         self.player.sprite.x, self.player.sprite.y = 825, 400
         self.player.xVel, self.player.yVel = 0, 0
@@ -83,6 +84,10 @@ class Boss(object):
         self.player.draw(display, offset)
 
     def update(self):
+        if data.getMusic() == "win-intro.ogg":
+            if not pygame.mixer.music.get_busy():
+                data.playMusic("win-main.ogg")
+
         for entity in self.entities:
             entity.update()
             if entity.dead: self.entities.remove(entity)

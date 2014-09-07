@@ -38,7 +38,7 @@ class Beholder(object):
             self.animation.index = lambda: 1 if self.animation.timer < 136 or self.animation.timer > 248 else 2
 
         if self.state == "running":
-            self.animation.index = lambda: 8 if self.animation.timer < 64 else 9 if self.animation.timer < 72 else 10
+            self.animation.index = lambda: 9 if 0 < self.speed < 2.5 else 8 if self.animation.timer < 64 else 9 if self.animation.timer < 72 else 10
 
         if self.state == "stunned":
             self.animation.index = lambda: (2, 1, 0, 1 , 0, 0, 0) [self.animation.timer / 8 % 7]
@@ -151,6 +151,7 @@ class Beholder(object):
         if self.state != "running" and self.animation.timer >= 128:
             if self.animation.timer == 128:
                 self.dir = random.choice([-1, 1])
+                if self.stuck(): self.dir *= -1
             else: self.walk()
 
             if self.animation.timer > 256 or self.stuck():
@@ -171,22 +172,25 @@ class Beholder(object):
             if self.animation.timer > 64:
                 self.run()
 
+                if abs(self.world.player.sprite.x - self.sprite.x) > 320 \
+                and self.dir != cmp(self.world.player.sprite.x, self.sprite.x):
+                    if self.speed < 2:
+                        self.animation.timer = 0
+                        self.speed = 0
+                    self.speed *= 0.95
+
                 if self.stuck():
                     self.animation.timer = 0
                     self.state = "stunned"
                     self.xVel *= -1
-
-                if abs(self.world.player.sprite.x - self.sprite.x) > 320 \
-                and self.dir != cmp(self.world.player.sprite.x, self.sprite.x):
-                    if self.speed < 2:
-                        if self.speed < 1: self.state = "idle"
-                        self.animation.timer = 0
-                    self.speed *= 0.95
+                    self.speed = 0
 
         elif self.state == "running":
-            if self.speed < 2 and self.animation.timer >= 64:
-                if self.speed < 1: self.state = "idle"
+            if 0 < self.speed < 2:
                 self.animation.timer = 0
+                self.speed = 0
+            if self.animation.timer >= 64 and self.speed == 0:
+                self.state = "idle"
             self.speed *= 0.95
 
     def collided(self):

@@ -24,13 +24,13 @@ def formatValue(value):
 
     return value
 
-def playMusic(song):
+def playMusic(song, repeat=True):
     global currentMusic
     currentMusic = song
 
     pygame.mixer.music.load(song)
     pygame.mixer.music.set_volume(data.config.MUSIC / 100.0)
-    pygame.mixer.music.play(-1)
+    pygame.mixer.music.play(-1 if repeat else 0)
 
 def stopMusic():
     global currentMusic

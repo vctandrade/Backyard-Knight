@@ -1,6 +1,7 @@
 import graphics
 import gameplay
 import random
+import data
 
 class Slime(object):
 
@@ -8,14 +9,17 @@ class Slime(object):
         self.world = world
 
         self.animation = graphics.AnimationInfo()
-        self.animation.timer = random.randint(0, 24)
+        self.animation.timer = random.randint(24, 48)
+        self.animation.index = lambda: (self.animation.timer / 8) % 8
         self.sprite = graphics.Sprite(0, "slime.png", pos)
 
-        self.upperBox = 16
+        self.upperBox = 4
 
         self.xVel, self.yVel = (0, 0)
 
-        self.jumpTimer = random.randint(96, 128)
+        self.period = random.choice((2, 3))
+        self.side = 0.5
+
         self.health = 1
 
         self.invincibility = 0
@@ -23,6 +27,9 @@ class Slime(object):
 
     def draw(self, display, offset=(0, 0)):
         self.animation.animate(self.sprite)
+
+        if self.invincibility > 0:
+            self.sprite.index += 8
 
         self.sprite.draw(display, offset)
 
@@ -35,6 +42,13 @@ class Slime(object):
         if self.onSurface():
             self.xVel = 5 + random.random()
             self.yVel = -6
+
+    def stuck(self, direction):
+        self.sprite.x += direction
+        stuck = self.collided()
+        self.sprite.x -= direction
+
+        return stuck
 
     def knockBack(self, origin):
         self.xVel = 4 * cmp(self.sprite.x, origin.sprite.x)
@@ -49,6 +63,8 @@ class Slime(object):
 
         self.invincibility = origin.weapon.pos - origin.weapon.pre
         self.jumpTimer = random.randint(96, 128)
+
+        data.playSound("slime1.ogg")
 
     def damage(self):
         return 1
@@ -80,19 +96,28 @@ class Slime(object):
             if self.invincibility < 0:
                 pos = self.sprite.x, self.sprite.y
 
-                for i in range(4):
+                for i in range(6):
                     newOrb = gameplay.entity.Orb(self.world, pos)
                     self.world.entities.append(newOrb)
 
+                data.playSound("slime2.ogg")
                 self.dead = True
             return
 
-        if self.jumpTimer == 0:
-            if random.random() < 0.5:
+        if not self.animation.timer % (64 * self.period):
+            if self.stuck(1): self.side = 1.00
+            if self.stuck(-1): self.side = 0.01
+
+            if random.random() < self.side:
+                self.side *= 0.8
                 self.moveLeft()
-            else: self.moveRight()
-            self.jumpTimer = random.randint(96, 128)
-        self.jumpTimer -= 1
+
+            else:
+                self.side /= 0.8
+                self.moveRight()
+
+            self.period = random.choice((2, 3))
+            self.animation.timer = 0
 
     def collided(self):
         l = int(self.sprite.x - self.sprite.xCenter) / gameplay.tile.size

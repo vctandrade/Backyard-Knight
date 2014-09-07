@@ -8,10 +8,10 @@ import data
 class Gameplay(object):
 
     def __init__(self):
+        data.playMusic("pull-me-under.ogg")
+
         self.world = gameplay.level.Test(gameplay.entity.Player())
         keyboard.setMultiKeys(pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_x)
-
-        data.playMusic("pull-me-under.ogg")
 
         self.transitionTimer = 1
         self.overlay = None
@@ -78,7 +78,7 @@ class Gameplay(object):
             self.overlay.update()
             return
 
-        if self.world.player.health <= 0:
+        if self.world.player.dead:
             pygame.mixer.music.fadeout(1024)
             if self.world.player.animation.timer >= 72:
                 self.overlay = screen.Dead()
