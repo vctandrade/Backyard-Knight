@@ -1,9 +1,9 @@
 import pygame
 import data
 
-def drawText(display, string, x, y, color=0x262626, size=16, formatting="left"):
+def drawText(display, string, x, y, color=0x262626, size=16, formatting="left", font="Potash_10x10.png"):
 
-    font = data.getResource("Potash_10x10.png")
+    font = data.getResource(font)
     begin = size * len(string) / 2 if formatting == "center" else 0
 
     for c in string:
@@ -18,4 +18,5 @@ def drawText(display, string, x, y, color=0x262626, size=16, formatting="left"):
         char = pygame.transform.scale(char, (size, size))
         char.set_colorkey(0xFF00FF)
         display.blit(char, (x - begin, y - size / 2))
+
         x += size

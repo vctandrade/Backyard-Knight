@@ -20,16 +20,16 @@ class ConfigMenu(object):
 
         self.configMenu_list.addButton(0, "arrow_back.png", data.config.WIDTH * 0.1, data.config.HEIGHT * 0.1, mask="arrow_leftMask.png")
 
-        self.configMenu_list.addButton(1, "pointer_left.png", data.config.WIDTH * 0.55, data.config.HEIGHT * 0.7, mask="pointer_leftMask.png")
-        self.configMenu_list.addButton(2, "pointer_right.png", data.config.WIDTH * 0.85, data.config.HEIGHT * 0.7, mask="pointer_rightMask.png")
+        self.configMenu_list.addButton(1, "pointer_left.png", data.config.WIDTH * 0.48 - 70 + 100, data.config.HEIGHT * 0.7, mask="pointer_leftMask.png")
+        self.configMenu_list.addButton(2, "pointer_right.png", data.config.WIDTH * 0.68 + 70 + 100, data.config.HEIGHT * 0.7, mask="pointer_rightMask.png")
 
-        self.configMenu_list.addButton(3, "pointer_left.png", data.config.WIDTH * 0.55, data.config.HEIGHT * 0.85, mask="pointer_leftMask.png")
-        self.configMenu_list.addButton(4, "pointer_right.png", data.config.WIDTH * 0.85, data.config.HEIGHT * 0.85, mask="pointer_rightMask.png")
+        self.configMenu_list.addButton(3, "pointer_left.png", data.config.WIDTH * 0.48 - 70 + 100, data.config.HEIGHT * 0.85, mask="pointer_leftMask.png")
+        self.configMenu_list.addButton(4, "pointer_right.png", data.config.WIDTH * 0.68 + 70 + 100, data.config.HEIGHT * 0.85, mask="pointer_rightMask.png")
 
-        self.configMenu_list.addCheckBox("fullscreen", "checkbox.png", data.config.WIDTH * 0.7, data.config.HEIGHT * 0.55, checked=data.config.FULLSCREEN)
+        self.configMenu_list.addCheckBox("fullscreen", "checkbox.png", data.config.WIDTH * 0.58 + 100, data.config.HEIGHT * 0.55, checked=data.config.FULLSCREEN)
 
-        self.configMenu_list.addSlider("musicVolume", "slider.png", "slidermask.png", (0, 100), data.config.MUSIC, data.config.WIDTH * 0.7 , data.config.HEIGHT * 0.3)
-        self.configMenu_list.addSlider("musicSound", "slider.png", "slidermask.png", (0, 100), data.config.SOUND, data.config.WIDTH * 0.7 , data.config.HEIGHT * 0.4)
+        self.configMenu_list.addSlider("musicVolume", "slider.png", "slidermask.png", (0, 100), data.config.MUSIC, data.config.WIDTH * 0.58 + 100 , data.config.HEIGHT * 0.3)
+        self.configMenu_list.addSlider("musicSound", "slider.png", "slidermask.png", (0, 100), data.config.SOUND, data.config.WIDTH * 0.58 + 100, data.config.HEIGHT * 0.4)
 
     def displayOutput(self, display):
 
@@ -38,19 +38,19 @@ class ConfigMenu(object):
             shadow = pygame.Surface(resolution, pygame.SRCALPHA)
             shadow.fill((0, 0, 0, 224))
             display.blit(shadow, (0, 0))
-        else: display.blit(data.getResource("rocks.png"), (0, 0))
+        else: display.blit(data.getResource("rocks.png"), (data.config.WIDTH * 0.5 - 960, data.config.HEIGHT * 0.5 - 540))
 
         self.configMenu_list.draw(display)
 
-        graphics.drawText(display, data.translate("configurations"), data.config.WIDTH * 0.5, data.config.HEIGHT * 0.1, color=0xE0E0E0, size=40, formatting="center")
-        graphics.drawText(display, data.translate("music"), data.config.WIDTH * 0.2, data.config.HEIGHT * 0.3, color=0xE0E0E0, size=30, formatting="center")
-        graphics.drawText(display, data.translate("sound"), data.config.WIDTH * 0.2, data.config.HEIGHT * 0.4, color=0xE0E0E0, size=30, formatting="center")
-        graphics.drawText(display, data.translate("fullscreen"), data.config.WIDTH * 0.2, data.config.HEIGHT * 0.55, color=0xE0E0E0, size=30, formatting="center")
-        graphics.drawText(display, data.translate("resolution"), data.config.WIDTH * 0.2, data.config.HEIGHT * 0.7, color=0xE0E0E0, size=30, formatting="center")
-        graphics.drawText(display, data.translate("language"), data.config.WIDTH * 0.2, data.config.HEIGHT * 0.85, color=0xE0E0E0, size=30, formatting="center")
+        graphics.drawText(display, data.translate("configurations"), data.config.WIDTH * 0.5, data.config.HEIGHT * 0.1, color=0xF0F0F0, size=40, formatting="center")
+        graphics.drawText(display, data.translate("music"), data.config.WIDTH * 0.35 - 240, data.config.HEIGHT * 0.3, color=0xF0F0F0, size=30)
+        graphics.drawText(display, data.translate("sound"), data.config.WIDTH * 0.35 - 240, data.config.HEIGHT * 0.4, color=0xF0F0F0, size=30)
+        graphics.drawText(display, data.translate("fullscreen"), data.config.WIDTH * 0.35 - 240, data.config.HEIGHT * 0.55, color=0xF0F0F0, size=30)
+        graphics.drawText(display, data.translate("resolution"), data.config.WIDTH * 0.35 - 240, data.config.HEIGHT * 0.7, color=0xF0F0F0, size=30)
+        graphics.drawText(display, data.translate("language"), data.config.WIDTH * 0.35 - 240, data.config.HEIGHT * 0.85, color=0xF0F0F0, size=30)
 
-        graphics.drawText(display, self.resolutions_strings[self.resolution_index], data.config.WIDTH * 0.7, data.config.HEIGHT * 0.7, color=0xE0E0E0, size=30, formatting="center")
-        graphics.drawText(display, self.languages_strings[self.language_index], data.config.WIDTH * 0.7, data.config.HEIGHT * 0.85, color=0xE0E0E0, size=30, formatting="center")
+        graphics.drawText(display, self.resolutions_strings[self.resolution_index], data.config.WIDTH * 0.58 + 100, data.config.HEIGHT * 0.7, color=0xF0F0F0, size=30, formatting="center")
+        graphics.drawText(display, self.languages_strings[self.language_index], data.config.WIDTH * 0.58 + 100, data.config.HEIGHT * 0.85, color=0xF0F0F0, size=30, formatting="center")
 
     def respondToUserInput(self, event):
         for e in self.configMenu_list.handle(event):

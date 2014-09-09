@@ -15,7 +15,7 @@ class Boss(object):
 
         self.xVel, self.yVel = (0, 0)
 
-        self.health = 12
+        self.health = 16
         self.state = "idle"
         self.dir = random.choice([-1, 1])
 
@@ -99,8 +99,8 @@ class Boss(object):
         self.sprite.x += self.xVel
 
         if self.collided():
-            if self.xVel >= 0: self.sprite.x -= (self.sprite.x + self.sprite.xCenter) % gameplay.tile.size
-            else: self.sprite.x += gameplay.tile.size - (self.sprite.x - self.sprite.xCenter) % gameplay.tile.size
+            if self.xVel >= 0: self.sprite.x -= (self.sprite.x + self.sprite.xCenter + 32) % gameplay.tile.size
+            else: self.sprite.x += gameplay.tile.size - (self.sprite.x - self.sprite.xCenter - 32) % gameplay.tile.size
 
             self.xVel = 0
 
@@ -122,11 +122,15 @@ class Boss(object):
             if self.state != "dying":
                 self.world.camera.setShake(512, 0.992)
                 pygame.mixer.music.fadeout(7400)
+                self.world.freezeTimer = 0
                 self.animation.timer = 0
                 self.state = "dying"
 
-            if self.animation.timer >= 512:
+            if self.animation.timer == 512:
                 data.playMusic("win-intro.ogg", repeat=False)
+
+            if self.animation.timer == 528:
+                self.world.freezeTimer = -16
                 self.dead = True
 
             if self.score > 0:
@@ -152,7 +156,7 @@ class Boss(object):
             if self.animation.timer >= 64:
                 self.move()
 
-                if abs(self.sprite.x - 816) > 364 \
+                if abs(self.sprite.x - 816) > 348 \
                 and cmp(self.sprite.x, 816) == self.dir:
                     self.animation.timer = 0
                     self.dir *= -1
@@ -194,8 +198,8 @@ class Boss(object):
                 self.state = "idle"
 
     def collided(self):
-        l = int(self.sprite.x - self.sprite.xCenter) / gameplay.tile.size
-        r = int(self.sprite.x + self.sprite.xCenter - 1) / gameplay.tile.size
+        l = int(self.sprite.x - self.sprite.xCenter + 32) / gameplay.tile.size
+        r = int(self.sprite.x + self.sprite.xCenter - 33) / gameplay.tile.size
 
         t = int(self.sprite.y - self.sprite.yCenter) / gameplay.tile.size
         b = int(self.sprite.y + self.sprite.yCenter - 1) / gameplay.tile.size

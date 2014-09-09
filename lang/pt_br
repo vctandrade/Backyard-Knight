@@ -21,7 +21,7 @@
 	"language": "Língua",
 	"menu": "Menu",
 	"monitor": "Monitor:",
-	"move": "Andar/Abaixar",
+	"move": "Andar",
 	"music": "Música",
 	"name": "Insira seu nome:",
 	"open": "Interagir",
@@ -36,7 +36,7 @@
 	"sound": "Som",
 	"start": "Iniciar",
 	"submit": "Submiter Pontuaçäo",
-	"students": "Estudantes:",
+	"students": "Alunos:",
 	"use item": "Usar item",
 	"weapons": "Armas",
 	"win": "Você Ganhou!!!"

@@ -39,6 +39,8 @@ class Dead(object):
                 display = pygame.display.get_surface()
                 static = display.copy()
 
+                clock = pygame.time.Clock()
+
                 blackness = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))
                 blackness.fill(0x000000)
 
@@ -48,8 +50,10 @@ class Dead(object):
                     blackness.set_alpha(transitionTimer, pygame.RLEACCEL)
                     display.blit(blackness, (0, 0))
 
-                    transitionTimer += 1
+                    transitionTimer += 4
                     pygame.display.flip()
+
+                    clock.tick(60)
 
                 if e.button == 0:
                     return screen.Menu(fadin=True)

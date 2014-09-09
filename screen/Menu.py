@@ -21,7 +21,7 @@ class Menu(object):
         self.fadin = 255 if fadin else 0
 
     def displayOutput(self, display):
-        display.blit(data.getResource("windows_xp.png"), (0, 0))
+        display.blit(data.getResource("windows_xp.png"), (data.config.WIDTH * 0.5 - 960, data.config.HEIGHT * 0.5 - 540))
         display.blit(data.getResource("logo.png"), (data.config.WIDTH * 0.5 - 461, data.config.HEIGHT * 0.05))
         self.menu_list.draw(display)
 
@@ -48,6 +48,8 @@ class Menu(object):
                     transitionTimer = 0
                     display = pygame.display.get_surface()
 
+                    clock = pygame.time.Clock()
+
                     blackness = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))
                     blackness.fill(0x000000)
 
@@ -57,8 +59,10 @@ class Menu(object):
                         blackness.set_alpha(transitionTimer, pygame.RLEACCEL)
                         display.blit(blackness, (0, 0))
 
-                        transitionTimer += 2.5
+                        transitionTimer += 4
                         pygame.display.flip()
+
+                        clock.tick(60)
 
                     return screen.Gameplay()
 
