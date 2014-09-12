@@ -69,7 +69,7 @@ class Gameplay(object):
         display.blit(item, (data.config.WIDTH - 80, 24))
 
         if self.world.player.score >= 0:
-            graphics.drawText(display, "%.6d" % self.world.player.score, data.config.WIDTH / 2, 48, 0xFFEE00, 30, "center", "Time_10x10.png")
+            graphics.drawText(display, "%.4d" % self.world.player.score, data.config.WIDTH / 2, 48, 0xFFEE00, 30, "center", "Time_10x10.png")
 
         if not hasattr(self.world, "freezeTimer") or (self.world.freezeTimer / 16) % 4:
             seconds = min(self.timer / 1000, 3599)
@@ -159,7 +159,8 @@ class Gameplay(object):
                 data.playMusic("win-main.ogg")
 
         if type(self.overlay) in (screen.Dead, screen.SubmitScore):
-            self.world.update()
+            if type(self.overlay) != screen.Dead or self.overlay.transitionTimer < 128:
+                self.world.update()
 
         if self.overlay:
             self.overlay.update()

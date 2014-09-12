@@ -93,6 +93,7 @@ class Boss(object):
         self.map = self.towerMap
 
         self.entities = list()
+        self.particles = list()
 
         self.entities.append(gameplay.entity.Boss(self, [816, 64]))
 
@@ -142,10 +143,17 @@ class Boss(object):
 
         self.player.draw(display, offset)
 
+        for particle in self.particles:
+            particle.draw(display, offset)
+
     def update(self):
         for entity in self.entities:
             entity.update()
             if entity.dead: self.entities.remove(entity)
+
+        for particle in self.particles:
+            particle.update()
+            if particle.dead: self.particles.remove(particle)
 
         self.player.update()
 

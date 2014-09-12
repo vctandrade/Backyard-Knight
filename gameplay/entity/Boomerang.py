@@ -106,6 +106,9 @@ class Boomerang(object):
                     data.stopSound("boomerang.ogg", fade=True)
                 self.invincibility = 32
 
+        if self.world.player.dead:
+            data.stopSound("boomerang.ogg", fade=True)
+
         self.sprite.y += self.yVel
 
         if self.collided():

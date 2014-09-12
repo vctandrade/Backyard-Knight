@@ -13,7 +13,7 @@ class SubmitScore (object):
 
         self.menu_list = graphics.userInterface.Interface()
         self.menu_list.addButton(0, "button.png", data.config.WIDTH * 0.5 + 225, data.config.HEIGHT * 0.55, active=False)
-        self.menu_list.addTextField("name", "textField.png", data.config.WIDTH * 0.5 - 125, data.config.HEIGHT * 0.55, color=0x000000, size=20)
+        self.menu_list.addTextField("name", "textField.png", data.config.WIDTH * 0.5 - 125, data.config.HEIGHT * 0.55, color=0x000000, size=20, focused=True)
 
         self.winButtons = graphics.userInterface.Interface()
         self.winButtons.addButton(0, "button.png", data.config.WIDTH * 0.35, data.config.HEIGHT * 0.4)
@@ -47,7 +47,7 @@ class SubmitScore (object):
             graphics.drawText(buf, data.translate("submit"), data.config.WIDTH * 0.5 + 225, data.config.HEIGHT * 0.55, size=20 , formatting="center")
 
             if self.color == 0xE0E0E0:
-                graphics.drawText(buf, "%.6d" % self.score, data.config.WIDTH / 2, 48, 0xFFEE00, 30, "center", "Time_10x10.png")
+                graphics.drawText(buf, "%.4d" % self.score, data.config.WIDTH / 2, 48, 0xFFEE00, 30, "center", "Time_10x10.png")
 
             buf.set_alpha(2 * self.transitionTimer - 256, pygame.RLEACCEL)
             display.blit(buf, (0, 0))
@@ -60,7 +60,7 @@ class SubmitScore (object):
             graphics.drawText(display, data.translate("submit"), data.config.WIDTH * 0.5 + 225, data.config.HEIGHT * 0.55, size=20 , formatting="center")
 
             if self.color == 0xE0E0E0:
-                graphics.drawText(display, "%.6d" % self.score, data.config.WIDTH / 2, 48, 0xFFEE00, 30, "center", "Time_10x10.png")
+                graphics.drawText(display, "%.4d" % self.score, data.config.WIDTH / 2, 48, 0xFFEE00, 30, "center", "Time_10x10.png")
 
     def respondToUserInput(self, event):
         for e in self.menu_list.handle(event):

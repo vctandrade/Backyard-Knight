@@ -9,4 +9,6 @@ def loadLanguage():
         langPack = json.load(f, encoding="latin")
 
 def translate(key):
-    return langPack[key]
+    if langPack.has_key(key):
+        return langPack[key]
+    else: return key

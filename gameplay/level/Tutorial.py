@@ -41,6 +41,7 @@ class Tutorial(object):
             self.map.append(newLine)
 
         self.entities = list()
+        self.particles = list()
 
         self.entities.append(gameplay.entity.Chest(self, [300, 220], gameplay.item.Food()))
         self.entities.append(gameplay.entity.Chest(self, [450, 220], gameplay.item.HealthPotion()))
@@ -72,10 +73,17 @@ class Tutorial(object):
 
         self.player.draw(display, offset)
 
+        for particle in self.particles:
+            particle.draw(display, offset)
+
     def update(self):
         for entity in self.entities:
             entity.update()
             if entity.dead: self.entities.remove(entity)
+
+        for particle in self.particles:
+            particle.update()
+            if particle.dead: self.particles.remove(particle)
 
         self.player.update()
         self.camera.update(self.player.sprite)

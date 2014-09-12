@@ -7,9 +7,12 @@ import data
 pygame.mixer.pre_init(buffer=1024)
 pygame.init()
 
+pygame.mixer.set_num_channels(16)
+
 data.loadConfig()
 data.loadLanguage()
 
+pygame.display.set_icon(pygame.image.load("icon.png"))
 pygame.display.set_caption(data.translate("caption"))
 resolution = data.config.WIDTH, data.config.HEIGHT
 

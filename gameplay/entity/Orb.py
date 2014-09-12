@@ -20,6 +20,8 @@ class Orb(object):
 
         self.dead = False
 
+        self.update()
+
     def draw(self, display, offset=(0, 0)):
         if self.animation.timer < 768 \
         or int(16.0 * self.animation.timer / (1280 - self.animation.timer)) % 4:

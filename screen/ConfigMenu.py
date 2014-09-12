@@ -2,6 +2,7 @@ import screen
 import data
 import graphics
 import pygame
+import os
 
 class ConfigMenu(object):
 
@@ -14,8 +15,8 @@ class ConfigMenu(object):
         self.resolutions = [(1024, 768), (1280, 768), (1600, 900), (1920, 1080)]
         self.resolution_index = self.resolutions.index((data.config.WIDTH, data.config.HEIGHT))
 
-        self.languages_strings = [data.translate("english"), data.translate("portuguese")]
-        self.languages = ["en_us", "pt_br"]
+        self.languages = os.listdir("../../lang")
+        self.languages_strings = map(data.translate, self.languages)
         self.language_index = self.languages.index(data.config.LANG)
 
         self.configMenu_list.addButton(0, "arrow_back.png", data.config.WIDTH * 0.1, data.config.HEIGHT * 0.1, mask="arrow_leftMask.png")

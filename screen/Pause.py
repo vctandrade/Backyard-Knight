@@ -17,6 +17,8 @@ class Pause(object):
         self.shadow = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))
         self.shadow.set_alpha(224, pygame.RLEACCEL)
 
+        pygame.mixer.pause()
+
         self.camera = camera
 
     def displayOutput(self, display):
@@ -33,6 +35,7 @@ class Pause(object):
         for e in self.menu_list.handle(event):
             if e.type == graphics.userInterface.BUTTONCLICKED:
                 if e.button == 0:
+                    pygame.mixer.unpause()
                     return None
                 if e.button == 1:
                     return screen.Help(screen.Pause, self.camera)
@@ -41,6 +44,7 @@ class Pause(object):
                 if e.button == 3:
 
                     pygame.mixer.music.fadeout(1024)
+                    pygame.mixer.stop()
 
                     transitionTimer = 0
                     display = pygame.display.get_surface()
@@ -66,6 +70,7 @@ class Pause(object):
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
+                pygame.mixer.unpause()
                 return None
 
         return self

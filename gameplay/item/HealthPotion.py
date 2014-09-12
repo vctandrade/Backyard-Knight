@@ -1,3 +1,4 @@
+import gameplay
 import graphics
 import data
 
@@ -14,3 +15,5 @@ class HealthPotion(object):
 
         data.playSound("item.ogg")
         player.item = None
+
+        for i in range(8): player.world.particles.append(gameplay.entity.Sparkle(player.world, (player.sprite.x, player.sprite.y)))

@@ -5,7 +5,7 @@ sprite = None
 info = graphics.AnimationInfo()
 
 def init():
-    graphics.userInterface.cursor.Fairy.load()
+    pass
 
 def draw(display):
     if sprite == None: return

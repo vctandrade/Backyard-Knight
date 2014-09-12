@@ -6,13 +6,14 @@ import data
 class Ranking(object):
 
     def __init__(self, fadin=False, showCredits=True):
-        self.ranking_list = graphics.userInterface.Interface()
-        self.ranking_list.addButton(0, "arrow_back.png", data.config.WIDTH * 0.1, data.config.HEIGHT * 0.1, mask="arrow_leftMask.png")
-        self.ranking_list.addSlider(1, "slider.png", "slidermask.png", (0, 1000), 0, data.config.WIDTH * 0.75 + 180, data.config.HEIGHT * 0.55, vertical=True)
 
         try: self.list = data.load("ranking")
         except: data.save([], "ranking")
         self.list = data.load("ranking")
+
+        self.ranking_list = graphics.userInterface.Interface()
+        self.ranking_list.addButton(0, "arrow_back.png", data.config.WIDTH * 0.1, data.config.HEIGHT * 0.1, mask="arrow_leftMask.png")
+        self.ranking_list.addSlider(1, "slider.png", "slidermask.png", (0, 1000), 0, data.config.WIDTH * 0.75 + 180, data.config.HEIGHT * 0.55, vertical=True, visible=len(self.list) > 5)
 
         self.fadin = 256 if fadin else -1
         self.showCredits = showCredits
@@ -40,7 +41,7 @@ class Ranking(object):
             if data.config.HEIGHT * 0.55 - 276 < y < data.config.HEIGHT * 0.55 + 272 + 15:
                 graphics.drawText(buff, str(i + 1), data.config.WIDTH * 0.5 - 300, y, size=30, color=purple, formatting="center")
                 graphics.drawText(buff, self.list[i][0], data.config.WIDTH * 0.5 - 228, y, size=20, color=purple)
-                graphics.drawText(buff, "%6d" % self.list[i][1], data.config.WIDTH * 0.5 + 160 + 100, y, size=20, color=purple, formatting="center")
+                graphics.drawText(buff, "%4d" % self.list[i][1], data.config.WIDTH * 0.5 + 160 + 100, y, size=20, color=purple, formatting="center")
 
         display.blit(buff, (data.config.WIDTH * 0.5 - 350, data.config.HEIGHT * 0.55 - 268), ((data.config.WIDTH * 0.5 - 350, data.config.HEIGHT * 0.55 - 268), (710, 540)))
 

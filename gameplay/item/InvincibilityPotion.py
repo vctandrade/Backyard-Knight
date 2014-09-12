@@ -1,3 +1,4 @@
+import gameplay
 import graphics
 import data
 
@@ -10,3 +11,5 @@ class InvincibilityPotion(object):
         data.playSound("item.ogg")
         player.invincibility = 512
         player.item = None
+
+        for i in range(8): player.world.particles.append(gameplay.entity.Sparkle(player.world, (player.sprite.x, player.sprite.y)))

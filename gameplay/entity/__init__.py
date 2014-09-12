@@ -15,4 +15,5 @@ from Orb import *
 from Player import *
 from Skeleton import *
 from Slime import *
+from Sparkle import *
 from Spike import *

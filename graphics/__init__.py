@@ -1,7 +1,6 @@
 from AnimationInfo import *
 from Utils import *
 
-import spawner
 import userInterface
 
 from Mask import *

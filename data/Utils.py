@@ -41,7 +41,8 @@ def stopMusic():
 def getMusic():
     return currentMusic
 
-def playSound(sound, repeat=False, volume=data.config.SOUND / 100.0):
+def playSound(sound, repeat=False, volume=1):
+    volume = min(data.config.SOUND / 100.0, volume)
     data.getResource(sound).set_volume(volume)
     data.getResource(sound).play(-1 if repeat else 0)
 

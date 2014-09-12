@@ -9,6 +9,8 @@ class Introduction(object):
         data.playMusic("fade-to-black.ogg")
         self.transitionTimer = 0
 
+        pygame.mouse.set_visible(False)
+
     def displayOutput(self, display):
         textColor = 0xF0F0F0
 
@@ -63,6 +65,7 @@ class Introduction(object):
 
                     clock.tick(60)
 
+                pygame.mouse.set_visible(True)
                 return screen.Menu(fadin=True)
 
             return self
