@@ -5,7 +5,7 @@ import pygame
 
 class ConfigMenu(object):
 
-    def __init__(self, origin):
+    def __init__(self, origin, camera=None):
         self.origin = origin
 
         self.configMenu_list = graphics.userInterface.Interface()
@@ -31,13 +31,17 @@ class ConfigMenu(object):
         self.configMenu_list.addSlider("musicVolume", "slider.png", "slidermask.png", (0, 100), data.config.MUSIC, data.config.WIDTH * 0.58 + 100 , data.config.HEIGHT * 0.3)
         self.configMenu_list.addSlider("musicSound", "slider.png", "slidermask.png", (0, 100), data.config.SOUND, data.config.WIDTH * 0.58 + 100, data.config.HEIGHT * 0.4)
 
+        self.shadow = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))
+        self.shadow.set_alpha(224, pygame.RLEACCEL)
+
+        self.camera = camera
+
+        self.lastSound = data.config.SOUND
+
     def displayOutput(self, display):
 
         if self.origin is not screen.Menu:
-            resolution = (data.config.WIDTH, data.config.HEIGHT)
-            shadow = pygame.Surface(resolution, pygame.SRCALPHA)
-            shadow.fill((0, 0, 0, 224))
-            display.blit(shadow, (0, 0))
+            display.blit(self.shadow, (0, 0))
         else: display.blit(data.getResource("rocks.png"), (data.config.WIDTH * 0.5 - 960, data.config.HEIGHT * 0.5 - 540))
 
         self.configMenu_list.draw(display)
@@ -56,9 +60,18 @@ class ConfigMenu(object):
         for e in self.configMenu_list.handle(event):
             if e.type == graphics.userInterface.BUTTONCLICKED:
                 if e.button == 0:
+
+                    if self.camera:
+                        self.camera.x += data.config.WIDTH / 2
+                        self.camera.y += data.config.HEIGHT / 2
+
                     data.config.WIDTH, data.config.HEIGHT = self.resolutions[self.resolution_index]
                     data.config.FULLSCREEN = self.configMenu_list.boxChecked("fullscreen")
                     data.config.LANG = self.languages[self.language_index]
+
+                    if self.camera:
+                        self.camera.x -= data.config.WIDTH / 2
+                        self.camera.y -= data.config.HEIGHT / 2
 
                     if data.config.FULLSCREEN:
                         pygame.display.set_mode(self.resolutions[self.resolution_index], pygame.FULLSCREEN)
@@ -67,7 +80,7 @@ class ConfigMenu(object):
                     data.saveConfig()
                     data.loadLanguage()
 
-                    return self.origin()
+                    return self.origin(self.camera)
 
                 if e.button == 1:
                     self.resolution_index -= 1
@@ -83,6 +96,11 @@ class ConfigMenu(object):
 
         data.config.MUSIC = self.configMenu_list.getSliderValue("musicVolume")
         data.config.SOUND = self.configMenu_list.getSliderValue("musicSound")
+
+        if event.type == pygame.MOUSEBUTTONUP:
+            if self.lastSound != data.config.SOUND:
+                data.playSound("explosion.ogg")
+                self.lastSound = data.config.SOUND
 
         pygame.mixer.music.set_volume(data.config.MUSIC / 100.0)
 

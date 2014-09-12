@@ -127,5 +127,7 @@ class Boomerang(object):
 
     def collidedWith(self, entity):
         if isinstance(entity, gameplay.entity.Player):
-            if self.invincibility == -1:
-                entity.getHurt(self)
+            if entity.invincibility <= 0:
+                if self.invincibility == -1:
+                    if self.sprite.collidesWith(entity.sprite):
+                        entity.getHurt(self)

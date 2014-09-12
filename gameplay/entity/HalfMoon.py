@@ -38,4 +38,8 @@ class HalfMoon(object):
 
     def collidedWith(self, entity):
         if isinstance(entity, gameplay.entity.Player):
-            entity.getHurt(self)
+            if entity.invincibility <= 0:
+                if self.sprite.collidesWith(entity.sprite):
+                    self.sprite.x -= 1000 * self.sprite.xScale
+                    entity.getHurt(self)
+                    self.sprite.x += 1000 * self.sprite.xScale

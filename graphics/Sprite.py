@@ -76,8 +76,8 @@ class Sprite(object):
             self.xTrueCenter, self.yTrueCenter = x, y
             self.centerOutdated = False
 
-        x = self.x - self.xTrueCenter - offset[0]
-        y = self.y - self.yTrueCenter - offset[1]
+        x = self.x - self.xTrueCenter - math.floor(offset[0])
+        y = self.y - self.yTrueCenter - math.ceil(offset[1])
 
         self.pixelArray = pygame.PixelArray(img.copy())
 

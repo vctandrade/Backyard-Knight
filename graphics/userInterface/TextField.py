@@ -44,7 +44,7 @@ class TextField(object):
         return icon
 
     def getDrawPos(self):
-        return [(self.x - self.width / 2, self.y - self.height / 2), (0, 0)]
+        return [self.x - self.width / 2, self.y - self.height / 2]
 
     def updateHover(self):
         pos = pygame.mouse.get_pos()

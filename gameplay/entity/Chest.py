@@ -5,16 +5,16 @@ import data
 
 class Chest(object):
 
-    def __init__(self, world, pos):
+    def __init__(self, world, pos, item=None):
         self.world = world
 
         self.animation = graphics.AnimationInfo()
-        self.sprite = graphics.Sprite(0, "chest.png", (0, 0))
+        self.sprite = graphics.Sprite(0, "chest.png", pos)
 
-        self.sprite.x, self.sprite.y = pos
         self.state = "closed"
 
         self.dead = False
+        self.item = item
 
     def draw(self, display, offset=(0, 0)):
 
@@ -45,14 +45,15 @@ class Chest(object):
 
     def use(self):
         if self.state == "closed":
-            item = self.randomizeItem()
+            if self.item == None:
+                self.item = self.randomizeItem()
 
-            if hasattr(item, "damage"):
-                self.world.player.weapon = item
+            if hasattr(self.item, "damage"):
+                self.world.player.weapon = self.item
                 self.world.player.flashMode = "weapon"
 
             else:
-                self.world.player.item = item
+                self.world.player.item = self.item
                 self.world.player.flashMode = "item"
 
             self.world.player.flashTimer = 32
@@ -65,9 +66,10 @@ class Chest(object):
     def getHurt(self, origin):
         pass
 
-    def collidedWith(self, origin):
-        if isinstance(origin, gameplay.entity.Player):
-            origin.interactibles.add(self)
+    def collidedWith(self, entity):
+        if isinstance(entity, gameplay.entity.Player):
+            if self.sprite.collidesWith(entity.sprite):
+                entity.interactibles.add(self)
 
     def update(self):
         self.animation.timer += 1

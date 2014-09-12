@@ -5,7 +5,7 @@ import data
 
 class Pause(object):
 
-    def __init__(self):
+    def __init__(self, camera):
 
         self.menu_list = graphics.userInterface.Interface()
 
@@ -16,6 +16,8 @@ class Pause(object):
 
         self.shadow = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))
         self.shadow.set_alpha(224, pygame.RLEACCEL)
+
+        self.camera = camera
 
     def displayOutput(self, display):
         display.blit(self.shadow, (0, 0))
@@ -33,9 +35,9 @@ class Pause(object):
                 if e.button == 0:
                     return None
                 if e.button == 1:
-                    return screen.Help(screen.Pause)
+                    return screen.Help(screen.Pause, self.camera)
                 if e.button == 2:
-                    return screen.ConfigMenu(screen.Pause)
+                    return screen.ConfigMenu(screen.Pause, self.camera)
                 if e.button == 3:
 
                     pygame.mixer.music.fadeout(1024)

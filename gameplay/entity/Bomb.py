@@ -111,7 +111,9 @@ class Bomb(object):
     def collidedWith(self, entity):
         if isinstance(entity, gameplay.entity.Player) \
         and self.animation.timer > self.weapon.pre:
-            entity.getHurt(self)
+            if entity.invincibility <= 0:
+                if self.sprite.collidesWith(entity.sprite):
+                    entity.getHurt(self)
 
     def getHurt(self, origin):
         pass

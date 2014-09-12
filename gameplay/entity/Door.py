@@ -10,8 +10,7 @@ class Door(object):
         self.next = nextLvl
 
         self.animation = graphics.AnimationInfo()
-        self.sprite = graphics.Sprite(56, "golem.png", (0, 0))
-        self.sprite.x, self.sprite.y = pos
+        self.sprite = graphics.Sprite(56, "golem.png", pos)
 
         self.sprite.yCenter = 212
 
@@ -34,9 +33,11 @@ class Door(object):
     def getHurt(self, origin):
         pass
 
-    def collidedWith(self, origin):
-        if isinstance(origin, gameplay.entity.Player):
-            origin.interactibles.add(self)
+    def collidedWith(self, entity):
+        if isinstance(entity, gameplay.entity.Player):
+            if abs(self.sprite.x - entity.sprite.x) <= 70:
+                if self.sprite.collidesWith(entity.sprite):
+                    entity.interactibles.add(self)
 
     def update(self):
         try: self.world.player.interactibles.remove(self)

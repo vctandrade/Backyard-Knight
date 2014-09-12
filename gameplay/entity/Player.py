@@ -1,5 +1,6 @@
 import graphics
 import gameplay
+import pygame
 import data
 
 class Player(object):
@@ -81,7 +82,34 @@ class Player(object):
             if type(self.weapon) == gameplay.item.Spear:
                 self.sprite.index += 6
 
-        self.sprite.draw(display, offset)
+        if not hasattr(self.world, "backyardTimer") or self.world.backyardTimer < 384:
+            self.sprite.draw(display, offset)
+
+        elif self.world.backyardTimer < 512:
+            knight = pygame.Surface((96, 96))
+            knight.set_colorkey(0xFF00FF)
+            knight.fill(0xFF00FF)
+
+            kid = pygame.Surface((96, 96))
+            kid.set_colorkey(0xFF00FF)
+            kid.fill(0xFF00FF)
+
+            self.sprite.draw(knight, (self.sprite.x - 48, self.sprite.y - 48))
+
+            self.sprite.index += 24
+            self.sprite.draw(kid, (self.sprite.x - 48, self.sprite.y - 48))
+
+            knight.set_alpha(1024 - 2 * self.world.backyardTimer, pygame.RLEACCEL)
+            kid.set_alpha(2 * self.world.backyardTimer - 768, pygame.RLEACCEL)
+
+            offset = self.sprite.x - offset[0] - 48, self.sprite.y - offset[1] - 48
+
+            display.blit(knight, offset)
+            display.blit(kid, offset)
+
+        else:
+            self.sprite.index += 24
+            self.sprite.draw(display, offset)
 
         if self.state == "attacking":
             self.weapon.sprite.alpha = self.sprite.alpha
@@ -136,6 +164,8 @@ class Player(object):
             self.yVel = -9
 
     def useItem(self):
+        if hasattr(self.world, "backyardTimer"): return
+
         if self.state == "attacking" or self.knock > 0 \
         or not self.item: return
         self.item.use(self)
@@ -148,6 +178,8 @@ class Player(object):
             entity.use()
 
     def attack(self):
+        if hasattr(self.world, "backyardTimer"): return
+
         if self.state == "attacking" or self.knock > 0 \
         or not self.weapon: return
 
@@ -167,7 +199,8 @@ class Player(object):
         if self.invincibility > 0:
             return
 
-        self.knockBack(origin)
+        if origin.damage() > 0 or self.knock == 0:
+            self.knockBack(origin)
         self.health -= origin.damage()
 
         if self.health > 0 and origin.damage() > 0:
@@ -218,8 +251,7 @@ class Player(object):
         self.invincibility = max(self.invincibility - 1, self.health <= 0)
 
         for entity in self.world.entities:
-            if self.sprite.collidesWith(entity.sprite):
-                entity.collidedWith(self)
+            entity.collidedWith(self)
 
     def collided(self):
         l = int(self.sprite.x - self.sideBox) / gameplay.tile.size

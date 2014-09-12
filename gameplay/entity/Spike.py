@@ -4,7 +4,7 @@ import pygame
 
 class Spike(object):
 
-    def __init__(self, world, pos, mode):
+    def __init__(self, world, pos, mode, startTime=0, waitTime=128):
         self.world = world
 
         self.animation = graphics.AnimationInfo()
@@ -32,6 +32,9 @@ class Spike(object):
 
         self.skull.y += 16
         self.origin = self.sprite.y
+
+        self.waitTime = waitTime
+        self.animation.timer = startTime
 
     def draw(self, display, offset=(0, 0)):
         self.skull.draw(display, offset)
@@ -82,8 +85,8 @@ class Spike(object):
 
         if abs(self.sprite.y - self.origin) <= 0:
             self.yVel = 0
-            if self.animation.timer == 128:
-                self.animation.timer = -128
+            if self.animation.timer == self.waitTime:
+                self.animation.timer = -self.waitTime
                 self.moveUp()
 
     def moveUp(self):
@@ -112,6 +115,8 @@ class Spike(object):
 
     def collidedWith(self, entity):
         if isinstance(entity, gameplay.entity.Player):
-            if self.mode == "up" and (entity.sprite.y + entity.upperBox) < self.origin \
-            or self.mode == "down" and (entity.sprite.y - entity.lowerBox) > self.origin:
-                entity.getHurt(self)
+            if entity.invincibility <= 0:
+                if self.mode == "up" and (entity.sprite.y + entity.lowerBox) <= self.origin - 90 \
+                or self.mode == "down" and (entity.sprite.y - entity.upperBox) >= self.origin + 90:
+                    if self.sprite.collidesWith(entity.sprite):
+                        entity.getHurt(self)

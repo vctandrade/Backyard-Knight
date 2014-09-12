@@ -17,7 +17,6 @@ class Beholder(object):
         self.health = 2
         self.state = "idle"
 
-        self.speed = 0
         self.dir = 0
 
         self.invincibility = 0
@@ -38,7 +37,7 @@ class Beholder(object):
             self.animation.index = lambda: 1 if self.animation.timer < 136 or self.animation.timer > 248 else 2
 
         if self.state == "running":
-            self.animation.index = lambda: 9 if 0 < self.speed < 2.5 else 8 if self.animation.timer < 64 else 9 if self.animation.timer < 72 else 10
+            self.animation.index = lambda: 9 if 0 < abs(self.xVel) < 0.8 else 8 if self.animation.timer < 64 else 9 if self.animation.timer < 72 else 10
 
         if self.state == "stunned":
             self.animation.index = lambda: (2, 1, 0, 1 , 0, 0, 0) [self.animation.timer / 8 % 7]
@@ -50,7 +49,7 @@ class Beholder(object):
             self.animation.index = lambda: 24 if self.state == "running" else 25
 
         if self.state != "dead":
-            self.sprite.y += math.cos(self.floatTimer / 32.0) * 8
+            self.sprite.y += round(math.cos(self.floatTimer / 32.0) * 8)
 
         self.animation.animate(self.sprite)
         self.sprite.draw(display, offset)
@@ -58,7 +57,7 @@ class Beholder(object):
         self.sprite.y = origin
 
     def knockBack(self, origin):
-        self.xVel = 8 * cmp(self.sprite.x, origin.sprite.x)
+        self.xVel = 6 * cmp(self.sprite.x, origin.sprite.x)
 
         if self.state == "running":
             if self.animation.timer < 64:
@@ -91,9 +90,6 @@ class Beholder(object):
         self.xVel = 2 * self.dir
         self.state = "walking"
 
-    def run(self):
-        self.xVel = self.speed * self.dir
-
     def stuck(self):
         self.sprite.x += self.dir
         stuck = self.collided()
@@ -111,7 +107,10 @@ class Beholder(object):
             if self.xVel >= 0: self.sprite.x -= (self.sprite.x + self.sprite.xCenter) % gameplay.tile.size
             else: self.sprite.x += gameplay.tile.size - (self.sprite.x - self.sprite.xCenter) % gameplay.tile.size
 
-            self.xVel = 0
+            if abs(self.xVel) > 0.8:
+                self.animation.timer = 0
+                self.state = "stunned"
+            self.xVel *= -1
 
         self.sprite.y += self.yVel
 
@@ -125,7 +124,7 @@ class Beholder(object):
 
         self.invincibility -= 1
 
-        if self.health <= 0:
+        if self.health <= 0 and abs(self.xVel < 0.5):
             if self.invincibility < 0 and self.state != "dead":
                 data.playSound("flesh.ogg")
 
@@ -146,17 +145,20 @@ class Beholder(object):
         if self.state == "stunned" or self.state == "hurt":
             if self.animation.timer >= 56:
                 self.state = "idle"
+                self.xVel = 0
             else: return
 
-        if self.state != "running" and self.animation.timer >= 128:
-            if self.animation.timer == 128:
-                self.dir = random.choice([-1, 1])
-                if self.stuck(): self.dir *= -1
-            else: self.walk()
-
-            if self.animation.timer > 256 or self.stuck():
-                self.state = "idle"
-                self.animation.timer = 0
+#===============================================================================
+#         if self.state != "running" and self.animation.timer >= 128:
+#             if self.animation.timer == 128:
+#                 self.dir = random.choice([-1, 1])
+#                 if self.stuck(): self.dir *= -1
+#             else: self.walk()
+#
+#             if self.animation.timer > 256 or self.stuck():
+#                 self.state = "idle"
+#                 self.animation.timer = 0
+#===============================================================================
 
         if self.playerClose() and (self.world.player.health > 0 or self.state == "running"):
             if self.state != "running":
@@ -167,31 +169,28 @@ class Beholder(object):
             if self.animation.timer == 64:
                 self.dir = cmp(self.world.player.sprite.x, self.sprite.x)
                 if self.dir == 0 or self.stuck(): self.animation.timer = -32
-                else: self.speed = 6
+                else: self.xVel = 6 * self.dir
 
             if self.animation.timer > 64:
-                self.run()
 
-                if abs(self.world.player.sprite.x - self.sprite.x) > 320 \
-                and self.dir != cmp(self.world.player.sprite.x, self.sprite.x):
-                    if self.speed < 2:
+                distant = abs(self.world.player.sprite.x - self.sprite.x) > 320 \
+                and self.dir != cmp(self.world.player.sprite.x, self.sprite.x)
+
+                if abs(self.xVel) < 6 or distant:
+                    if abs(self.xVel) < 0.5:
                         self.animation.timer = 0
-                        self.speed = 0
-                    self.speed *= 0.95
+                        self.xVel = 0
+                    self.xVel *= 0.95
 
-                if self.stuck():
-                    self.animation.timer = 0
-                    self.state = "stunned"
-                    self.xVel *= -1
-                    self.speed = 0
 
         elif self.state == "running":
-            if 0 < self.speed < 2:
+            if 0 < abs(self.xVel) < 0.5:
                 self.animation.timer = 0
-                self.speed = 0
-            if self.animation.timer >= 64 and self.speed == 0:
+                self.xVel = 0
+            if self.animation.timer >= 64 and self.xVel == 0:
                 self.state = "idle"
-            self.speed *= 0.95
+            if abs(self.sprite.x - self.world.player.sprite.x) >= 460:
+                self.xVel *= 0.95
 
     def collided(self):
         l = int(self.sprite.x - self.sprite.xCenter) / gameplay.tile.size
@@ -209,8 +208,10 @@ class Beholder(object):
 
     def collidedWith(self, entity):
         if isinstance(entity, gameplay.entity.Player):
-            if self.health > 0 and self.invincibility <= 0:
-                entity.getHurt(self)
+            if entity.invincibility <= 0:
+                if self.health > 0 and self.invincibility <= 0:
+                    if self.sprite.collidesWith(entity.sprite):
+                        entity.getHurt(self)
 
     def onSurface(self):
         self.sprite.y += 1
@@ -219,5 +220,8 @@ class Beholder(object):
         return check
 
     def applyGravity(self):
-        if self.onSurface(): self.xVel *= 0.95
+        if self.onSurface() and self.state != "running":
+            self.xVel *= 0.95
+        elif self.health <= 0:
+            self.xVel *= 0.98
         else:  self.yVel = min(self.yVel + 0.1, 2)

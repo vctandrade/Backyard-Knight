@@ -4,7 +4,7 @@ import data
 
 class Skeleton(object):
 
-    def __init__(self, world, pos):
+    def __init__(self, world, pos, side=0):
         self.world = world
 
         self.animation = graphics.AnimationInfo()
@@ -12,7 +12,7 @@ class Skeleton(object):
 
         self.xVel, self.yVel = (0, 0)
 
-        self.sprite.xScale = cmp(self.world.player.sprite.x, self.sprite.x)
+        self.sprite.xScale = side if side else cmp(self.world.player.sprite.x, self.sprite.x)
         if self.sprite.xScale == 0: self.sprite.xScale = -1
 
         self.health = 3
@@ -188,8 +188,10 @@ class Skeleton(object):
 
     def collidedWith(self, entity):
         if isinstance(entity, gameplay.entity.Player):
-            if self.health > 0 and self.invincibility <= 0:
-                entity.getHurt(self)
+            if entity.invincibility <= 0:
+                if self.health > 0 and self.invincibility <= 0:
+                    if self.sprite.collidesWith(entity.sprite):
+                        entity.getHurt(self)
 
     def onSurface(self):
         self.sprite.y += 1

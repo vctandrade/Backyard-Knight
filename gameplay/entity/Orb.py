@@ -90,11 +90,12 @@ class Orb(object):
         return False
 
     def collidedWith(self, entity):
-        if isinstance(entity, gameplay.entity.Player):
-            if not self.dead:
-                data.playSound("orb.ogg")
-                entity.score += 5
-                self.dead = True
+        if not self.dead:
+            if isinstance(entity, gameplay.entity.Player):
+                if self.sprite.collidesWith(entity.sprite):
+                    data.playSound("orb.ogg")
+                    entity.score += 5
+                    self.dead = True
 
     def onSurface(self):
         self.sprite.y += 1

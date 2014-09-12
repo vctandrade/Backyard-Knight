@@ -3,7 +3,10 @@ from Credits import *
 from Dead import *
 from Gameplay import *
 from Help import *
+from Introduction import *
 from Menu import *
 from Pause import *
 from Ranking import *
 from StartGame import *
+from SubmitScore import *
+from Win import *

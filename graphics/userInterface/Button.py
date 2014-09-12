@@ -31,7 +31,7 @@ class Button(object):
         return data.getResource(self.icon)[index]
 
     def getDrawPos(self):
-        return [(self.x - self.width / 2, self.y - self.height / 2), (0, 0)]
+        return [self.x - self.width / 2, self.y - self.height / 2]
 
     def updateHover(self):
         pos = pygame.mouse.get_pos()

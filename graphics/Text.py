@@ -1,7 +1,7 @@
 import pygame
 import data
 
-def drawText(display, string, x, y, color=0x262626, size=16, formatting="left", font="Potash_10x10.png"):
+def drawText(display, string, x, y, color=0x262626, size=10, formatting="left", font="Potash_10x10.png"):
 
     font = data.getResource(font)
     begin = size * len(string) / 2 if formatting == "center" else 0

@@ -49,8 +49,8 @@ class Slider(object):
         return icon
 
     def getDrawPos(self):
-        if self.vertical: return [(self.x - self.height / 2, self.y - self.width / 2), (0, 0)]
-        return [(self.x - self.width / 2, self.y - self.height / 2), (0, 0)]
+        if self.vertical: return [self.x - self.height / 2, self.y - self.width / 2]
+        return [self.x - self.width / 2, self.y - self.height / 2]
 
     def updateHover(self):
         if not self.active:

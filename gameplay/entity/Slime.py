@@ -135,8 +135,10 @@ class Slime(object):
 
     def collidedWith(self, entity):
         if isinstance(entity, gameplay.entity.Player):
-            if self.health > 0 and self.invincibility <= 0:
-                entity.getHurt(self)
+            if entity.invincibility <= 0:
+                if self.health > 0 and self.invincibility <= 0:
+                    if self.sprite.collidesWith(entity.sprite):
+                        entity.getHurt(self)
 
     def onSurface(self):
         self.sprite.y += 1

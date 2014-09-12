@@ -69,7 +69,9 @@ class Cyclone(object):
 
     def collidedWith(self, entity):
         if isinstance(entity, gameplay.entity.Player):
-            entity.getHurt(self)
+            if entity.invincibility <= 0:
+                if self.sprite.collidesWith(entity.sprite):
+                    entity.getHurt(self)
 
     def onSurface(self):
         self.sprite.y += 1

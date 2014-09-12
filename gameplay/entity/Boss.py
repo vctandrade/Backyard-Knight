@@ -61,11 +61,12 @@ class Boss(object):
         if self.invincibility > 0 and self.state != "dying": self.sprite.index += 24
 
         if self.state == "dying" or (self.state == "hurt" and 192 <= self.animation.timer < 320):
+            random.seed(self.animation.timer)
             self.sprite.x += random.random() * 3 - 1.5
             self.sprite.y += random.random() * 3 - 1.5
 
-        if self.yVel < 0: self.sprite.x += math.cos(self.floatTimer / 16.0) * 4
-        if self.state != "dying": self.sprite.y += math.sin(self.floatTimer / 16.0) * 4
+        if self.yVel < 0: self.sprite.x += round(math.cos(self.floatTimer / 16.0) * 4)
+        if self.state != "dying": self.sprite.y += round(math.sin(self.floatTimer / 16.0) * 4)
 
 
         self.sprite.draw(display, offset)
@@ -112,6 +113,9 @@ class Boss(object):
 
             self.yVel = 0
 
+        if abs(self.xVel) < 0.1: self.xVel = 0
+        if abs(self.yVel) < 0.1: self.yVel = 0
+
         self.invincibility -= 1
         self.boomerangTimer = max(self.boomerangTimer - 1, 0)
         self.cycloneTimer = max(self.cycloneTimer - 1, 0)
@@ -126,12 +130,14 @@ class Boss(object):
                 self.animation.timer = 0
                 self.state = "dying"
 
-            if self.animation.timer == 512:
+            if self.animation.timer == 512 and not self.world.player.dead:
                 data.playMusic("win-intro.ogg", repeat=False)
 
             if self.animation.timer == 528:
-                self.world.freezeTimer = -16
                 self.dead = True
+
+                pos = (816, self.world.camera.y - 128)
+                self.world.entities.append(gameplay.entity.Cage(self.world, pos))
 
             if self.score > 0:
                 if not self.score % 60: data.playSound("orb.ogg")
@@ -147,6 +153,7 @@ class Boss(object):
                 self.boomerangTimer = random.randint(150, 300)
                 self.state = "boomerang"
                 self.animation.timer = 0
+                self.health = 0
 
             if self.cycloneTimer == 0:
                 self.cycloneTimer = random.randint(300, 450)
@@ -156,7 +163,7 @@ class Boss(object):
             if self.animation.timer >= 64:
                 self.move()
 
-                if abs(self.sprite.x - 816) > 348 \
+                if abs(self.sprite.x - 816) > 328 \
                 and cmp(self.sprite.x, 816) == self.dir:
                     self.animation.timer = 0
                     self.dir *= -1
@@ -171,7 +178,7 @@ class Boss(object):
         if self.state == "cyclone":
             if self.animation.timer == 32:
                 self.dir = random.choice((-1, 1))
-                self.sprite.x = 825 - 378 * self.dir
+                self.sprite.x = 816 - 378 * self.dir
                 self.sprite.y = 384
             if self.animation.timer == 88:
                 pos = (self.sprite.x + 72 * self.dir, 400)
@@ -197,6 +204,12 @@ class Boss(object):
                 self.cycloneTimer = random.randint(300, 450)
                 self.state = "idle"
 
+                if abs(self.sprite.x - 816) > 328 \
+                and cmp(self.sprite.x, 816) == self.dir:
+                    self.dir *= -1
+
+                self.animation.timer = 0
+
     def collided(self):
         l = int(self.sprite.x - self.sprite.xCenter + 32) / gameplay.tile.size
         r = int(self.sprite.x + self.sprite.xCenter - 33) / gameplay.tile.size
@@ -213,8 +226,10 @@ class Boss(object):
 
     def collidedWith(self, entity):
         if isinstance(entity, gameplay.entity.Player):
-            if self.health > 0 and self.invincibility <= 0:
-                entity.getHurt(self)
+            if entity.invincibility <= 0:
+                if self.health > 0 and self.invincibility <= 0:
+                    if self.sprite.collidesWith(entity.sprite):
+                        entity.getHurt(self)
 
     def onSurface(self):
         self.sprite.y += 1

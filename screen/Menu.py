@@ -21,7 +21,7 @@ class Menu(object):
         self.fadin = 255 if fadin else 0
 
     def displayOutput(self, display):
-        display.blit(data.getResource("windows_xp.png"), (data.config.WIDTH * 0.5 - 960, data.config.HEIGHT * 0.5 - 540))
+        display.blit(data.getResource("backyard.png"), (data.config.WIDTH * 0.5 - 960, data.config.HEIGHT * 0.85 - 1080 + 162))
         display.blit(data.getResource("logo.png"), (data.config.WIDTH * 0.5 - 461, data.config.HEIGHT * 0.05))
         self.menu_list.draw(display)
 

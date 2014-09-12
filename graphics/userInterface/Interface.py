@@ -82,15 +82,31 @@ class Interface(object):
 
         return output
 
-    def draw(self, display):
+    def draw(self, display, offset=(0, 0)):
         for b in self.buttons:
-            display.blit(b.getIcon(), b.getDrawPos())
+            pos = b.getDrawPos()
+            pos[0] -= offset[0]
+            pos[1] -= offset[1]
+
+            display.blit(b.getIcon(), pos)
 
         for cb in self.checkBoxes.values():
-            display.blit(cb.getIcon(), cb.getDrawPos())
+            pos = cb.getDrawPos()
+            pos[0] -= offset[0]
+            pos[1] -= offset[1]
+
+            display.blit(cb.getIcon(), pos)
 
         for s in self.sliders.values():
-            display.blit(s.getIcon(), s.getDrawPos())
+            pos = s.getDrawPos()
+            pos[0] -= offset[0]
+            pos[1] -= offset[1]
+
+            display.blit(s.getIcon(), pos)
 
         for tf in self.textFields.values():
-            display.blit(tf.getIcon(), tf.getDrawPos())
+            pos = tf.getDrawPos()
+            pos[0] -= offset[0]
+            pos[1] -= offset[1]
+
+            display.blit(tf.getIcon(), pos)

@@ -4,7 +4,7 @@ import data
 
 class Golem(object):
 
-    def __init__(self, world, pos):
+    def __init__(self, world, pos, side=0):
         self.world = world
 
         self.animation = graphics.AnimationInfo()
@@ -14,7 +14,7 @@ class Golem(object):
 
         self.sprite.xCenter = 48
 
-        self.sprite.xScale = cmp(self.world.player.sprite.x, self.sprite.x)
+        self.sprite.xScale = side if side else cmp(self.world.player.sprite.x, self.sprite.x)
         if self.sprite.xScale == 0: self.sprite.xScale = -1
         if self.sprite.xScale == -1: self.sprite.x -= 180
 
@@ -80,7 +80,7 @@ class Golem(object):
         self.invincibility = origin.weapon.pos - origin.weapon.pre
 
     def damage(self):
-        return 3 if self.state == "attacking" and 48 <= self.animation.timer < 96 else 0
+        return 3 if self.state == "attacking" and 48 <= self.animation.timer <= 96 else 0
 
     def update(self):
         self.animation.timer += 1
@@ -120,7 +120,7 @@ class Golem(object):
 
         if self.state == "dead":
             if self.animation.timer == 0:
-                x = self.sprite.x + 180 if self.sprite.xScale == -1 else 0
+                x = self.sprite.x + (180 if self.sprite.xScale == -1 else 0)
                 y = self.sprite.y
 
                 for i in range(12):
@@ -163,11 +163,15 @@ class Golem(object):
 
     def collidedWith(self, entity):
         if isinstance(entity, gameplay.entity.Player):
-            if self.health > 0 and self.invincibility <= 0:
-                k = self.sprite.width - 2 * self.sprite.xCenter
-                if self.sprite.xScale == -1: self.sprite.x += k
-                entity.getHurt(self)
-                if self.sprite.xScale == -1: self.sprite.x -= k
+            if entity.invincibility <= 0:
+                if self.health > 0 and self.invincibility <= 0:
+                    if self.state == "attacking" and self.animation.timer >= 48 \
+                    or abs(self.sprite.x - (None, self.rightBox, self.leftBox)[self.sprite.xScale] - entity.sprite.x) <= 160:
+                        if self.sprite.collidesWith(entity.sprite):
+                            k = self.sprite.width - 2 * self.sprite.xCenter
+                            if self.sprite.xScale == -1: self.sprite.x += k
+                            entity.getHurt(self)
+                            if self.sprite.xScale == -1: self.sprite.x -= k
 
     def onSurface(self):
         self.sprite.y += 1
