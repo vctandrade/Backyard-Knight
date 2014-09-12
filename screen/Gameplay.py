@@ -7,7 +7,7 @@ import data
 
 class Gameplay(object):
 
-    def __init__(self, level=gameplay.level.Boss):
+    def __init__(self, level=gameplay.level.LevelOne):
         data.playMusic("pull-me-under.ogg")
         pygame.mouse.set_visible(False)
 
@@ -23,6 +23,9 @@ class Gameplay(object):
 
     def displayOutput(self, display):
         if type(self.overlay) != screen.Dead or self.overlay.transitionTimer < 128:
+            if type(self.overlay) == screen.SubmitScore and self.world.player.dead:
+                self.overlay.displayOutput(display)
+                return
             self.world.draw(display)
 
         for i in range(self.world.player.maxHealth / 2 + self.world.player.maxHealth % 2):
@@ -95,7 +98,7 @@ class Gameplay(object):
                 pygame.mouse.set_visible(False)
                 return self
 
-            if type(self.overlay) in (screen.Gameplay, screen.Menu):
+            if type(self.overlay) in (screen.Gameplay, screen.Menu, screen.Ranking, screen.Credits):
                 return self.overlay
 
         if not self.overlay or type(self.overlay) == screen.Win:
@@ -155,7 +158,7 @@ class Gameplay(object):
             if not pygame.mixer.music.get_busy():
                 data.playMusic("win-main.ogg")
 
-        if type(self.overlay) == screen.Dead:
+        if type(self.overlay) in (screen.Dead, screen.SubmitScore):
             self.world.update()
 
         if self.overlay:
@@ -167,7 +170,7 @@ class Gameplay(object):
             pygame.mixer.music.fadeout(1024)
             if self.world.player.animation.timer >= 72:
                 pygame.mouse.set_visible(True)
-                self.overlay = screen.Dead()
+                self.overlay = screen.Dead(self.world.player.score)
 
         if self.transitionTimer < 0:
             if self.world.next != None:
@@ -192,7 +195,7 @@ class Gameplay(object):
                 self.world.freezeTimer = -16
 
             if not hasattr(self, "score"):
-                self.score = 5 * 60 * 1000 * 10 / self.timer
+                self.score = 5 * 60 * 1000 * 1000 / self.timer
                 self.timeDown = self.timer / (self.score / 7.0)
 
             elif self.score > 0:

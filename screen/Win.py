@@ -39,30 +39,31 @@ class Win(object):
         for e in self.buttons.handle(event):
             if e.type == graphics.userInterface.BUTTONCLICKED:
 
-                transitionTimer = 0
-                display = pygame.display.get_surface()
-                static = display.copy()
-
-                clock = pygame.time.Clock()
-
-                blackness = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))
-                blackness.fill(0x000000)
-
-                while transitionTimer <= 255:
-                    display.blit(static, (0, 0))
-
-                    blackness.set_alpha(transitionTimer, pygame.RLEACCEL)
-                    display.blit(blackness, (0, 0))
-
-                    transitionTimer += 4
-                    pygame.display.flip()
-
-                    clock.tick(60)
-
                 if e.button == 0:
                     return screen.SubmitScore(self.score)
 
                 if e.button == 1:
+
+                    transitionTimer = 0
+                    display = pygame.display.get_surface()
+                    static = display.copy()
+
+                    clock = pygame.time.Clock()
+
+                    blackness = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))
+                    blackness.fill(0x000000)
+
+                    while transitionTimer <= 255:
+                        display.blit(static, (0, 0))
+
+                        blackness.set_alpha(transitionTimer, pygame.RLEACCEL)
+                        display.blit(blackness, (0, 0))
+
+                        transitionTimer += 4
+                        pygame.display.flip()
+
+                        clock.tick(60)
+
                     return screen.Credits(fadin=True)
 
         return self

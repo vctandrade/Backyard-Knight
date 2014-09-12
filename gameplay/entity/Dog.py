@@ -51,7 +51,7 @@ class Dog(object):
         self.applyGravity()
 
     def follow(self):
-        self.xVel = 2.5 * self.sprite.xScale
+        self.xVel = (2.5 - 0.6 * (abs(self.world.player.xVel) == 1.5)) * self.sprite.xScale
 
     def getHurt(self, origin):
         pass

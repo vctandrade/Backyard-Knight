@@ -15,7 +15,7 @@ class Help(object):
         self.help_list.addButton(0, "arrow_back.png", data.config.WIDTH * 0.1, data.config.HEIGHT * 0.1, mask="arrow_leftMask.png")
         self.help_list.addButton(1, "arrow_left.png", data.config.WIDTH * 0.4, data.config.HEIGHT * 0.9, mask="arrow_leftMask.png")
         self.help_list.addButton(2, "arrow_right.png", data.config.WIDTH * 0.6, data.config.HEIGHT * 0.9, mask="arrow_rightMask.png")
-        self.help_list.addButton(3, "door-button.png", data.config.WIDTH * 0.5, data.config.HEIGHT * 0.35, mask="door-mask.png", active=False, visible=False)
+        self.help_list.addButton(3, "door_button.png", data.config.WIDTH * 0.5, data.config.HEIGHT * 0.35, mask="door_mask.png", active=False, visible=False)
 
         self.shadow = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))
         self.shadow.set_alpha(224, pygame.RLEACCEL)

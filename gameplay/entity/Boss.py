@@ -139,7 +139,7 @@ class Boss(object):
                 pos = (816, self.world.camera.y - 128)
                 self.world.entities.append(gameplay.entity.Cage(self.world, pos))
 
-            if self.score > 0:
+            if self.score > 0 and not self.world.player.dead:
                 if not self.score % 60: data.playSound("orb.ogg")
                 self.world.player.score += 10
                 self.score -= 10
@@ -153,7 +153,6 @@ class Boss(object):
                 self.boomerangTimer = random.randint(150, 300)
                 self.state = "boomerang"
                 self.animation.timer = 0
-                self.health = 0
 
             if self.cycloneTimer == 0:
                 self.cycloneTimer = random.randint(300, 450)

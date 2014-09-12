@@ -4,7 +4,7 @@ import pygame
 
 class TextField(object):
 
-    def __init__(self, image, x, y, color=0xFFFFFF, size=16, text="asd", focused=False, active=True, visible=True, mask=None):
+    def __init__(self, image, x, y, color=0xFFFFFF, size=20, text="asd", focused=False, active=True, visible=True, mask=None):
 
         self.image = image
         self.mask = mask
@@ -68,7 +68,7 @@ class TextField(object):
         if self.hovered:
             self.clicked = True
 
-            newPos = (pygame.mouse.get_pos()[0] - self.width * 0.06 - self.x) / self.size
+            newPos = (pygame.mouse.get_pos()[0] + self.width * 0.44 - self.x) / self.size
             self.pos = max(0, min(int(round(newPos)), len(self.text)))
 
             self.tick = 0

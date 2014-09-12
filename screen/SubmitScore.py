@@ -1,6 +1,5 @@
-# coding: cp437
-
 import graphics
+import keyboard
 import screen
 import pygame
 import data
@@ -9,39 +8,65 @@ from operator import itemgetter
 
 class SubmitScore (object):
 
-    def __init__(self, score):
-        data.playMusic("win-intro.ogg")
+    def __init__(self, score, dead=False):
+        keyboard.setMultiKeys()
 
         self.menu_list = graphics.userInterface.Interface()
+        self.menu_list.addButton(0, "button.png", data.config.WIDTH * 0.5 + 225, data.config.HEIGHT * 0.55, active=False)
+        self.menu_list.addTextField("name", "textField.png", data.config.WIDTH * 0.5 - 125, data.config.HEIGHT * 0.55, color=0x000000, size=20)
 
-        self.menu_list.addButton(0, "button.png", data.config.WIDTH * 0.5, data.config.HEIGHT * 0.8,active=False)
-        self.menu_list.addTextField(2, "textField2.png", data.config.WIDTH * 0.5, data.config.HEIGHT * 0.6, color=0x000000, size=15)
+        self.winButtons = graphics.userInterface.Interface()
+        self.winButtons.addButton(0, "button.png", data.config.WIDTH * 0.35, data.config.HEIGHT * 0.4)
+        self.winButtons.addButton(1, "button.png", data.config.WIDTH * 0.65, data.config.HEIGHT * 0.4)
 
-        self.buff = pygame.Surface((data.config.WIDTH, data.config.HEIGHT))
-        
-        self.transitionTimer = 0
-        
+        self.color = 0xE0E0E0 if dead else 0x262626
+        self.transitionTimer = 0 if not dead else 128
         self.score = score
-                        
-    def displayOutput(self, display,offset=(0,0)):
-        
-        if self.transitionTimer <= 128:
-            self.buff.fill((64 - self.transitionTimer / 2, 0,0))
-            self.buff.set_alpha(self.transitionTimer * 3 + 1, pygame.RLEACCEL)
-            graphics.drawText(self.buff, data.translate("name"), data.config.WIDTH * 0.5, data.config.HEIGHT * 0.5, size=int(30*self.transitionTimer*0.01) , color=0xFFFFFF, formatting="center")
-        
-        self.menu_list.draw(self.buff)
 
-        graphics.drawText(self.buff, data.translate("submit"), data.config.WIDTH * 0.5, data.config.HEIGHT * 0.8, size=14 , formatting="center")
-        
-        display.blit(self.buff, (0, 0))
-        self.transitionTimer += 1
+    def displayOutput(self, display, offset=(0, 0)):
+
+        if self.transitionTimer < 128:
+            buf = pygame.Surface((200 + data.config.WIDTH * 0.3, 100), pygame.SRCALPHA)
+
+            self.winButtons.draw(buf, (data.config.WIDTH * 0.35 - 100, data.config.HEIGHT * 0.4 - 50))
+
+            graphics.drawText(buf, data.translate("submit"), 100, 50 - 15, size=20, formatting="center")
+            graphics.drawText(buf, data.translate("score"), 100, 50 + 15, size=20, formatting="center")
+            graphics.drawText(buf, data.translate("exit"), 100 + data.config.WIDTH * 0.3, 50, size=20, formatting="center")
+
+            buf.fill((255, 255, 255, 255 - self.transitionTimer * 2), special_flags=pygame.BLEND_RGBA_MULT)
+            display.blit(buf, (data.config.WIDTH * 0.35 - 100, data.config.HEIGHT * 0.4 - 50))
+            self.transitionTimer += 2
+
+        elif self.transitionTimer < 256:
+            buf = display.copy()
+
+            self.menu_list.draw(buf)
+
+            graphics.drawText(buf, data.translate("name"), data.config.WIDTH * 0.5, data.config.HEIGHT * 0.4, size=40, color=self.color, formatting="center")
+            graphics.drawText(buf, data.translate("submit"), data.config.WIDTH * 0.5 + 225, data.config.HEIGHT * 0.55, size=20 , formatting="center")
+
+            if self.color == 0xE0E0E0:
+                graphics.drawText(buf, "%.6d" % self.score, data.config.WIDTH / 2, 48, 0xFFEE00, 30, "center", "Time_10x10.png")
+
+            buf.set_alpha(2 * self.transitionTimer - 256, pygame.RLEACCEL)
+            display.blit(buf, (0, 0))
+            self.transitionTimer += 2
+
+        else:
+            self.menu_list.draw(display)
+
+            graphics.drawText(display, data.translate("name"), data.config.WIDTH * 0.5, data.config.HEIGHT * 0.4, size=40, color=self.color, formatting="center")
+            graphics.drawText(display, data.translate("submit"), data.config.WIDTH * 0.5 + 225, data.config.HEIGHT * 0.55, size=20 , formatting="center")
+
+            if self.color == 0xE0E0E0:
+                graphics.drawText(display, "%.6d" % self.score, data.config.WIDTH / 2, 48, 0xFFEE00, 30, "center", "Time_10x10.png")
 
     def respondToUserInput(self, event):
         for e in self.menu_list.handle(event):
-            if e.type == graphics.userInterface.BUTTONCLICKED:
-
-                pygame.mixer.music.fadeout(1024)
+            if e.type == graphics.userInterface.BUTTONCLICKED \
+            or (event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN \
+            and self.menu_list.buttons[0].active == True):
 
                 transitionTimer = 0
                 display = pygame.display.get_surface()
@@ -59,22 +84,19 @@ class SubmitScore (object):
                     transitionTimer += 1
                     pygame.display.flip()
 
-                if e.button == 0:
-                    ranking = data.load("ranking")
-                    
-                    ranking.append((self.menu_list.textFields[2].text, self.score))
-                    ranking = sorted(ranking,key=itemgetter(1),reverse=True)
+                ranking = data.load("ranking")
 
-                    data.save(ranking,"ranking")
-                    
-                    return screen.Ranking()
-            
+                ranking.append((self.menu_list.getText("name"), self.score))
+                ranking = sorted(ranking, key=itemgetter(1), reverse=True)[0:10]
+
+                data.save(ranking, "ranking")
+
+                return screen.Ranking(fadin=True, showCredits=self.color == 0x262626)
+
         return self
 
     def update(self):
-        
-        if len(self.menu_list.textFields[2].text) >= 3:
+        if len(self.menu_list.getText("name")) >= 3:
             self.menu_list.buttons[0].active = True
-        else:
-            self.menu_list.buttons[0].active = False
+        else: self.menu_list.buttons[0].active = False
 

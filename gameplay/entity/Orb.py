@@ -90,7 +90,7 @@ class Orb(object):
         return False
 
     def collidedWith(self, entity):
-        if not self.dead:
+        if not self.dead and not entity.dead:
             if isinstance(entity, gameplay.entity.Player):
                 if self.sprite.collidesWith(entity.sprite):
                     data.playSound("orb.ogg")
