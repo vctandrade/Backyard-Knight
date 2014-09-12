@@ -77,6 +77,8 @@ class Golem(object):
         self.knockBack(origin)
         self.health -= origin.damage()
 
+        data.playSound("stone-hit.ogg")
+
         self.invincibility = origin.weapon.pos - origin.weapon.pre
 
     def damage(self):

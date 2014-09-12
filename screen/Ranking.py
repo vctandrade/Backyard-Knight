@@ -40,7 +40,7 @@ class Ranking(object):
             if data.config.HEIGHT * 0.55 - 276 < y < data.config.HEIGHT * 0.55 + 272 + 15:
                 graphics.drawText(buff, str(i + 1), data.config.WIDTH * 0.5 - 300, y, size=30, color=purple, formatting="center")
                 graphics.drawText(buff, self.list[i][0], data.config.WIDTH * 0.5 - 228, y, size=20, color=purple)
-                graphics.drawText(buff, "%.6d" % self.list[i][1], data.config.WIDTH * 0.5 + 160 + 100, y, size=20, color=purple, formatting="center")
+                graphics.drawText(buff, "%6d" % self.list[i][1], data.config.WIDTH * 0.5 + 160 + 100, y, size=20, color=purple, formatting="center")
 
         display.blit(buff, (data.config.WIDTH * 0.5 - 350, data.config.HEIGHT * 0.55 - 268), ((data.config.WIDTH * 0.5 - 350, data.config.HEIGHT * 0.55 - 268), (710, 540)))
 

@@ -1,6 +1,7 @@
 import graphics
 import gameplay
 import pygame
+import data
 
 class Spike(object):
 
@@ -80,6 +81,11 @@ class Spike(object):
 
             self.world.camera.setShake(64000 / distance, 0.8)
 
+            distance = (self.sprite.x - self.world.player.sprite.x) ** 2 + (self.sprite.y - self.world.player.sprite.y) ** 2
+            volume = 1000.0 * data.config.SOUND / distance
+            if volume > 0.1: data.playSound("spike1.ogg", volume=volume)
+
+
         if abs(self.sprite.y - self.origin) >= 180:
             self.moveDown()
 
@@ -88,6 +94,11 @@ class Spike(object):
             if self.animation.timer == self.waitTime:
                 self.animation.timer = -self.waitTime
                 self.moveUp()
+
+
+                distance = (self.sprite.x - self.world.player.sprite.x) ** 2 + (self.sprite.y - self.world.player.sprite.y) ** 2
+                volume = 1000.0 * data.config.SOUND / distance
+                if volume > 0.1: data.playSound("spike2.ogg", volume=volume)
 
     def moveUp(self):
         self.yVel = 9 * self.dir

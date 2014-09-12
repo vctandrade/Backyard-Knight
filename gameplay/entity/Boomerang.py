@@ -1,6 +1,7 @@
 import graphics
 import gameplay
 import random
+import data
 
 class Crush:
     pre = 32
@@ -11,6 +12,14 @@ class Boomerang(object):
     def __init__(self, summoner, pos):
         self.world = summoner.world
         self.summoner = summoner
+
+        boomerangsInWorld = 0
+        for e in self.world.entities:
+            if type(e) == gameplay.entity.Boomerang:
+                boomerangsInWorld += 1
+
+        if boomerangsInWorld == 0:
+            data.playSound("boomerang.ogg", repeat=True)
 
         self.animation = graphics.AnimationInfo()
         self.animation.timer = random.randint(0, 24)
@@ -30,6 +39,13 @@ class Boomerang(object):
         self.sprite.draw(display, offset)
 
         if self.sprite.y - offset[1] < -64:
+            boomerangsInWorld = 0
+            for e in self.world.entities:
+                if type(e) == gameplay.entity.Boomerang:
+                    boomerangsInWorld += 1
+
+            if boomerangsInWorld == 1:
+                data.stopSound("boomerang.ogg", fade=True)
             self.dead = True
 
     def getHurt(self, origin):
@@ -81,6 +97,13 @@ class Boomerang(object):
             self.yVel *= 0.5
 
             if self.invincibility < 0:
+                boomerangsInWorld = 0
+                for e in self.world.entities:
+                    if type(e) == gameplay.entity.Boomerang:
+                        boomerangsInWorld += 1
+
+                if boomerangsInWorld == 1:
+                    data.stopSound("boomerang.ogg", fade=True)
                 self.invincibility = 32
 
         self.sprite.y += self.yVel
@@ -93,6 +116,13 @@ class Boomerang(object):
             self.yVel *= -0.5
 
             if self.invincibility < 0:
+                boomerangsInWorld = 0
+                for e in self.world.entities:
+                    if type(e) == gameplay.entity.Boomerang:
+                        boomerangsInWorld += 1
+
+                if boomerangsInWorld == 1:
+                    data.stopSound("boomerang.ogg", fade=True)
                 self.invincibility = 32
 
         if self.invincibility == 0:

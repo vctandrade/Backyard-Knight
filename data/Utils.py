@@ -41,12 +41,13 @@ def stopMusic():
 def getMusic():
     return currentMusic
 
-def playSound(sound):
-    data.getResource(sound).set_volume(data.config.SOUND / 100.0)
-    data.getResource(sound).play()
+def playSound(sound, repeat=False, volume=data.config.SOUND / 100.0):
+    data.getResource(sound).set_volume(volume)
+    data.getResource(sound).play(-1 if repeat else 0)
 
-def stopSound(sound):
-    data.getResource(sound).stop()
+def stopSound(sound, fade=False):
+    if fade: data.getResource(sound).fadeout(256)
+    else: data.getResource(sound).stop()
 
 def fadeSound(sound):
     data.getResource(sound).fadeout(1024)

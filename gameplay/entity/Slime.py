@@ -116,6 +116,10 @@ class Slime(object):
                 self.side /= 0.8
                 self.moveRight()
 
+            distance = (self.sprite.x - self.world.player.sprite.x) ** 2 + (self.sprite.y - self.world.player.sprite.y) ** 2
+            volume = 1000.0 * data.config.SOUND / distance
+            if volume > 0.1: data.playSound("slime3.ogg", volume=volume)
+
             self.period = random.choice((2, 3))
             self.animation.timer = 0
 

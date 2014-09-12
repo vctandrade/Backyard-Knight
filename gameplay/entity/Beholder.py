@@ -77,6 +77,8 @@ class Beholder(object):
         self.health -= origin.damage()
         self.knockBack(origin)
 
+        data.playSound("beholder-hit.ogg")
+
         self.invincibility = origin.weapon.pos - origin.weapon.pre
 
     def damage(self):
@@ -108,6 +110,7 @@ class Beholder(object):
             else: self.sprite.x += gameplay.tile.size - (self.sprite.x - self.sprite.xCenter) % gameplay.tile.size
 
             if abs(self.xVel) > 0.8:
+                data.playSound("hit.ogg")
                 self.animation.timer = 0
                 self.state = "stunned"
             self.xVel *= -1
@@ -211,6 +214,7 @@ class Beholder(object):
             if entity.invincibility <= 0:
                 if self.health > 0 and self.invincibility <= 0:
                     if self.sprite.collidesWith(entity.sprite):
+                        data.playSound("hit.ogg")
                         entity.getHurt(self)
 
     def onSurface(self):

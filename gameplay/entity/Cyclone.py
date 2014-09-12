@@ -1,5 +1,7 @@
 import graphics
 import gameplay
+import random
+import data
 
 class Cyclone(object):
 
@@ -7,6 +9,7 @@ class Cyclone(object):
         self.world = world
 
         self.maxTime = 148
+        data.playSound("cyclone" + str(random.randint(1, 2)) + ".ogg")
 
         self.animation = graphics.AnimationInfo()
         self.animation.index = lambda: 56 + (self.animation.timer / 4) % 3

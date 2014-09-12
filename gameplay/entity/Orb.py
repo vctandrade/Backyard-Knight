@@ -94,7 +94,7 @@ class Orb(object):
             if isinstance(entity, gameplay.entity.Player):
                 if self.sprite.collidesWith(entity.sprite):
                     data.playSound("orb.ogg")
-                    entity.score += 5
+                    entity.score += 15
                     self.dead = True
 
     def onSurface(self):

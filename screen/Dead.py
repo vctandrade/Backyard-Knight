@@ -6,7 +6,7 @@ import data
 class Dead(object):
 
     def __init__(self, score):
-        data.playMusic("game-over.ogg")
+        data.playMusic("game-over.ogg", repeat=False)
 
         self.menu_list = graphics.userInterface.Interface()
 

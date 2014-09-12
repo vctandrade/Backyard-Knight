@@ -1,9 +1,11 @@
 import graphics
 import gameplay
+import data
 
 class HalfMoon(object):
 
     def __init__(self, pos, direction):
+        data.playSound("halfmoon.ogg")
 
         self.animation = graphics.AnimationInfo()
         self.animation.alpha = lambda: 255 - (self.animation.timer - 8) * 32

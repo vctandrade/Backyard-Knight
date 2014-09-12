@@ -86,6 +86,7 @@ class Boss(object):
             if self.sprite.y < 384:
                 self.animation.timer = 0
                 self.state = "hurt"
+        data.playSound("hit.ogg")
 
         self.health -= origin.damage()
         self.invincibility = origin.weapon.pos - origin.weapon.pre
