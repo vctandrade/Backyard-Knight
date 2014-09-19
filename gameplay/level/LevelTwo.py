@@ -59,11 +59,11 @@ class LevelTwo(object):
         self.entities.append(gameplay.entity.Chest(self, [2550, 732]))
 
         self.entities.append(gameplay.entity.Skeleton(self, [1650, 700]))
-        self.entities.append(gameplay.entity.Slime(self, [1400, 700]))
-        self.entities.append(gameplay.entity.Slime(self, [1800, 700]))
-        self.entities.append(gameplay.entity.Slime(self, [1650, 700]))
+        self.entities.append(gameplay.entity.Slime(self, [1400, 750]))
+        self.entities.append(gameplay.entity.Slime(self, [1800, 750]))
+        self.entities.append(gameplay.entity.Slime(self, [1650, 750]))
 
-        self.entities.append(gameplay.entity.Golem(self, [800, 180], side=1))
+        self.entities.append(gameplay.entity.Golem(self, [800, 230], side=1))
 
         self.entities.append(gameplay.entity.Beholder(self, [2500, 700]))
         self.entities.append(gameplay.entity.Beholder(self, [1600, 180]))

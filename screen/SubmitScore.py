@@ -46,9 +46,6 @@ class SubmitScore (object):
             graphics.drawText(buf, data.translate("name"), data.config.WIDTH * 0.5, data.config.HEIGHT * 0.4, size=40, color=self.color, formatting="center")
             graphics.drawText(buf, data.translate("submit"), data.config.WIDTH * 0.5 + 225, data.config.HEIGHT * 0.55, size=20 , formatting="center")
 
-            if self.color == 0xE0E0E0:
-                graphics.drawText(buf, "%.4d" % self.score, data.config.WIDTH / 2, 48, 0xFFEE00, 30, "center", "Time_10x10.png")
-
             buf.set_alpha(2 * self.transitionTimer - 256, pygame.RLEACCEL)
             display.blit(buf, (0, 0))
             self.transitionTimer += 2
@@ -59,10 +56,10 @@ class SubmitScore (object):
             graphics.drawText(display, data.translate("name"), data.config.WIDTH * 0.5, data.config.HEIGHT * 0.4, size=40, color=self.color, formatting="center")
             graphics.drawText(display, data.translate("submit"), data.config.WIDTH * 0.5 + 225, data.config.HEIGHT * 0.55, size=20 , formatting="center")
 
-            if self.color == 0xE0E0E0:
-                graphics.drawText(display, "%.4d" % self.score, data.config.WIDTH / 2, 48, 0xFFEE00, 30, "center", "Time_10x10.png")
-
     def respondToUserInput(self, event):
+        if self.transitionTimer < 64:
+            return self
+
         for e in self.menu_list.handle(event):
             if e.type == graphics.userInterface.BUTTONCLICKED \
             or (event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN \

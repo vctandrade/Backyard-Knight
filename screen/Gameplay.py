@@ -159,7 +159,8 @@ class Gameplay(object):
                 data.playMusic("win-main.ogg")
 
         if type(self.overlay) in (screen.Dead, screen.SubmitScore):
-            if type(self.overlay) != screen.Dead or self.overlay.transitionTimer < 128:
+            if (type(self.overlay) != screen.Dead and not self.world.player.dead) \
+            or self.overlay.transitionTimer < 128:
                 self.world.update()
 
         if self.overlay:
@@ -206,8 +207,7 @@ class Gameplay(object):
                 self.score -= 7
 
             else:
-                if self.world.backyardTimer >= 384 \
-                and type(self.overlay) != screen.Win:
+                if self.world.backyardTimer == 384:
                     pygame.mouse.set_visible(True)
                     self.overlay = screen.Win(self.world.player.score)
                 self.world.freezeTimer = -64

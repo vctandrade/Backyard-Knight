@@ -1,5 +1,6 @@
 from Beholder import *
 from Bomb import *
+from Bone import *
 from Boomerang import *
 from Boss import *
 from Cage import *

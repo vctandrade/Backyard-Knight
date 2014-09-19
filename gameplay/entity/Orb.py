@@ -35,7 +35,7 @@ class Orb(object):
         xDist = self.world.player.sprite.x - self.sprite.x
         yDist = self.world.player.sprite.y - self.sprite.y
 
-        return xDist ** 2 + yDist ** 2 < 128 ** 2
+        return xDist ** 2 + yDist ** 2 < 128 ** 2 and not self.world.player.dead
 
     def update(self):
         self.animation.timer += 1

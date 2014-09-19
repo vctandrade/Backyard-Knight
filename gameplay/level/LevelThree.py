@@ -62,8 +62,8 @@ class LevelThree(object):
         self.entities.append(gameplay.entity.Chest(self, [1468, 220]))
 
         self.entities.append(gameplay.entity.Golem(self, [280, 148], side=1))
-        self.entities.append(gameplay.entity.Skeleton(self, [1468, 580]))
-        self.entities.append(gameplay.entity.Skeleton(self, [968, 580], side=1))
+        self.entities.append(gameplay.entity.Skeleton(self, [1468, 630]))
+        self.entities.append(gameplay.entity.Skeleton(self, [968, 630], side=1))
         self.entities.append(gameplay.entity.Slime(self, [568, 670]))
         self.entities.append(gameplay.entity.Beholder(self, [988, 800]))
 
@@ -79,7 +79,7 @@ class LevelThree(object):
         self.entities.append(gameplay.entity.Spike(self, [2200, 270], "up", waitTime=96))
         self.entities.append(gameplay.entity.Spike(self, [2300, 004], "down", waitTime=132))
         self.entities.append(gameplay.entity.Spike(self, [2400, 270], "up", waitTime=156))
-        self.entities.append(gameplay.entity.Spike(self, [2500, 004], "down", waitTime=4))
+        self.entities.append(gameplay.entity.Spike(self, [2500, 004], "down", waitTime=48))
         self.entities.append(gameplay.entity.Spike(self, [2600, 270], "up", waitTime=128))
         self.entities.append(gameplay.entity.Spike(self, [2700, 004], "down", waitTime=200))
         self.entities.append(gameplay.entity.Spike(self, [2800, 270], "up", waitTime=136))

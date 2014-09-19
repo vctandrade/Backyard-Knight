@@ -2,6 +2,7 @@ import graphics
 import gameplay
 import pygame
 import data
+import math
 
 class Spike(object):
 
@@ -47,16 +48,16 @@ class Spike(object):
         buff.fill(0xFF00FF)
 
         xRect = self.sprite.x - 37
-        yRect = self.sprite.y - 90
+        yRect = round(self.sprite.y - 90)
 
         self.sprite.draw(buff, [xRect, yRect])
 
-        xRect -= offset[0]
-        yRect -= offset[1]
+        xRect -= math.floor(offset[0])
+        yRect -= math.ceil(offset[1])
 
         if self.mode == "up":
             pos = (xRect, yRect)
-            rect = ((0, 0), (74, self.origin - self.sprite.y))
+            rect = ((0, 0), (74, self.origin - round(self.sprite.y)))
 
         if self.mode == "down":
             pos = (xRect, self.origin + 90 - offset[1])
@@ -68,9 +69,13 @@ class Spike(object):
         self.animation.timer += 1
 
         self.sprite.y += self.yVel
-        self.sprite.x += self.xVel
 
         if self.collided():
+
+            if cmp(self.yVel, 0) == self.dir:
+                if self.dir >= 0: self.sprite.y -= (self.sprite.y + self.sprite.yCenter) % gameplay.tile.size
+                else: self.sprite.y += gameplay.tile.size - (self.sprite.y - self.sprite.yCenter) % gameplay.tile.size
+
             self.moveDown()
 
             xDis = self.sprite.x - self.world.player.sprite.x
@@ -85,16 +90,15 @@ class Spike(object):
             volume = 1000.0 * data.config.SOUND / distance
             if volume > 0.1: data.playSound("spike1.ogg", volume=volume)
 
-
-        if abs(self.sprite.y - self.origin) >= 180:
+        if self.dir * (self.sprite.y - self.origin) >= 180:
             self.moveDown()
 
-        if abs(self.sprite.y - self.origin) <= 0:
+        if self.dir * (self.sprite.y - self.origin) <= 0:
             self.yVel = 0
-            if self.animation.timer == self.waitTime:
+            self.sprite.y = self.origin
+            if self.animation.timer >= self.waitTime:
                 self.animation.timer = -self.waitTime
                 self.moveUp()
-
 
                 distance = (self.sprite.x - self.world.player.sprite.x) ** 2 + (self.sprite.y - self.world.player.sprite.y) ** 2
                 volume = 1000.0 * data.config.SOUND / distance
@@ -110,6 +114,9 @@ class Spike(object):
         pass
 
     def collided(self):
+        if cmp(self.sprite.y, self.origin) != self.dir:
+            return False
+
         l = int(self.sprite.x - self.sprite.xCenter) / gameplay.tile.size
         r = int(self.sprite.x + self.sprite.xCenter - 1) / gameplay.tile.size
 

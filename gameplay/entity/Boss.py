@@ -79,7 +79,8 @@ class Boss(object):
 
     def getHurt(self, origin):
         if self.invincibility > 0 \
-        or self.sprite.alpha < 128:
+        or self.sprite.alpha < 128 \
+        or self.health <= 0:
             return
 
         if type(origin) == gameplay.entity.Boomerang:

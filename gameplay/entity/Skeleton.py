@@ -100,6 +100,20 @@ class Skeleton(object):
         self.invincibility = origin.weapon.pos - origin.weapon.pre
         data.playSound("bone-smash.ogg")
 
+        if self.health <= 0: self.summonBones()
+
+    def summonBones(self):
+        self.world.particles.append(gameplay.entity.Bone(40, (self.sprite.x + 4 * self.sprite.xScale, self.sprite.y - 24), self.sprite.xScale))
+        self.world.particles.append(gameplay.entity.Bone(42, (self.sprite.x + 18 * self.sprite.xScale, self.sprite.y + 16), self.sprite.xScale))
+        self.world.particles.append(gameplay.entity.Bone(43, (self.sprite.x + 4 * self.sprite.xScale, self.sprite.y + 44), self.sprite.xScale))
+        self.world.particles.append(gameplay.entity.Bone(44, (self.sprite.x - 24 * self.sprite.xScale, self.sprite.y + 44), self.sprite.xScale))
+
+        for i in range(4):
+            self.world.particles.append(gameplay.entity.Bone(43, (self.sprite.x, self.sprite.y), self.sprite.xScale))
+            self.world.particles.append(gameplay.entity.Bone(44, (self.sprite.x, self.sprite.y), self.sprite.xScale))
+
+        self.world.particles.append(gameplay.entity.Bone(41, (self.sprite.x - 14 * self.sprite.xScale, self.sprite.y + 8), self.sprite.xScale))
+
     def damage(self):
         return 2 if self.state == "attacking" and 32 <= self.animation.timer < 64 else 0
 
@@ -127,15 +141,13 @@ class Skeleton(object):
         self.invincibility -= 1
 
         if self.health <= 0:
-            if self.invincibility < 0:
-                pos = self.sprite.x, self.sprite.y
+            pos = self.sprite.x, self.sprite.y
 
-                for i in range(8):
-                    newOrb = gameplay.entity.Orb(self.world, pos)
-                    self.world.entities.append(newOrb)
+            for i in range(8):
+                newOrb = gameplay.entity.Orb(self.world, pos)
+                self.world.entities.append(newOrb)
 
-                self.dead = True
-            return
+            self.dead = True
 
         if self.state == "walking":
             if self.soundTimer <= 0:
