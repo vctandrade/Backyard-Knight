@@ -92,8 +92,8 @@ class Sprite(object):
         up = int(other.y - other.yCenter - self.y + self.yCenter)
         down = up + other.height
 
-        for x1 in range(max(0, left), min(right, self.width)):
-            for y1 in range(max(0, up), min(down, self.height)):
+        for x1 in range(max(0, left), min(right, self.width), 2):
+            for y1 in range(max(0, up), min(down, self.height), 2):
                 x2 = x1 + int(self.x - self.xTrueCenter - other.x + other.xTrueCenter)
                 y2 = y1 + int(self.y - self.yTrueCenter - other.y + other.yTrueCenter)
                 if self.pixelArray[x1][y1] != 0xFF00FF and other.pixelArray[x2][y2] != 0xFF00FF:

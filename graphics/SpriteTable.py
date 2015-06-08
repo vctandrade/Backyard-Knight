@@ -32,3 +32,6 @@ class SpriteTable(object):
 
     def __getitem__(self, i):
         return self.table[i]
+
+    def copy(self):
+        return [sprite.copy() for sprite in self.table]
